@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
 class UserInfoPage extends StatelessWidget {
-  UserInfoPage({Key? key, required this.product, x}) : super(key: key);
+  UserInfoPage({super.key, required this.product, x});
   final ProductModel product;
   List<String> images = [];
 

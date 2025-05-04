@@ -1,3 +1,4 @@
+import 'package:closet_mate/config/theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -239,6 +240,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                 child: CustomButton(
                   text: 'Add to Cart',
                   onPressed: () => controller.onAddToCartPressed(),
+                  backgroundColor: ColorConstants.appSpecificDark,
                   disabled: controller.product.quantity <= 0,
                   fontSize: 16.sp,
                   radius: 12.r,

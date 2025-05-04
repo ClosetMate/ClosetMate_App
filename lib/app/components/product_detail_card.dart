@@ -1,5 +1,5 @@
+import 'package:closet_mate/app/components/user_info_page.dart';
 import 'package:closet_mate/models/product_model.dart';
-import 'package:closet_mate/pages/user_info_page.dart';
 import 'package:flutter/material.dart';
 
 class ProductDetailCard extends StatelessWidget {
@@ -29,6 +29,14 @@ class ProductDetailCard extends StatelessWidget {
                   image: AssetImage(product.imageUrl),
                   fit: BoxFit.cover,
                 ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    spreadRadius: 2,
+                    blurRadius: 6,
+                    offset: Offset(0, 3), // changes position of shadow
+                  ),
+                ],
               ),
             ),
           ),

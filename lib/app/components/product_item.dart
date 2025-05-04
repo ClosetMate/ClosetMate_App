@@ -13,7 +13,7 @@ class ProductItem extends StatelessWidget {
     return GestureDetector(
       onTap: () => Get.toNamed(Routes.PRODUCT_DETAILS, arguments: product),
       child: Card(
-        elevation: 4,
+        // elevation: 4,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         child: Stack(
           children: [
@@ -47,7 +47,7 @@ class ProductItem extends StatelessWidget {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        '${product.currency} ${product.price.toStringAsFixed(2)}',
+                        '${product.currency} ${product.currentPrice.toStringAsFixed(2)}',
                         style: const TextStyle(
                           color: Colors.green,
                           fontWeight: FontWeight.bold,
