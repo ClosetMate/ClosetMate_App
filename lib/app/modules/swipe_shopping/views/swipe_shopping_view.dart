@@ -21,7 +21,7 @@ class SwipeShoppingView extends GetView<SwipeShoppingController> {
                     return Padding(
                       padding: const EdgeInsets.only(
                         bottom: 130,
-                        top: 16,
+                        top: 40,
                       ), // Padding around each card
                       child: controller.productCards[index],
                     );
@@ -61,7 +61,7 @@ class SwipeShoppingView extends GetView<SwipeShoppingController> {
                         };
                       } else if (controller.direction == AxisDirection.up) {
                         controller.swipeAction = {
-                          'top': 20.0,
+                          'top': 60.0,
                           'left': 10.0,
                           'right': 10.0,
                           'color': ColorConstants.brightGreen,

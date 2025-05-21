@@ -109,11 +109,11 @@ class CartView extends GetView<CartController> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          _buildSummaryRow('Subtotal', '₹ 2599.00'),
+          _buildSummaryRow('Subtotal', '\$ 24.00'),
           const SizedBox(height: 8),
-          _buildSummaryRow('Shipping', '₹ 99.00'),
+          _buildSummaryRow('Shipping', '\$ 2.00'),
           const Divider(height: 24, thickness: 1),
-          _buildSummaryRow('Total', '₹ 2698.00', isTotal: true),
+          _buildSummaryRow('Total', '\$ 26.00', isTotal: true),
           const SizedBox(height: 16),
           ElevatedButton(
             onPressed: () {

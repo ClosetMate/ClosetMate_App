@@ -25,7 +25,7 @@ class _BottomNavState extends State<BottomNav> {
   @override
   Widget build(BuildContext context) {
     return CurvedNavigationBar(
-      height: 70,
+      height: 75,
       backgroundColor: const Color.fromRGBO(255, 0, 0, 0), // Keeps the curved effect smooth
       color: ColorConstants.appSpecificDark, // Matches AppBar
       animationDuration: const Duration(milliseconds: 300),

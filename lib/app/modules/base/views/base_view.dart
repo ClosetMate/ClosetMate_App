@@ -22,7 +22,7 @@ class BaseView extends GetView<BaseController> {
                 height:
                     controller.currentTabIndex == 2
                         ? 0
-                        : 80, // Animate height change
+                        : 120, // Animate height change
                 child: AnimatedOpacity(
                   duration: const Duration(milliseconds: 400),
                   opacity:

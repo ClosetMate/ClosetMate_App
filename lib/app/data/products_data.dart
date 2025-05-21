@@ -6,9 +6,9 @@ List<Map<String, dynamic>> productsData = [
     'name': 'PARTIQ',
     'description':
         'Sail Blue Velvet Ruched Short Sleeve Pocketed Mini Dress',
-    'price': 999,
-    'currentPrice': 799,
-    'currency': '₹',
+    'price': 12,
+    'currentPrice': 8,
+    'currency': "\$",
     'imageUrl': 'assets/images/products/p5_1.png',
     'otherImageUrls': [
       'assets/images/products/p5_1.png',
@@ -37,9 +37,9 @@ List<Map<String, dynamic>> productsData = [
     'name': 'Off White Striped Textured Shirt',
     'description':
         'Textured elegance meets relaxed vibes in this off-white striped essential.',
-    'price': 1999,
-    'currentPrice': 1599,
-    'currency': '₹',
+    'price': 24,
+    'currentPrice': 16,
+    'currency': "\$",
     'imageUrl': 'assets/images/products/p1_0.png',
     'otherImageUrls': [
       'assets/images/products/p1_1.png',
@@ -68,9 +68,9 @@ List<Map<String, dynamic>> productsData = [
     'name': 'Blue Boat Neckline Bowknot Ruched Sleeveless Mini Dress',
     'description':
         'Blue Boat Neckline Bowknot Ruched Sleeveless Mini Dress',
-    'price': 999,
-    'currentPrice': 799,
-    'currency': '₹',
+    'price': 12,
+    'currentPrice': 8,
+    'currency': "\$",
     'imageUrl': 'assets/images/products/p6_0.png',
     'otherImageUrls': [
       'assets/images/products/p6_1.png',
@@ -97,9 +97,9 @@ List<Map<String, dynamic>> productsData = [
     'name': 'Baggy Black Jean',
     'description':
         'Textured elegance meets relaxed vibes in this Baggy Black Jean essential.',
-    'price': 1499,
-    'currentPrice': 1299,
-    'currency': '₹',
+    'price': 16,
+    'currentPrice': 12,
+    'currency': "\$",
     'imageUrl': 'assets/images/products/p2_0.png',
     'otherImageUrls': [
       'assets/images/products/p2_1.png',
@@ -128,9 +128,9 @@ List<Map<String, dynamic>> productsData = [
     'name': 'Women Bodycon Mini Dress',
     'description':
         'Women Bodycon Mini Dress',
-    'price': 999,
-    'currentPrice': 799,
-    'currency': '₹',
+    'price': 12,
+    'currentPrice': 8,
+    'currency': "\$",
     'imageUrl': 'assets/images/products/p7_0.png',
     'otherImageUrls': [
       'assets/images/products/p7_1.png',
@@ -159,9 +159,9 @@ List<Map<String, dynamic>> productsData = [
     'name': 'Printed TShirt',
     'description':
         'Textured elegance meets relaxed vibes in this Printed TShirt essential.',
-    'price': 599,
-    'currentPrice': 499,
-    'currency': '₹',
+    'price': 6,
+    'currentPrice': 4,
+    'currency': "\$",
     'imageUrl': 'assets/images/products/p3_0.png',
     'otherImageUrls': [
       'assets/images/products/p3_1.png',
@@ -190,9 +190,9 @@ List<Map<String, dynamic>> productsData = [
     'name': 'Half Sleeve Blue Shirt',
     'description':
         'Textured elegance meets relaxed vibes in this Half Sleeve Blue Shirt essential.',
-    'price': 999,
-    'currentPrice': 799,
-    'currency': '₹',
+    'price': 12,
+    'currentPrice': 6,
+    'currency': "\$",
     'imageUrl': 'assets/images/products/p4_0.png',
     'otherImageUrls': [
       'assets/images/products/p4_1.png',

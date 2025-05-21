@@ -78,7 +78,7 @@ class ProfileView extends GetView<ProfileController> {
                 _buildProfileOption(Icons.location_on, "Shipping Address", () {}),
                 _buildProfileOption(Icons.settings, "Settings", () {}),
                 _buildProfileOption(Icons.help_outline, "Help & Support", () {}),
-                _buildProfileOption(Icons.logout, "Logout", () {}),
+                _buildProfileOption(Icons.logout, "Logout", controller.logout),
               ],
             ),
           ),

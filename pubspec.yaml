@@ -43,6 +43,7 @@ dependencies:
   get: 
   flutter_animate: 
   flutter_svg: 
+  font_awesome_flutter: ^10.7.0
 
 dev_dependencies:
   flutter_test:

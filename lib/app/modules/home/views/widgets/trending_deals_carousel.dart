@@ -5,7 +5,7 @@ import 'package:closet_mate/models/product_model.dart';
 class TrendingDealsCarousel extends StatelessWidget {
   final List<ProductModel> deals;
 
-  const TrendingDealsCarousel({Key? key, required this.deals}) : super(key: key);
+  const TrendingDealsCarousel({super.key, required this.deals});
 
   @override
   Widget build(BuildContext context) {

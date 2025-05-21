@@ -1,3 +1,4 @@
+import 'package:closet_mate/app/routes/app_pages.dart';
 import 'package:get/get.dart';
 
 class ProfileController extends GetxController {
@@ -8,5 +9,10 @@ class ProfileController extends GetxController {
     super.onInit();
     userName = 'Vinay Varma';
     userEmail = 'vinayvarma@gmail.com';
+  }
+
+  void logout() {
+    // Implement logout functionality here
+    Get.offNamed(Routes.LOGIN);
   }
 }

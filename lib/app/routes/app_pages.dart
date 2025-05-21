@@ -8,14 +8,16 @@ import '../modules/favorites/bindings/favorites_binding.dart';
 import '../modules/favorites/views/favorites_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
+import '../modules/login/bindings/login_binding.dart';
+import '../modules/login/views/login_view.dart';
 import '../modules/product_details/bindings/product_details_binding.dart';
 import '../modules/product_details/views/product_details_view.dart';
 import '../modules/profile/bindings/profile_binding.dart';
 import '../modules/profile/views/profile_view.dart';
 import '../modules/search_products/bindings/search_products_binding.dart';
 import '../modules/search_products/views/search_products_view.dart';
-import '../modules/sign_up/bindings/sign_up_binding.dart';
-import '../modules/sign_up/views/sign_up_view.dart';
+import '../modules/signup/bindings/signup_binding.dart';
+import '../modules/signup/views/signup_view.dart';
 import '../modules/splash/bindings/splash_binding.dart';
 import '../modules/splash/views/splash_view.dart';
 import '../modules/swipe_shopping/bindings/swipe_shopping_binding.dart';
@@ -75,9 +77,14 @@ class AppPages {
       binding: ProductDetailsBinding(),
     ),
     GetPage(
-      name: _Paths.SIGN_UP,
-      page: () => const SignUpView(),
-      binding: SignUpBinding(),
+      name: _Paths.LOGIN,
+      page: () => LoginView(),
+      binding: LoginBinding(),
+    ),
+    GetPage(
+      name: _Paths.SIGNUP,
+      page: () => SignupView(),
+      binding: SignupBinding(),
     ),
   ];
 }

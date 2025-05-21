@@ -20,7 +20,7 @@ class SplashView extends GetView<SplashController> {
             children: [
               Image.asset(
                 Constants.logoNoBg,
-                width: 500.w,
+                width: 250.w,
                 height: 250.h,
               ).animate().scale(
                 begin: const Offset(0.5, 0.5), // Start slightly smaller
