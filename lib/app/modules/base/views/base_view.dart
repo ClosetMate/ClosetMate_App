@@ -20,17 +20,17 @@ class BaseView extends GetView<BaseController> {
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 400),
                 height:
-                    controller.currentTabIndex == 2
-                        ? 0
+                    _shouldHideAppBar(controller.currentTabIndex)
+                        ? 40
                         : 120, // Animate height change
                 child: AnimatedOpacity(
                   duration: const Duration(milliseconds: 400),
                   opacity:
-                      controller.currentTabIndex == 2
+                      _shouldHideAppBar(controller.currentTabIndex)
                           ? 0.0
                           : 1.0, // Animate opacity change
                   child:
-                      controller.currentTabIndex == 2
+                      _shouldHideAppBar(controller.currentTabIndex)
                           ? SizedBox.shrink()
                           : CustomAppBar(
                             previousIndex: controller.currentTabIndex,
@@ -55,5 +55,11 @@ class BaseView extends GetView<BaseController> {
                     ),
           ),
     );
+  }
+
+  bool _shouldHideAppBar(int currentIndex) {
+    // Add indices where you want to hide the app bar
+    return currentIndex == 2 || // Swipe Shopping
+           currentIndex == 5;   // Search
   }
 }

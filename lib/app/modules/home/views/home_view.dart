@@ -1,6 +1,7 @@
 import 'package:closet_mate/app/modules/home/controllers/home_controller.dart';
 import 'package:closet_mate/app/modules/home/views/widgets/products_section.dart';
 import 'package:closet_mate/app/modules/home/views/widgets/trending_deals_carousel.dart';
+import 'package:closet_mate/app/modules/home/views/widgets/brands_section.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
 import 'package:get/get_state_manager/src/simple/get_view.dart';
@@ -18,6 +19,7 @@ class HomeView extends GetView<HomeController> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TrendingDealsCarousel(deals: controller.products),
+              BrandsSection(brands: controller.brands),
               ProductsSection(
                 products: controller.products,
                 sectionTitle: 'Top Selling',

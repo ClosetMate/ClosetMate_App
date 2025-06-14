@@ -13,100 +13,66 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _CustomAppBarState extends State<CustomAppBar> {
-  bool _showSearch = false; // Controls search bar visibility
   late Function(int) onTabChange;
   late int previousIndex;
-  final FocusNode _searchFocusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
     previousIndex = widget.previousIndex;
-    onTabChange = widget.onTabChange;// Assigning the received data to a local variable
+    onTabChange = widget.onTabChange;
   }
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      elevation: 10, // Adds depth
+      elevation: 10,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
-          bottom: Radius.circular(20), // Soft rounded corners
+          bottom: Radius.circular(20),
         ),
       ),
       flexibleSpace: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [Colors.white, Colors.white], // Gradient effect
+            colors: [Colors.white, Colors.white],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.3), // Shadow color
-              blurRadius: 5, // Spread of shadow
-              offset: Offset(0, 3), // Vertical offset
+              color: Colors.black.withOpacity(0.3),
+              blurRadius: 5,
+              offset: Offset(0, 3),
             ),
           ],
         ),
       ),
-      title:
-          _showSearch
-              ? Container(
-                height: 40,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(30.0),
-                  border: Border.all(color: Colors.grey, width: 1),
-                ),
-                child: TextField(
-                  focusNode: _searchFocusNode,
-                  autofocus: true,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w400
-                  ),
-                  decoration: InputDecoration(
-                    hintText: "Search",
-                    hintStyle: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 16,
-                    ),
-                    border: InputBorder.none,
-                    prefixIcon: Icon(Icons.search, color: Colors.grey),
-                    contentPadding: EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 10,
-                    ),
-                  ),
-                ),
-              )
-              : Text.rich(
-                TextSpan(
-                  children: [
-                    TextSpan(
-                      text: 'Closet',
-                      style: TextStyle(
-                        color: ColorConstants.appSpecificLight,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 1.2,
-                      ),
-                    ),
-                    TextSpan(
-                      text: 'Mate',
-                      style: TextStyle(
-                        color: ColorConstants.appSpecificDark,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 1.2,
-                      ),
-                    ),
-                  ],
-                ),
+      title: Text.rich(
+        TextSpan(
+          children: [
+            TextSpan(
+              text: 'Closet',
+              style: TextStyle(
+                color: ColorConstants.appSpecificLight,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                letterSpacing: 1.2,
               ),
-      centerTitle: !_showSearch,
+            ),
+            TextSpan(
+              text: 'Mate',
+              style: TextStyle(
+                color: ColorConstants.appSpecificDark,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                letterSpacing: 1.2,
+              ),
+            ),
+          ],
+        ),
+      ),
+      centerTitle: true,
       leading: IconButton(
         icon: Icon(Icons.person, color: ColorConstants.appSpecificDark),
         onPressed: () {},
@@ -114,29 +80,11 @@ class _CustomAppBarState extends State<CustomAppBar> {
       ),
       actions: [
         IconButton(
-          icon: Icon(
-            _showSearch ? Icons.close : Icons.search,
-            color: ColorConstants.appSpecificDark,
-          ),
-          onPressed: () {
-            setState(() {
-              _showSearch = !_showSearch; // Toggle search bar visibility
-              if (_showSearch) {
-                onTabChange(5);
-              }else{
-                // FocusScope.of(context).unfocus(); // Dismiss keyboard
-                onTabChange(previousIndex);
-              }
-            });
-          },
-          tooltip: _showSearch ? "Close Search" : "Search",
+          icon: Icon(Icons.search, color: ColorConstants.appSpecificDark),
+          onPressed: () => onTabChange(5),
+          tooltip: "Search",
         ),
-        // IconButton(
-        //   icon: Icon(Icons.info, color: ColorConstants.appSpecificDark),
-        //   onPressed: () {},
-        //   tooltip: "Info",
-        // ),
-        SizedBox(width: 10), // Adds spacing
+        SizedBox(width: 10),
       ],
     );
   }

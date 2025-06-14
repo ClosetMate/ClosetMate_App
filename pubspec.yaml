@@ -104,6 +104,12 @@ flutter:
     - assets/images/products/p7_2.png
     - assets/images/products/p7_3.png
     - assets/images/products/p7_4.png
+    - assets/images/brands/nike.webp
+    - assets/images/brands/adidas.jpg
+    - assets/images/brands/puma.png
+    - assets/images/brands/zara.jpg
+    - assets/images/brands/h&m.jpg
+    - assets/images/brands/gucci.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
