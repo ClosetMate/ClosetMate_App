@@ -17,6 +17,7 @@ class SwipeShoppingView extends GetView<SwipeShoppingController> {
             body: Stack(
               children: [
                 AppinioSwiper(
+                  controller: controller.swiperController,
                   cardBuilder: (context, index) {
                     return Padding(
                       padding: const EdgeInsets.only(
@@ -82,26 +83,29 @@ class SwipeShoppingView extends GetView<SwipeShoppingController> {
                     left: controller.swipeAction['left'],
                     right: controller.swipeAction['right'],
                     child: AnimatedOpacity(
-                      duration: const Duration(milliseconds: 1000),
+                      duration: const Duration(milliseconds: 300),
                       opacity: controller.swipeAction['opacity'],
-                      child: Container(
-                        width: 64,
-                        height: 64,
-                        decoration: BoxDecoration(
-                          color: const Color.fromARGB(196, 255, 255, 255),
-                          shape: BoxShape.circle,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.1),
-                              blurRadius: 8,
-                              offset: const Offset(0, 4),
-                            ),
-                          ],
-                        ),
-                        child: Icon(
-                          controller.swipeAction['icon'],
-                          size: 40,
-                          color: controller.swipeAction['color'],
+                      child: Transform.scale(
+                        scale: 0.5 + (controller.swipeAction['opacity'] * 0.5),
+                        child: Container(
+                          width: 64,
+                          height: 64,
+                          decoration: BoxDecoration(
+                            color: const Color.fromARGB(196, 255, 255, 255),
+                            shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.1),
+                                blurRadius: 8,
+                                offset: const Offset(0, 4),
+                              ),
+                            ],
+                          ),
+                          child: Icon(
+                            controller.swipeAction['icon'],
+                            size: 40,
+                            color: controller.swipeAction['color'],
+                          ),
                         ),
                       ),
                     ),
@@ -115,7 +119,7 @@ class SwipeShoppingView extends GetView<SwipeShoppingController> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       InkWell(
-                        onTap: () {},
+                        onTap: () => controller.swipeCard(AxisDirection.left),
                         child: Container(
                           width: 64,
                           height: 64,
@@ -138,7 +142,7 @@ class SwipeShoppingView extends GetView<SwipeShoppingController> {
                         ),
                       ),
                       InkWell(
-                        onTap: () {},
+                        onTap: () => controller.swipeCard(AxisDirection.up),
                         child: Container(
                           width: 56,
                           height: 56,
@@ -161,7 +165,7 @@ class SwipeShoppingView extends GetView<SwipeShoppingController> {
                         ),
                       ),
                       InkWell(
-                        onTap: () {},
+                        onTap: () => controller.swipeCard(AxisDirection.right),
                         child: Container(
                           width: 64,
                           height: 64,
