@@ -1,6 +1,8 @@
-import 'package:closet_mate/app/components/user_info_page.dart';
+import 'package:closet_mate/app/routes/app_pages.dart';
 import 'package:closet_mate/models/product_model.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
 
 class ProductDetailCard extends StatelessWidget {
   const ProductDetailCard({super.key, required this.product});
@@ -9,19 +11,14 @@ class ProductDetailCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.only(top: 10, bottom: 10, left: 10, right: 10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
       ),
       child: Stack(
         children: [
           InkWell(
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => UserInfoPage(product: product)));
-            },
+            onTap: () => Get.toNamed(Routes.PRODUCT_DETAILS, arguments: product),
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16),

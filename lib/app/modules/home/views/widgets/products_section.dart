@@ -6,11 +6,15 @@ import 'package:flutter/material.dart';
 class ProductsSection extends StatelessWidget {
   final List<ProductModel> products;
   final String sectionTitle;
+  final bool showViewAll;
+  final String category;
 
   const ProductsSection({
     super.key,
     required this.products,
     required this.sectionTitle,
+    this.showViewAll = true,
+    this.category = 'products',
   });
 
     @override
@@ -31,25 +35,27 @@ class ProductsSection extends StatelessWidget {
                     sectionTitle,
                     style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      // Navigate to all products page
-                    },
-                    child: Row(
-                      children: [
-                        Text(
-                          "View All",
-                          style: TextStyle(fontSize: 14, color: ColorConstants.appSpecificDark),
-                        ),
-                        const SizedBox(width: 4),
-                        Icon(
-                          Icons.arrow_forward_ios,
-                          size: 14,
-                          color: ColorConstants.appSpecificDark,
-                        ),
-                      ],
+                  if (showViewAll)
+                    GestureDetector(
+                      onTap: () {
+                        // Navigate to all products page with category filter
+                        print('Navigate to category: $category');
+                      },
+                      child: Row(
+                        children: [
+                          Text(
+                            "View All",
+                            style: TextStyle(fontSize: 14, color: ColorConstants.appSpecificDark),
+                          ),
+                          const SizedBox(width: 4),
+                          Icon(
+                            Icons.arrow_forward_ios,
+                            size: 14,
+                            color: ColorConstants.appSpecificDark,
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
                 ],
               ),
             ),

@@ -9,19 +9,33 @@ class BrandItem {
 
 class BrandsSection extends StatelessWidget {
   final List<BrandItem> brands;
+  final String? title;
+  final Map<String, dynamic>? config;
 
-  const BrandsSection({super.key, required this.brands});
+  const BrandsSection({
+    super.key, 
+    required this.brands,
+    this.title,
+    this.config,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final sectionTitle = title ?? 'Popular Brands';
+    final showBrandNames = config?['show_brand_names'] ?? true;
+    final brandsToShow = config?['brands_to_show'] ?? brands.length;
+    
+    // Limit brands based on config
+    final limitedBrands = brands.take(brandsToShow).toList();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
           child: Text(
-            'Popular Brands',
-            style: TextStyle(
+            sectionTitle,
+            style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
             ),
@@ -32,9 +46,9 @@ class BrandsSection extends StatelessWidget {
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.symmetric(horizontal: 12.0),
-            itemCount: brands.length,
+            itemCount: limitedBrands.length,
             itemBuilder: (context, index) {
-              final brand = brands[index];
+              final brand = limitedBrands[index];
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 4.0),
                 child: Column(
@@ -52,14 +66,16 @@ class BrandsSection extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 4),
-                    Text(
-                      brand.name,
-                      style: const TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
+                    if (showBrandNames) ...[
+                      const SizedBox(height: 4),
+                      Text(
+                        brand.name,
+                        style: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
-                    ),
+                    ],
                   ],
                 ),
               );

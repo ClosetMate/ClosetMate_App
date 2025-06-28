@@ -17,12 +17,14 @@ class SwipeShoppingView extends GetView<SwipeShoppingController> {
             body: Stack(
               children: [
                 AppinioSwiper(
+                  backgroundCardOffset: Offset(0, 50),
+                  backgroundCardCount: 1,
                   controller: controller.swiperController,
                   cardBuilder: (context, index) {
                     return Padding(
                       padding: const EdgeInsets.only(
-                        bottom: 130,
-                        top: 40,
+                        bottom: 50,
+                        top: 0,
                       ), // Padding around each card
                       child: controller.productCards[index],
                     );
@@ -38,7 +40,7 @@ class SwipeShoppingView extends GetView<SwipeShoppingController> {
                       controller.swipeAction = {'opacity': 0.0};
                     }
                     controller.direction = currentDirection;
-                    double opacity = (position.offset.distance / 5).clamp(
+                    double opacity = position.offset.distance < 30 ? 0.0 :(position.offset.distance / 100).clamp(
                       0.0,
                       1.0,
                     );
@@ -46,7 +48,7 @@ class SwipeShoppingView extends GetView<SwipeShoppingController> {
                         controller.swipeAction = {
                           'top': MediaQuery.of(context).size.height / 3,
                           'left': null,
-                          'right': 10.0,
+                          'right': 20.0,
                           'color': Colors.red,
                           'icon': Icons.favorite,
                           'opacity': opacity,
@@ -54,7 +56,7 @@ class SwipeShoppingView extends GetView<SwipeShoppingController> {
                       } else if (controller.direction == AxisDirection.left) {
                         controller.swipeAction = {
                           'top': MediaQuery.of(context).size.height / 3,
-                          'left': 10.0,
+                          'left': 20.0,
                           'right': null,
                           'color': ColorConstants.close,
                           'icon': Icons.close,
@@ -62,9 +64,9 @@ class SwipeShoppingView extends GetView<SwipeShoppingController> {
                         };
                       } else if (controller.direction == AxisDirection.up) {
                         controller.swipeAction = {
-                          'top': 60.0,
-                          'left': 10.0,
-                          'right': 10.0,
+                          'top': 20.0,
+                          'left': 20.0,
+                          'right': 20.0,
                           'color': ColorConstants.brightGreen,
                           'icon': Icons.shopping_cart,
                           'opacity': opacity,
@@ -86,7 +88,7 @@ class SwipeShoppingView extends GetView<SwipeShoppingController> {
                       duration: const Duration(milliseconds: 300),
                       opacity: controller.swipeAction['opacity'],
                       child: Transform.scale(
-                        scale: 0.5 + (controller.swipeAction['opacity'] * 0.5),
+                        scale: 0.2 + (controller.swipeAction['opacity'] * 1.2),
                         child: Container(
                           width: 64,
                           height: 64,
@@ -110,86 +112,6 @@ class SwipeShoppingView extends GetView<SwipeShoppingController> {
                       ),
                     ),
                   ),
-
-                Positioned(
-                  bottom: 50,
-                  right: 0,
-                  left: 0,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      InkWell(
-                        onTap: () => controller.swipeCard(AxisDirection.left),
-                        child: Container(
-                          width: 64,
-                          height: 64,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.1),
-                                blurRadius: 8,
-                                offset: const Offset(0, 4),
-                              ),
-                            ],
-                          ),
-                          child: Icon(
-                            Icons.close,
-                            color: ColorConstants.close,
-                            size: 32,
-                          ),
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () => controller.swipeCard(AxisDirection.up),
-                        child: Container(
-                          width: 56,
-                          height: 56,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.1),
-                                blurRadius: 8,
-                                offset: const Offset(0, 4),
-                              ),
-                            ],
-                          ),
-                          child: Icon(
-                            Icons.shopping_cart,
-                            color: ColorConstants.brightGreen,
-                            size: 32,
-                          ),
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () => controller.swipeCard(AxisDirection.right),
-                        child: Container(
-                          width: 64,
-                          height: 64,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.1),
-                                blurRadius: 8,
-                                offset: const Offset(0, 4),
-                              ),
-                            ],
-                          ),
-                          child: Icon(
-                            Icons.favorite,
-                            color: ColorConstants.favorite,
-                            size: 32,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
               ],
             ),
           ),

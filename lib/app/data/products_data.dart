@@ -215,3 +215,8 @@ List<Map<String, dynamic>> productsData = [
     'quantity': 1,
   },
 ];
+
+List<Map<String, dynamic>> getShuffledProducts(){
+  productsData.shuffle();
+  return productsData;
+}
