@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:closet_mate/app/data/products_data.dart';
 import 'package:appinio_swiper/appinio_swiper.dart';
-import 'package:closet_mate/config/theme/colors.dart';
 
 class SwipeShoppingController extends GetxController {
   List<ProductDetailCard> productCards = [];

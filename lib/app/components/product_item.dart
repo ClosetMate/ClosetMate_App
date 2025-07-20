@@ -1,4 +1,5 @@
 import 'package:closet_mate/app/routes/app_pages.dart';
+import 'package:closet_mate/config/theme/theme_colors.dart';
 import 'package:closet_mate/models/product_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -9,11 +10,13 @@ class ProductItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isLightTheme = Get.isDarkMode == false;
     // final theme = context.theme;
     return GestureDetector(
       onTap: () => Get.toNamed(Routes.PRODUCT_DETAILS, arguments: product),
       child: Card(
         // elevation: 4,
+        color: ThemeColors.getCardBackground(isLightTheme),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         child: Stack(
           children: [

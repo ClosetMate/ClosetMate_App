@@ -1,5 +1,7 @@
 import 'package:closet_mate/config/theme/colors.dart';
+import 'package:closet_mate/config/theme/theme_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class BottomNav extends StatefulWidget {
   final int index;
@@ -41,10 +43,11 @@ class _BottomNavState extends State<BottomNav> with SingleTickerProviderStateMix
 
   @override
   Widget build(BuildContext context) {
+    bool isLightTheme = Theme.of(context).brightness == Brightness.light;
     return Container(
       height: 70,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: ThemeColors.getScaffoldBackground(isLightTheme),
         borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
         boxShadow: [
           BoxShadow(
@@ -59,17 +62,17 @@ class _BottomNavState extends State<BottomNav> with SingleTickerProviderStateMix
         children: [
           Container(
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: ThemeColors.getScaffoldBackground(isLightTheme),
               borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                _buildNavItem(Icons.home_outlined, 0),
-                _buildNavItem(Icons.favorite, 1),
+                _buildNavItem(Icons.home_outlined, 0, isLightTheme),
+                _buildNavItem(Icons.favorite, 1, isLightTheme),
                 const SizedBox(width: 60),
-                _buildNavItem(Icons.shopping_cart_rounded, 3),
-                _buildNavItem(Icons.person_outlined, 4),
+                _buildNavItem(Icons.shopping_cart_rounded, 3, isLightTheme),
+                _buildNavItem(Icons.person_outlined, 4, isLightTheme),
               ],
             ),
           ),
@@ -78,7 +81,7 @@ class _BottomNavState extends State<BottomNav> with SingleTickerProviderStateMix
             right: 0,
             top: -5,
             child: Center(
-              child: _buildCenterButton(),
+              child: _buildCenterButton(isLightTheme),
             ),
           ),
         ],
@@ -86,7 +89,7 @@ class _BottomNavState extends State<BottomNav> with SingleTickerProviderStateMix
     );
   }
 
-  Widget _buildNavItem(IconData icon, int index) {
+  Widget _buildNavItem(IconData icon, int index, bool isLightTheme) {
     final bool isSelected = currentTabIndex == index;
     return GestureDetector(
       onTap: () {
@@ -100,7 +103,7 @@ class _BottomNavState extends State<BottomNav> with SingleTickerProviderStateMix
         margin: const EdgeInsets.only(top: 3),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         decoration: BoxDecoration(
-          color: isSelected ? ColorConstants.primaryColor.withOpacity(0.1) : Colors.transparent,
+          color: isSelected ? ThemeColors.getSecondary(isLightTheme).withOpacity(0.1) : Colors.transparent,
           borderRadius: BorderRadius.circular(16),
         ),
         child: Column(
@@ -108,26 +111,16 @@ class _BottomNavState extends State<BottomNav> with SingleTickerProviderStateMix
           children: [
             Icon(
               icon,
-              color: isSelected ? ColorConstants.primaryColor : Colors.grey[600],
+              color: isSelected ? ThemeColors.getSecondary(isLightTheme) : ThemeColors.getSecondary(isLightTheme),
               size: 24,
             ),
-            // if (isSelected)
-            //   Container(
-            //     margin: const EdgeInsets.only(top: 3),
-            //     height: 3,
-            //     width: 20,
-            //     decoration: BoxDecoration(
-            //       color: ColorConstants.primaryColor,
-            //       borderRadius: BorderRadius.circular(2),
-            //     ),
-            //   ),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildCenterButton() {
+  Widget _buildCenterButton(bool isLightTheme) {
     final bool isSelected = currentTabIndex == 2;
     return GestureDetector(
       onTap: () {
@@ -145,12 +138,12 @@ class _BottomNavState extends State<BottomNav> with SingleTickerProviderStateMix
           gradient: LinearGradient(
             colors: isSelected
                 ? [
-                    ColorConstants.primaryColor,
-                    ColorConstants.primaryColor.withOpacity(0.8),
+                    ThemeColors.getPrimary(isLightTheme),
+                    ThemeColors.getPrimary(isLightTheme).withOpacity(0.8),
                   ]
                 : [
-                    Colors.white,
-                    Colors.white.withOpacity(0.9),
+                    ThemeColors.getSecondary(isLightTheme),
+                    ThemeColors.getSecondary(isLightTheme).withOpacity(0.9),
                   ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
@@ -169,7 +162,7 @@ class _BottomNavState extends State<BottomNav> with SingleTickerProviderStateMix
           scale: _scaleAnimation,
           child: Icon(
             Icons.swap_horiz,
-            color: isSelected ? Colors.white : ColorConstants.primaryColor,
+            color: isSelected ? ThemeColors.getSecondary(isLightTheme) : ThemeColors.getPrimary(isLightTheme),
             size: 28,
           ),
         ),

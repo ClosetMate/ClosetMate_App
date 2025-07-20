@@ -1,17 +1,19 @@
 import 'package:closet_mate/app/modules/home/controllers/home_controller.dart';
 import 'package:closet_mate/app/modules/home/views/widgets/dynamic_section_widget.dart';
+import 'package:closet_mate/config/theme/theme_colors.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_state_manager/src/simple/get_state.dart';
-import 'package:get/get_state_manager/src/simple/get_view.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
+import 'package:get/get.dart';
+
 
 class HomeView extends GetView<HomeController> {
   const HomeView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    bool isLightTheme = Theme.of(context).brightness == Brightness.light;
     return GetBuilder<HomeController>(
       builder: (_) => Scaffold(
+        backgroundColor: ThemeColors.getScaffoldBackground(isLightTheme),
         body: Obx(() {
           if (controller.isLoading.value) {
             return const Center(

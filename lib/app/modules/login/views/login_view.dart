@@ -1,4 +1,5 @@
-import 'package:closet_mate/utils/color_constants.dart';
+import 'package:closet_mate/config/theme/theme_colors.dart';
+import 'package:closet_mate/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -34,8 +35,9 @@ class LoginView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isLightTheme = Get.isDarkMode == false;
     return Scaffold(
-      backgroundColor: Colors.blue[50],
+      backgroundColor: ThemeColors.getScaffoldBackground(isLightTheme),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
         child: Form(
@@ -43,13 +45,25 @@ class LoginView extends StatelessWidget {
           child: Column(
             children: [
               const SizedBox(height: 40),
-              Image.asset(
-                Constants.logoNoBg,
-                width: 120.w,
-                height: 120.h,
+              Container(
+                padding: EdgeInsets.all(4),
+                decoration: BoxDecoration(
+                  color: Colors.white, // or use ThemeColors.getCardBackground(...)
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Image.asset(
+                  Constants.logoNoBg,
+                  width: 120.w,
+                  height: 120.h,
+                ),
               ),
+              // Image.asset(
+              //   Constants.logoNoBg,
+              //   width: 120.w,
+              //   height: 120.h,
+              // ),
               const SizedBox(height: 20),
-              const Text("Welcome Back", style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold)),
+              Text("Welcome Back", style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: ThemeColors.getTextPrimary(isLightTheme))),
               const SizedBox(height: 30),
               TextFormField(
                 controller: controller.emailController,
@@ -86,8 +100,9 @@ class LoginView extends StatelessWidget {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
+                    backgroundColor: ThemeColors.getPrimary(isLightTheme)
                   ),
-                  child: const Text("Login", style: TextStyle(fontSize: 18, color: Colors.white)),
+                  child: Text("Login", style: TextStyle(fontSize: 18, color: ThemeColors.getSecondary(isLightTheme))),
                 ),
               ),
               const SizedBox(height: 25),

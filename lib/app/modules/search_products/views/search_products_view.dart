@@ -1,3 +1,4 @@
+import 'package:closet_mate/config/theme/theme_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:closet_mate/app/components/product_item.dart';
@@ -9,12 +10,13 @@ class SearchProductsView extends GetView<SearchProductsController> {
 
   @override
   Widget build(BuildContext context) {
+    bool isLightTheme = Theme.of(context).brightness == Brightness.light;
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Colors.white,
+        backgroundColor: ThemeColors.getBackground(isLightTheme),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
+          icon: Icon(Icons.arrow_back_ios, color: ThemeColors.getSecondary(isLightTheme)),
           onPressed: () {
             // Remove focus when going back
             FocusScope.of(context).unfocus();
@@ -33,25 +35,25 @@ class SearchProductsView extends GetView<SearchProductsController> {
             // autofocus: true,
             decoration: InputDecoration(
               hintText: 'Search',
-              hintStyle: TextStyle(color: Colors.grey[400]),
+              hintStyle: TextStyle(color: ThemeColors.getTextHint(isLightTheme)),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(color: Colors.grey[300]!),
+                borderSide: BorderSide(color: ThemeColors.getTextHint(isLightTheme)),
               ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(color: Colors.grey[300]!),
+                borderSide: BorderSide(color: ThemeColors.getTextHint(isLightTheme)),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(color: Colors.grey[400]!),
+                borderSide: BorderSide(color: ThemeColors.getTextHint(isLightTheme)),
               ),
               contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
               filled: true,
-              fillColor: Colors.grey[50],
+              fillColor: ThemeColors.getCardBackground(isLightTheme),
             ),
-            style: const TextStyle(
-              color: Colors.black,
+            style: TextStyle(
+              color: ThemeColors.getTextPrimary(isLightTheme),
               fontSize: 16,
             ),
             onChanged: (value) => controller.onSearchChanged(value),
@@ -59,8 +61,8 @@ class SearchProductsView extends GetView<SearchProductsController> {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.filter_list, color: Colors.black),
-            onPressed: () => _showFilterBottomSheet(context),
+            icon: Icon(Icons.filter_list, color: ThemeColors.getSecondary(isLightTheme)),
+            onPressed: () => _showFilterBottomSheet(context, isLightTheme),
           ),
           const SizedBox(width: 8),
         ],
@@ -78,16 +80,19 @@ class SearchProductsView extends GetView<SearchProductsController> {
                     _buildFilterChip(
                       label: controller.selectedCategory!,
                       onDeleted: () => controller.setCategory(null),
+                      isLightTheme: isLightTheme
                     ),
                   if (controller.selectedPriceRange != null)
                     _buildFilterChip(
                       label: controller.selectedPriceRange!,
                       onDeleted: () => controller.setPriceRange(null),
+                      isLightTheme: isLightTheme
                     ),
                   if (controller.selectedSortBy != null)
                     _buildFilterChip(
                       label: controller.selectedSortBy!,
                       onDeleted: () => controller.setSortBy(null),
+                      isLightTheme: isLightTheme
                     ),
                 ],
               ),
@@ -145,19 +150,20 @@ class SearchProductsView extends GetView<SearchProductsController> {
   Widget _buildFilterChip({
     required String label,
     required VoidCallback onDeleted,
+    isLightTheme
   }) {
     return Padding(
       padding: const EdgeInsets.only(right: 8.0),
       child: Chip(
-        label: Text(label),
+        label: Text(label, style: TextStyle(color: ThemeColors.getTextPrimary(isLightTheme))),
         deleteIcon: const Icon(Icons.close, size: 18),
         onDeleted: onDeleted,
-        backgroundColor: ColorConstants.appSpecificDark.withOpacity(0.5),
+        backgroundColor: ThemeColors.getCardBackground(isLightTheme),
       ),
     );
   }
 
-  void _showFilterBottomSheet(BuildContext context) {
+  void _showFilterBottomSheet(BuildContext context, bool isLightTheme) {
     showModalBottomSheet(
       context: context,
       shape: const RoundedRectangleBorder(
@@ -169,27 +175,29 @@ class SearchProductsView extends GetView<SearchProductsController> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
+            Text(
               'Filters',
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
+                color: ThemeColors.getTextPrimary(isLightTheme)
               ),
             ),
             const SizedBox(height: 16),
             
             // Category Filter
-            const Text(
+            Text(
               'Category',
-              style: TextStyle(fontWeight: FontWeight.bold),
+              style: TextStyle(fontWeight: FontWeight.bold, color: ThemeColors.getTextPrimary(isLightTheme)),
             ),
             const SizedBox(height: 8),
             Wrap(
               spacing: 8,
               children: ['All', 'Shirts', 'Pants', 'Dresses', 'Shoes']
                   .map((category) => ChoiceChip(
-                        label: Text(category),
+                        label: Text(category, style: TextStyle(color: Colors.white)),
                         selected: controller.selectedCategory == category,
+                        selectedColor: ThemeColors.getSecondary(isLightTheme),
                         onSelected: (selected) {
                           if (selected) {
                             controller.setCategory(category);
@@ -201,9 +209,9 @@ class SearchProductsView extends GetView<SearchProductsController> {
             const SizedBox(height: 16),
 
             // Price Range Filter
-            const Text(
+            Text(
               'Price Range',
-              style: TextStyle(fontWeight: FontWeight.bold),
+              style: TextStyle(fontWeight: FontWeight.bold, color: ThemeColors.getTextPrimary(isLightTheme)),
             ),
             const SizedBox(height: 8),
             Wrap(
@@ -215,8 +223,9 @@ class SearchProductsView extends GetView<SearchProductsController> {
                 '\$200+'
               ]
                   .map((range) => ChoiceChip(
-                        label: Text(range),
+                        label: Text(range, style: TextStyle(color: Colors.white)),
                         selected: controller.selectedPriceRange == range,
+                        selectedColor: ThemeColors.getSecondary(isLightTheme),
                         onSelected: (selected) {
                           if (selected) {
                             controller.setPriceRange(range);
@@ -228,9 +237,9 @@ class SearchProductsView extends GetView<SearchProductsController> {
             const SizedBox(height: 16),
 
             // Sort By Filter
-            const Text(
+            Text(
               'Sort By',
-              style: TextStyle(fontWeight: FontWeight.bold),
+              style: TextStyle(fontWeight: FontWeight.bold, color: ThemeColors.getTextPrimary(isLightTheme)),
             ),
             const SizedBox(height: 8),
             Wrap(
@@ -242,8 +251,9 @@ class SearchProductsView extends GetView<SearchProductsController> {
                 'Most Popular'
               ]
                   .map((sort) => ChoiceChip(
-                        label: Text(sort),
+                        label: Text(sort, style: TextStyle(color: Colors.white)),
                         selected: controller.selectedSortBy == sort,
+                        selectedColor: ThemeColors.getSecondary(isLightTheme),
                         onSelected: (selected) {
                           if (selected) {
                             controller.setSortBy(sort);
@@ -263,16 +273,16 @@ class SearchProductsView extends GetView<SearchProductsController> {
                   Navigator.pop(context);
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: ColorConstants.appSpecificDark,
+                  backgroundColor: ThemeColors.getSecondary(isLightTheme),
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                child: const Text(
+                child: Text(
                   'Apply Filters',
                   style: TextStyle(
-                    color: Colors.white,
+                    color: ThemeColors.getPrimary(isLightTheme),
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),

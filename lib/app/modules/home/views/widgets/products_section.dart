@@ -1,7 +1,9 @@
 import 'package:closet_mate/app/components/product_item.dart';
 import 'package:closet_mate/config/theme/colors.dart';
+import 'package:closet_mate/config/theme/theme_colors.dart';
 import 'package:closet_mate/models/product_model.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ProductsSection extends StatelessWidget {
   final List<ProductModel> products;
@@ -78,12 +80,13 @@ class ProductsSection extends StatelessWidget {
   }
 
   Widget _buildProductCard(ProductModel item) {
+    bool isLightTheme = Get.isDarkMode == false;
     return Container(
       width: 180,
-      margin: const EdgeInsets.all(5),
+      margin: const EdgeInsets.all(2),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
-        color: Colors.white,
+        color: ThemeColors.getScaffoldBackground(isLightTheme),
       ),
       child: ProductItem(product: item),
     );

@@ -1,4 +1,5 @@
 import 'package:closet_mate/config/theme/colors.dart';
+import 'package:closet_mate/config/theme/theme_colors.dart';
 import 'package:closet_mate/models/product_model.dart';
 import 'package:flutter/material.dart';
 
@@ -10,8 +11,9 @@ class CartView extends GetView<CartController> {
   const CartView({super.key});
   @override
   Widget build(BuildContext context) {
+    bool isLightTheme = Theme.of(context).brightness == Brightness.light;
     return Scaffold(
-      backgroundColor: Colors.grey[100],
+      backgroundColor: ThemeColors.getScaffoldBackground(isLightTheme),
       body: Column(
         children: [
           Expanded(
@@ -30,7 +32,9 @@ class CartView extends GetView<CartController> {
   }
 
   Widget _buildCartItem(ProductModel product) {
+    bool isLightTheme = Get.isDarkMode == false;
     return Card(
+      color: ThemeColors.getCardBackground(isLightTheme),
       margin: const EdgeInsets.only(bottom: 12),
       child: Padding(
         padding: const EdgeInsets.all(12.0),
@@ -62,7 +66,7 @@ class CartView extends GetView<CartController> {
                   SizedBox(height: 4),
                   Text(
                     '${product.currency} ${product.currentPrice.toStringAsFixed(2)}',
-                    style: TextStyle(color: ColorConstants.appSpecificLight, fontWeight: FontWeight.bold),
+                    style: TextStyle(color: ThemeColors.getCurrency(isLightTheme), fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
@@ -93,10 +97,11 @@ class CartView extends GetView<CartController> {
   }
 
   Widget _buildCartSummary() {
+    bool isLightTheme = Get.isDarkMode == false;
     return Container(
       padding: const EdgeInsets.all(16),
-      decoration: const BoxDecoration(
-        color: Colors.white,
+      decoration: BoxDecoration(
+        color: ThemeColors.getScaffoldBackground(isLightTheme),
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
         boxShadow: [
           BoxShadow(
@@ -120,13 +125,13 @@ class CartView extends GetView<CartController> {
               // TODO: Handle checkout
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: ColorConstants.appSpecificDark,
+              backgroundColor: ThemeColors.getSecondary(isLightTheme),
               minimumSize: const Size.fromHeight(50),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
               ),
             ),
-            child: const Text('Checkout', style: TextStyle(fontSize: 18, color: Colors.white)),
+            child: Text('Checkout', style: TextStyle(fontSize: 18, color: ThemeColors.getButtonText(isLightTheme))),
           ),
         ],
       ),

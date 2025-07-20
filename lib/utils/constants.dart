@@ -2,6 +2,7 @@ class Constants {
 
   // assets images
   static const logo = 'assets/images/app_icon.png';
+  static const logoNoBg = 'assets/images/logo_no_background.png';
 
   static const homeIcon = 'assets/vectors/home.svg';
   static const favoritesIcon = 'assets/vectors/favorites.svg';

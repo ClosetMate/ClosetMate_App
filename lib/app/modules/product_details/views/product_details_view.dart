@@ -1,4 +1,5 @@
 import 'package:closet_mate/config/theme/colors.dart';
+import 'package:closet_mate/config/theme/theme_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -13,8 +14,10 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
 
   @override
   Widget build(BuildContext context) {
+    bool isLightTheme = Get.isDarkMode == false;
     final theme = context.theme;
     return Scaffold(
+      backgroundColor: ThemeColors.getScaffoldBackground(isLightTheme),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -114,7 +117,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                           // elevation: 4,
                           child: Icon(
                             Icons.arrow_back_ios_new_rounded,
-                            color: Colors.white,
+                            color: ThemeColors.getSecondary(isLightTheme),
                             size: 20.sp,
                           ),
                         ),
@@ -129,7 +132,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                   controller.product.isFavorite
                                   ? Icons.favorite
                                   : Icons.favorite_border,
-                                  color: Colors.white,
+                                  color: ThemeColors.getSecondary(isLightTheme),
                                   size: 22.sp,
                                 ).animate().scale(duration: 200.ms),
                               ),
@@ -144,6 +147,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                 padding: EdgeInsets.symmetric(horizontal: 20.w),
                 child: Text(
                   controller.product.name,
+                  style: TextStyle(color: ThemeColors.getTextPrimary(isLightTheme)),
                 ).animate().fade().slideX(duration: 300.ms, begin: -1),
               ),
               10.verticalSpace,
@@ -155,7 +159,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                       controller.product.currency +
                           controller.product.price.toString(),
                       style: TextStyle(
-                        color: theme.primaryColor,
+                        color: ThemeColors.getCurrency(isLightTheme),
                         fontSize: 16,
                         decoration: TextDecoration.lineThrough,
                         decorationColor:
@@ -169,7 +173,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                       controller.product.currency +
                           controller.product.currentPrice.toString(),
                       style: TextStyle(
-                        color: theme.primaryColor,
+                        color: ThemeColors.getCurrency(isLightTheme),
                         fontSize: 25,
                         fontWeight: FontWeight.w500,
                       ),
@@ -188,7 +192,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                       size: 24.sp,
                     ),
                     5.horizontalSpace,
-                    Text(controller.product.rating.toString()),
+                    Text(controller.product.rating.toString(), style: TextStyle(color: ThemeColors.getTextPrimary(isLightTheme))),
                     30.horizontalSpace,
                     Icon(
                       Icons.comment_outlined,
@@ -196,7 +200,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                       size: 24.sp,
                     ),
                     5.horizontalSpace,
-                    Text(controller.product.reviews),
+                    Text(controller.product.reviews, style: TextStyle(color: ThemeColors.getTextPrimary(isLightTheme)),),
                   ],
                 ).animate().fade().slideX(duration: 300.ms, begin: -1),
               ),
@@ -205,6 +209,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                 padding: EdgeInsets.symmetric(horizontal: 20.w),
                 child: Text(
                   'Choose your size:',
+                  style: TextStyle(color: ThemeColors.getTextPrimary(isLightTheme)),
                   // style: theme.textTheme.bodyText1?.copyWith(fontWeight: FontWeight.bold),
                 ).animate().fade().slideX(duration: 300.ms, begin: -1),
               ),
@@ -239,14 +244,15 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                 padding: EdgeInsets.symmetric(horizontal: 30.w),
                 child: CustomButton(
                   text: 'Add to Cart',
+                  foregroundColor: ThemeColors.getSecondary(isLightTheme),
                   onPressed: () => controller.onAddToCartPressed(),
-                  backgroundColor: ColorConstants.appSpecificDark,
+                  backgroundColor: ThemeColors.getPrimary(isLightTheme),
                   disabled: controller.product.quantity <= 0,
                   fontSize: 16.sp,
                   radius: 12.r,
                   verticalPadding: 12.h,
                   hasShadow: true,
-                  shadowColor: theme.primaryColor,
+                  shadowColor: ThemeColors.getPrimary(isLightTheme),
                   shadowOpacity: 0.3,
                   shadowBlurRadius: 6,
                   shadowSpreadRadius: 2,

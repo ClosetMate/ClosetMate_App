@@ -1,4 +1,4 @@
-import 'package:closet_mate/utils/color_constants.dart';
+import 'package:closet_mate/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -18,10 +18,17 @@ class SplashView extends GetView<SplashController> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset(
-                Constants.logoNoBg,
-                width: 250.w,
-                height: 250.h,
+              Container(
+                padding: EdgeInsets.all(4),
+                decoration: BoxDecoration(
+                  color: Colors.white, // or use ThemeColors.getCardBackground(...)
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Image.asset(
+                  Constants.logoNoBg,
+                  width: 200.w,
+                  height: 200.h,
+                ),
               ).animate().scale(
                 begin: const Offset(0.5, 0.5), // Start slightly smaller
                 end: const Offset(1.0, 1.0),   // Grow to full size

@@ -1,5 +1,6 @@
-import 'package:closet_mate/config/theme/colors.dart';
+import 'package:closet_mate/config/theme/theme_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   final int previousIndex;
@@ -25,6 +26,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
 
   @override
   Widget build(BuildContext context) {
+    bool isLightTheme = Theme.of(context).brightness == Brightness.light;
     return AppBar(
       elevation: 10,
       shape: RoundedRectangleBorder(
@@ -34,11 +36,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
       ),
       flexibleSpace: Container(
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.white, Colors.white],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
+          color: ThemeColors.getScaffoldBackground(isLightTheme),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.3),
@@ -54,19 +52,33 @@ class _CustomAppBarState extends State<CustomAppBar> {
             TextSpan(
               text: 'Closet',
               style: TextStyle(
-                color: ColorConstants.appSpecificLight,
+                color: ThemeColors.getPrimary(isLightTheme),
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
                 letterSpacing: 1.2,
+                // shadows: [
+                //   Shadow(
+                //     offset: Offset(0, 0),
+                //     blurRadius: 5.0,
+                //     color: isLightTheme ? Colors.black.withOpacity(0.8) : Colors.white.withOpacity(0.5),
+                //   ),
+                // ],
               ),
             ),
             TextSpan(
               text: 'Mate',
               style: TextStyle(
-                color: ColorConstants.appSpecificDark,
+                color: ThemeColors.getSecondary(isLightTheme),
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
                 letterSpacing: 1.2,
+                // shadows: [
+                //   Shadow(
+                //     offset: Offset(0, 0),
+                //     blurRadius: 5.0,
+                //     color: isLightTheme ? Colors.black.withOpacity(0.8) : Colors.white.withOpacity(0.5),
+                //   ),
+                // ],
               ),
             ),
           ],
@@ -74,13 +86,13 @@ class _CustomAppBarState extends State<CustomAppBar> {
       ),
       centerTitle: true,
       leading: IconButton(
-        icon: Icon(Icons.person, color: ColorConstants.appSpecificDark),
+        icon: Icon(Icons.person, color: ThemeColors.getSecondary(isLightTheme)),
         onPressed: () {},
         tooltip: "Profile",
       ),
       actions: [
         IconButton(
-          icon: Icon(Icons.search, color: ColorConstants.appSpecificDark),
+          icon: Icon(Icons.search, color: ThemeColors.getSecondary(isLightTheme)),
           onPressed: () => onTabChange(5),
           tooltip: "Search",
         ),

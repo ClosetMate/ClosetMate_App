@@ -18,20 +18,12 @@ Future<void> main() async {
       useInheritedMediaQuery: true,
       builder: (context, widget) {
         return GetMaterialApp(
-       
           useInheritedMediaQuery: true,
-             title: "ClosetMate",
+          title: "ClosetMate",
           debugShowCheckedModeBanner: false,
-          builder: (context,widget) {
-            bool themeIsLight = MySharedPref.getThemeIsLight();
-            return Theme(
-              data: MyTheme.getThemeData(isLight: themeIsLight),
-              child: MediaQuery(
-                data: MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(1.0)),
-                child: widget!,
-              ),
-            );
-          },
+          theme: MyTheme.getThemeData(isLight: true),
+          darkTheme: MyTheme.getThemeData(isLight: false),
+          themeMode: MySharedPref.getThemeIsLight() ? ThemeMode.light : ThemeMode.dark,
           initialRoute: AppPages.INITIAL,
           getPages: AppPages.routes,
         );

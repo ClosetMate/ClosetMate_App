@@ -1,4 +1,5 @@
 import 'package:closet_mate/app/routes/app_pages.dart';
+import 'package:closet_mate/config/theme/theme_colors.dart';
 import 'package:closet_mate/models/product_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

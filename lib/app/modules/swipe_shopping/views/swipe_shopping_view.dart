@@ -1,5 +1,6 @@
 import 'package:appinio_swiper/appinio_swiper.dart';
 import 'package:closet_mate/config/theme/colors.dart';
+import 'package:closet_mate/config/theme/theme_colors.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -10,10 +11,11 @@ class SwipeShoppingView extends GetView<SwipeShoppingController> {
   const SwipeShoppingView({super.key});
   @override
   Widget build(BuildContext context) {
+    bool isLightTheme = Theme.of(context).brightness == Brightness.light;
     return GetBuilder<SwipeShoppingController>(
       builder:
           (_) => Scaffold(
-            backgroundColor: Colors.white,
+            backgroundColor: ThemeColors.getScaffoldBackground(isLightTheme),
             body: Stack(
               children: [
                 AppinioSwiper(

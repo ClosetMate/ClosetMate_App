@@ -1,4 +1,5 @@
 import 'package:closet_mate/app/components/product_item.dart';
+import 'package:closet_mate/config/theme/theme_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -8,9 +9,11 @@ class FavoritesView extends GetView<FavoritesController> {
   const FavoritesView({super.key});
   @override
   Widget build(BuildContext context) {
+    bool isLightTheme = Theme.of(context).brightness == Brightness.light;
     return GetBuilder<FavoritesController>(
       builder:
           (_) => Scaffold(
+            backgroundColor: ThemeColors.getScaffoldBackground(isLightTheme),
             body: Padding(
               padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
               child: GridView.builder(

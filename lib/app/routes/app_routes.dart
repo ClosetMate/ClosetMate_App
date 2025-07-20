@@ -14,6 +14,8 @@ abstract class Routes {
   static const PRODUCT_DETAILS = _Paths.PRODUCT_DETAILS;
   static const LOGIN = _Paths.LOGIN;
   static const SIGNUP = _Paths.SIGNUP;
+  static const COLOR_THEME_CONTROLLER = _Paths.COLOR_THEME_CONTROLLER;
+  static const SETTINGS = _Paths.SETTINGS;
 }
 
 abstract class _Paths {
@@ -29,4 +31,6 @@ abstract class _Paths {
   static const PRODUCT_DETAILS = '/product-details';
   static const LOGIN = '/login';
   static const SIGNUP = '/signup';
+  static const COLOR_THEME_CONTROLLER = '/color-theme-controller';
+  static const SETTINGS = '/settings';
 }

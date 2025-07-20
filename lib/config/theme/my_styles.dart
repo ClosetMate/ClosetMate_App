@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
-
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import 'dark_theme_colors.dart';
+import 'app_colors.dart';
+import 'theme_colors.dart';
 import 'my_fonts.dart';
-import 'light_theme_colors.dart';
 
 class MyStyles {
   ///icons theme
   static IconThemeData getIconTheme({required bool isLightTheme}) =>
       IconThemeData(
-        color: isLightTheme
-            ? LightThemeColors.iconColor
-            : DarkThemeColors.iconColor,
+        color: ThemeColors.getIcon(isLightTheme),
       );
 
   ///app bar theme
@@ -25,12 +22,8 @@ class MyStyles {
           fontSize: MyFonts.appBarTittleSize,
         ),
         iconTheme: IconThemeData(
-            color: isLightTheme
-                ? LightThemeColors.appBarIconsColor
-                : DarkThemeColors.appBarIconsColor),
-        backgroundColor: isLightTheme
-            ? LightThemeColors.appBarColor
-            : DarkThemeColors.appbarColor,
+            color: ThemeColors.getAppBarIcon(isLightTheme)),
+        backgroundColor: ThemeColors.getPrimary(isLightTheme),
       );
 
   ///text theme
@@ -41,48 +34,34 @@ class MyStyles {
     bodyLarge: (MyFonts.bodyTextStyle).copyWith(
       fontWeight: FontWeight.bold,
       fontSize: MyFonts.bodyLargeSize,
-      color: isLightTheme
-          ? LightThemeColors.bodyTextColor
-          : DarkThemeColors.bodyTextColor,
+      color: ThemeColors.getTextPrimary(isLightTheme),
     ),
     bodyMedium: (MyFonts.bodyTextStyle).copyWith(
       fontSize: MyFonts.bodyMediumSize,
-      color: isLightTheme
-          ? LightThemeColors.bodyTextColor
-          : DarkThemeColors.bodyTextColor,
+      color: ThemeColors.getTextPrimary(isLightTheme),
     ),
     displayLarge: (MyFonts.displayTextStyle).copyWith(
       fontSize: MyFonts.displayLargeSize,
       fontWeight: FontWeight.bold,
-      color: isLightTheme
-          ? LightThemeColors.displayTextColor
-          : DarkThemeColors.displayTextColor,
+      color: ThemeColors.getTextPrimary(isLightTheme),
     ),
     bodySmall: TextStyle(
-        color: isLightTheme
-            ? LightThemeColors.bodySmallTextColor
-            : DarkThemeColors.bodySmallTextColor,
+        color: ThemeColors.getTextSecondary(isLightTheme),
         fontSize: MyFonts.bodySmallTextSize),
     displayMedium: (MyFonts.displayTextStyle).copyWith(
         fontSize: MyFonts.displayMediumSize,
         fontWeight: FontWeight.bold,
-        color: isLightTheme
-            ? LightThemeColors.displayTextColor
-            : DarkThemeColors.displayTextColor),
+        color: ThemeColors.getTextPrimary(isLightTheme)),
     displaySmall: (MyFonts.displayTextStyle).copyWith(
       fontSize: MyFonts.displaySmallSize,
       fontWeight: FontWeight.bold,
-      color: isLightTheme
-          ? LightThemeColors.displayTextColor
-          : DarkThemeColors.displayTextColor,
+      color: ThemeColors.getTextPrimary(isLightTheme),
     ),
   );
 
   static ChipThemeData getChipTheme({required bool isLightTheme}) {
     return ChipThemeData(
-      backgroundColor: isLightTheme
-          ? LightThemeColors.chipBackground
-          : DarkThemeColors.chipBackground,
+      backgroundColor: ThemeColors.getPrimary(isLightTheme),
       brightness: Brightness.light,
       labelStyle: getChipTextStyle(isLightTheme: isLightTheme),
       secondaryLabelStyle: getChipTextStyle(isLightTheme: isLightTheme),
@@ -97,9 +76,7 @@ class MyStyles {
   static TextStyle getChipTextStyle({required bool isLightTheme}) {
     return MyFonts.chipTextStyle.copyWith(
       fontSize: MyFonts.chipTextSize,
-      color: isLightTheme
-          ? LightThemeColors.chipTextColor
-          : DarkThemeColors.chipTextColor,
+      color: ThemeColors.getChipText(isLightTheme),
     );
   }
 
@@ -114,24 +91,17 @@ class MyStyles {
           return MyFonts.buttonTextStyle.copyWith(
               fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
               fontSize: fontSize ?? MyFonts.buttonTextSize,
-              color: isLightTheme
-                  ? LightThemeColors.buttonTextColor
-                  : DarkThemeColors.buttonTextColor);
+              color: ThemeColors.getButtonText(isLightTheme));
         } else if (states.contains(WidgetState.disabled)) {
           return MyFonts.buttonTextStyle.copyWith(
               fontSize: fontSize ?? MyFonts.buttonTextSize,
               fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
-              color: isLightTheme
-                  ? LightThemeColors.buttonDisabledTextColor
-                  : DarkThemeColors.buttonDisabledTextColor);
+              color: AppColors.grey);
         }
         return MyFonts.buttonTextStyle.copyWith(
             fontSize: fontSize ?? MyFonts.buttonTextSize,
             fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
-            color: isLightTheme
-                ? LightThemeColors.buttonTextColor
-                : DarkThemeColors
-                    .buttonTextColor); // Use the component's default.
+            color: ThemeColors.getButtonText(isLightTheme));
       },
     );
   }
@@ -144,7 +114,6 @@ class MyStyles {
           shape: WidgetStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(6.r),
-              //side: BorderSide(color: Colors.teal, width: 2.0),
             ),
           ),
           elevation: WidgetStateProperty.all(0),
@@ -154,17 +123,11 @@ class MyStyles {
           backgroundColor: WidgetStateProperty.resolveWith<Color>(
             (Set<WidgetState> states) {
               if (states.contains(WidgetState.pressed)) {
-                return isLightTheme
-                    ? LightThemeColors.buttonColor.withOpacity(0.5)
-                    : DarkThemeColors.buttonColor.withOpacity(0.5);
+                return ThemeColors.getPrimary(isLightTheme).withOpacity(0.5);
               } else if (states.contains(WidgetState.disabled)) {
-                return isLightTheme
-                    ? LightThemeColors.buttonDisabledColor
-                    : DarkThemeColors.buttonDisabledColor;
+                return AppColors.grey;
               }
-              return isLightTheme
-                  ? LightThemeColors.buttonColor
-                  : DarkThemeColors.buttonColor; // Use the component's default.
+              return ThemeColors.getPrimary(isLightTheme);
             },
           ),
         ),
