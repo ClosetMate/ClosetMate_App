@@ -5,7 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class MyFonts
 {
   // return the right font depending on app language
-  static TextStyle get getAppFontType => const TextStyle(fontFamily: 'Poppins');
+  static TextStyle get getAppFontType => const TextStyle(fontFamily: 'Roboto');
 
   // headlines text font
   static TextStyle get headlineTextStyle => getAppFontType;

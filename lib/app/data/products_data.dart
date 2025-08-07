@@ -65,7 +65,7 @@ List<Map<String, dynamic>> productsData = [
     'product_id': 6,
     'brand_id': 1,
     'brand_name': 'Cider',
-    'name': 'Blue Boat Neckline Bowknot Ruched Sleeveless Mini Dress',
+    'name': 'Sleeveless Mini Dress',
     'description':
         'Blue Boat Neckline Bowknot Ruched Sleeveless Mini Dress',
     'price': 12,
