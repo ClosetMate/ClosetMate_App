@@ -7,7 +7,7 @@ Map<String, dynamic> mockRemoteConfig = {
     "sections": [
       {
         "type": "trending_deals",
-        "title": "🔥 Must-Grab Offers",
+        "title": "Must-Grab Offers",
         "enabled": true,
         "order": 1,
         "config": {
@@ -18,7 +18,7 @@ Map<String, dynamic> mockRemoteConfig = {
       },
       {
         "type": "promotional_banner",
-        "title": "🎉 Flash Deals",
+        "title": "Flash Deals",
         "enabled": true,
         "order": 2,
         "config": {
@@ -29,7 +29,7 @@ Map<String, dynamic> mockRemoteConfig = {
       },
       {
         "type": "brands",
-        "title": "🏷️ Most-Loved Labels",
+        "title": "Most-Loved Labels",
         "enabled": true,
         "order": 3,
         "config": {
@@ -39,7 +39,7 @@ Map<String, dynamic> mockRemoteConfig = {
       },
       {
         "type": "products",
-        "title": "⭐ Chart Toppers",
+        "title": "Chart Toppers",
         "enabled": true,
         "order": 4,
         "config": {
@@ -50,7 +50,7 @@ Map<String, dynamic> mockRemoteConfig = {
       },
       {
         "type": "products",
-        "title": "🆕 New in Stocks",
+        "title": "New in Stocks",
         "enabled": true,
         "order": 5,
         "config": {
@@ -61,7 +61,7 @@ Map<String, dynamic> mockRemoteConfig = {
       },
       {
         "type": "products",
-        "title": "💡 Handpicked for You",
+        "title": "Handpicked for You",
         "enabled": true,
         "order": 6,
         "config": {
