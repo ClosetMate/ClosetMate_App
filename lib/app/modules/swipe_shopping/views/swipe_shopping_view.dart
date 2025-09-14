@@ -9,19 +9,20 @@ import '../controllers/swipe_shopping_controller.dart';
 
 class SwipeShoppingView extends GetView<SwipeShoppingController> {
   const SwipeShoppingView({super.key});
+  
   @override
   Widget build(BuildContext context) {
     bool isLightTheme = Theme.of(context).brightness == Brightness.light;
+    
     return GetBuilder<SwipeShoppingController>(
-      builder:
-          (_) => Scaffold(
-            backgroundColor: ThemeColors.getScaffoldBackground(isLightTheme),
-            body: Stack(
-              children: [
-                AppinioSwiper(
-                  backgroundCardOffset: Offset(0, 50),
-                  backgroundCardCount: 1,
-                  controller: controller.swiperController,
+      builder: (_) => Scaffold(
+        backgroundColor: ThemeColors.getScaffoldBackground(isLightTheme),
+        body: Stack(
+          children: [
+            AppinioSwiper(
+              backgroundCardOffset: Offset(0, 50),
+              backgroundCardCount: 1,
+              controller: AppinioSwiperController(),
                   cardBuilder: (context, index) {
                     return Padding(
                       padding: const EdgeInsets.only(
@@ -78,6 +79,34 @@ class SwipeShoppingView extends GetView<SwipeShoppingController> {
                       }
                       controller.update();
                   },
+                ),
+
+                // **Filter Button**
+                Positioned(
+                  top: MediaQuery.of(context).padding.top + 20,
+                  right: 20,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: ThemeColors.getCardBackground(isLightTheme),
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.filter_list_rounded,
+                        color: ThemeColors.getSecondary(isLightTheme),
+                        size: 24,
+                      ),
+                      onPressed: () => controller.showFilterDialog(context),
+                      tooltip: "Filter",
+                    ),
+                  ),
                 ),
 
                 // **Swipe Action Overlay**

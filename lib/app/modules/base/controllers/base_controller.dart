@@ -4,8 +4,15 @@ import 'package:closet_mate/app/modules/home/views/home_view.dart';
 import 'package:closet_mate/app/modules/profile/views/profile_view.dart';
 import 'package:closet_mate/app/modules/search_products/views/search_products_view.dart';
 import 'package:closet_mate/app/modules/swipe_shopping/views/swipe_shopping_view.dart';
+import 'package:closet_mate/app/modules/cart/bindings/cart_binding.dart';
+import 'package:closet_mate/app/modules/favorites/bindings/favorites_binding.dart';
+import 'package:closet_mate/app/modules/home/bindings/home_binding.dart';
+import 'package:closet_mate/app/modules/profile/bindings/profile_binding.dart';
+import 'package:closet_mate/app/modules/search_products/bindings/search_products_binding.dart';
+import 'package:closet_mate/app/modules/swipe_shopping/bindings/swipe_shopping_binding.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 class BaseController extends GetxController {
   // current screen index
   int currentTabIndex = 0;
@@ -14,14 +21,23 @@ class BaseController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
+    
+    // Initialize bindings for each page
+    HomeBinding().dependencies();
+    FavoritesBinding().dependencies();
+    SwipeShoppingBinding().dependencies();
+    CartBinding().dependencies();
+    ProfileBinding().dependencies();
+    SearchProductsBinding().dependencies();
+    
     pages = [
-      HomeView(),
-      FavoritesView(),
-      SwipeShoppingView(),
-      CartView(),
-      ProfileView(),
-      SearchProductsView()
-    ]; // Add swipePage to the list
+      const HomeView(),
+      const FavoritesView(),
+      const SwipeShoppingView(),
+      const CartView(),
+      const ProfileView(),
+      const SearchProductsView()
+    ];
   }
 
   void onTabChange(int index) {

@@ -52,7 +52,7 @@ class AppColors {
   static const Color buttonTextLight = Colors.white;
   static const Color buttonTextDark = Colors.black;
   static const Color chipTextLight = Colors.white;
-  static const Color chipTextDark = Color(0xFF000000DD);
+  static const Color chipTextDark = Color(0xff000000dd);
   
   // Utility function to convert hex to color
   static Color hexToColor(String hex) {

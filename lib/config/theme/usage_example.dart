@@ -5,7 +5,7 @@ import 'theme_colors.dart';
 
 /// Example showing how to use centralized colors in widgets
 class ColorUsageExample extends StatelessWidget {
-  const ColorUsageExample({Key? key}) : super(key: key);
+  const ColorUsageExample({super.key});
 
   @override
   Widget build(BuildContext context) {

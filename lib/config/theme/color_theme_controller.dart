@@ -6,7 +6,7 @@ import 'theme_colors.dart';
 /// Interactive Color and Theme Controller Screen
 /// Allows experimenting with different color patterns for the app
 class ColorThemeController extends StatefulWidget {
-  const ColorThemeController({Key? key}) : super(key: key);
+  const ColorThemeController({super.key});
 
   @override
   State<ColorThemeController> createState() => _ColorThemeControllerState();
@@ -630,10 +630,10 @@ class ColorPicker extends StatefulWidget {
   final Function(Color) onColorChanged;
 
   const ColorPicker({
-    Key? key,
+    super.key,
     required this.pickerColor,
     required this.onColorChanged,
-  }) : super(key: key);
+  });
 
   @override
   State<ColorPicker> createState() => _ColorPickerState();
@@ -650,7 +650,7 @@ class _ColorPickerState extends State<ColorPicker> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 300,
       child: Column(
         children: [

@@ -14,6 +14,10 @@ abstract class Routes {
   static const PRODUCT_DETAILS = _Paths.PRODUCT_DETAILS;
   static const LOGIN = _Paths.LOGIN;
   static const SIGNUP = _Paths.SIGNUP;
+  static const USER_MEASUREMENTS = _Paths.USER_MEASUREMENTS;
+  static const GENDER_SELECTION = _Paths.GENDER_SELECTION;
+  static const BASIC_MEASUREMENTS = _Paths.BASIC_MEASUREMENTS;
+  static const DETAILED_MEASUREMENTS = _Paths.DETAILED_MEASUREMENTS;
   static const COLOR_THEME_CONTROLLER = _Paths.COLOR_THEME_CONTROLLER;
   static const SETTINGS = _Paths.SETTINGS;
 }
@@ -31,6 +35,10 @@ abstract class _Paths {
   static const PRODUCT_DETAILS = '/product-details';
   static const LOGIN = '/login';
   static const SIGNUP = '/signup';
+  static const USER_MEASUREMENTS = '/user-measurements';
+  static const GENDER_SELECTION = '/gender-selection';
+  static const BASIC_MEASUREMENTS = '/basic-measurements';
+  static const DETAILED_MEASUREMENTS = '/detailed-measurements';
   static const COLOR_THEME_CONTROLLER = '/color-theme-controller';
   static const SETTINGS = '/settings';
 }

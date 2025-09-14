@@ -1,7 +1,6 @@
 import 'package:closet_mate/config/theme/colors.dart';
 import 'package:closet_mate/config/theme/theme_colors.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class BottomNav extends StatefulWidget {
   final int index;
@@ -160,10 +159,18 @@ class _BottomNavState extends State<BottomNav> with SingleTickerProviderStateMix
         ),
         child: ScaleTransition(
           scale: _scaleAnimation,
-          child: Icon(
-            Icons.swap_horiz,
-            color: isSelected ? ThemeColors.getSecondary(isLightTheme) : ThemeColors.getPrimary(isLightTheme),
-            size: 28,
+          child: Image.asset(
+            'assets/images/swipe_icon.png',
+            width: 28,
+            height: 28,
+            fit: BoxFit.contain,
+            errorBuilder: (context, error, stackTrace) {
+              return Icon(
+                Icons.swap_horiz,
+                color: isSelected ? ThemeColors.getSecondary(isLightTheme) : ThemeColors.getPrimary(isLightTheme),
+                size: 28,
+              );
+            },
           ),
         ),
       ),

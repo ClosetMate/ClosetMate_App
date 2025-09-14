@@ -5,7 +5,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class MyFonts
 {
   // return the right font depending on app language
+<<<<<<< HEAD
   static TextStyle get getAppFontType => const TextStyle(fontFamily: 'Roboto');
+=======
+  static TextStyle get getAppFontType => const TextStyle(fontFamily: 'Eurostile');
+>>>>>>> 8982ce0 (Measurements enhancement)
 
   // headlines text font
   static TextStyle get headlineTextStyle => getAppFontType;

@@ -18,7 +18,7 @@ class ThemeColors {
   
   //currency
   static Color getCurrency(bool isLight) => 
-      isLight ? AppColors.currencyLight : AppColors.currencyDark;
+      isLight ? const Color.fromARGB(255, 0, 0, 0) : const Color.fromARGB(255, 255, 255, 255);
 
   // Text colors
   static Color getTextPrimary(bool isLight) => 

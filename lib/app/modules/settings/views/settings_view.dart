@@ -80,6 +80,23 @@ class SettingsView extends GetView<SettingsController> {
                         ),
                       ],
                     ),
+                    const SizedBox(height: 40),
+                    Text(
+                      'Account Settings',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: ThemeColors.getTextPrimary(isLightTheme),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    _buildSettingsCard(
+                      title: 'Update Measurements',
+                      subtitle: 'Change your body measurements for better fit recommendations',
+                      icon: Icons.accessibility,
+                      onTap: controller.navigateToMeasurements,
+                      isLightTheme: isLightTheme,
+                    ),
                   ],
                 ),
               );
@@ -87,5 +104,75 @@ class SettingsView extends GetView<SettingsController> {
           ),
         ),
       );
+  }
+
+  Widget _buildSettingsCard({
+    required String title,
+    required String subtitle,
+    required IconData icon,
+    required VoidCallback onTap,
+    required bool isLightTheme,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(16),
+        margin: const EdgeInsets.only(bottom: 12),
+        decoration: BoxDecoration(
+          color: ThemeColors.getCardBackground(isLightTheme),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: Colors.grey.shade200,
+            width: 1,
+          ),
+        ),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: ThemeColors.getPrimary(isLightTheme).withOpacity(0.1),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Icon(
+                icon,
+                color: ThemeColors.getSecondary(isLightTheme),
+                size: 24,
+              ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: ThemeColors.getTextPrimary(isLightTheme),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    subtitle,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: ThemeColors.getTextSecondary(isLightTheme),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Icon(
+              Icons.arrow_forward_ios,
+              color: ThemeColors.getTextSecondary(isLightTheme),
+              size: 16,
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

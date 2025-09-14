@@ -51,8 +51,8 @@ class ProductItem extends StatelessWidget {
                       const SizedBox(height: 4),
                       Text(
                         '${product.currency} ${product.currentPrice.toStringAsFixed(2)}',
-                        style: const TextStyle(
-                          color: Colors.green,
+                        style: TextStyle(
+                          color: ThemeColors.getCurrency(isLightTheme),
                           fontWeight: FontWeight.bold,
                           fontSize: 14,
                         ),

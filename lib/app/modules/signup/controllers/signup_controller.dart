@@ -50,7 +50,7 @@ class SignupController extends GetxController {
         colorText: Colors.white
         );
 
-    Get.offNamed(Routes.LOGIN);
+    Get.offNamed(Routes.USER_MEASUREMENTS);
   }
 
   void login() {

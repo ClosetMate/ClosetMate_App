@@ -1,6 +1,6 @@
 import 'package:closet_mate/config/theme/theme_colors.dart';
+import 'package:closet_mate/utils/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   final int previousIndex;
@@ -46,43 +46,11 @@ class _CustomAppBarState extends State<CustomAppBar> {
           ],
         ),
       ),
-      title: Text.rich(
-        TextSpan(
-          children: [
-            TextSpan(
-              text: 'Closet',
-              style: TextStyle(
-                color: ThemeColors.getPrimary(isLightTheme),
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                letterSpacing: 1.2,
-                // shadows: [
-                //   Shadow(
-                //     offset: Offset(0, 0),
-                //     blurRadius: 5.0,
-                //     color: isLightTheme ? Colors.black.withOpacity(0.8) : Colors.white.withOpacity(0.5),
-                //   ),
-                // ],
-              ),
-            ),
-            TextSpan(
-              text: 'Mate',
-              style: TextStyle(
-                color: ThemeColors.getSecondary(isLightTheme),
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                letterSpacing: 1.2,
-                // shadows: [
-                //   Shadow(
-                //     offset: Offset(0, 0),
-                //     blurRadius: 5.0,
-                //     color: isLightTheme ? Colors.black.withOpacity(0.8) : Colors.white.withOpacity(0.5),
-                //   ),
-                // ],
-              ),
-            ),
-          ],
-        ),
+      title: Image.asset(
+        Constants.logoNoBg,
+        height: 35,
+        fit: BoxFit.contain,
+        color: isLightTheme ? null : ThemeColors.getSecondary(isLightTheme),
       ),
       centerTitle: true,
       leading: IconButton(

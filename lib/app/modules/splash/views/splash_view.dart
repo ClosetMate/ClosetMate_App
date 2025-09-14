@@ -1,3 +1,4 @@
+import 'package:closet_mate/config/theme/theme_colors.dart';
 import 'package:closet_mate/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -10,6 +11,7 @@ class SplashView extends GetView<SplashController> {
 
   @override
   Widget build(BuildContext context) {
+    bool isLightTheme = Theme.of(context).brightness == Brightness.light;
     Get.put(SplashController());
     // var theme = context.theme;
     return Scaffold(
@@ -20,14 +22,15 @@ class SplashView extends GetView<SplashController> {
             children: [
               Container(
                 padding: EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  color: Colors.white, // or use ThemeColors.getCardBackground(...)
-                  borderRadius: BorderRadius.circular(8),
-                ),
+                // decoration: BoxDecoration(
+                //   color: Colors.white, // or use ThemeColors.getCardBackground(...)
+                //   borderRadius: BorderRadius.circular(8),
+                // ),
                 child: Image.asset(
                   Constants.logoNoBg,
                   width: 200.w,
-                  height: 200.h,
+                  height: 100.h,
+                  color: isLightTheme ? null : ThemeColors.getSecondary(isLightTheme),
                 ),
               ).animate().scale(
                 begin: const Offset(0.5, 0.5), // Start slightly smaller

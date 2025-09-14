@@ -9,7 +9,7 @@ class DynamicContentService {
   DynamicContentService._internal();
 
   // Cache for storing fetched data
-  Map<String, dynamic> _cache = {};
+  final Map<String, dynamic> _cache = {};
   DateTime? _lastCacheTime;
   static const Duration _cacheExpiry = Duration(minutes: 5);
 

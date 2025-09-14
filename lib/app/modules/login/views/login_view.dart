@@ -47,14 +47,15 @@ class LoginView extends StatelessWidget {
               const SizedBox(height: 40),
               Container(
                 padding: EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  color: Colors.white, // or use ThemeColors.getCardBackground(...)
-                  borderRadius: BorderRadius.circular(8),
-                ),
+                // decoration: BoxDecoration(
+                //   color: Colors.white, // or use ThemeColors.getCardBackground(...)
+                //   borderRadius: BorderRadius.circular(8),
+                // ),
                 child: Image.asset(
                   Constants.logoNoBg,
-                  width: 120.w,
-                  height: 120.h,
+                  width: 200.w,
+                  height: 80.h,
+                  color: isLightTheme ? null : ThemeColors.getSecondary(isLightTheme),
                 ),
               ),
               // Image.asset(

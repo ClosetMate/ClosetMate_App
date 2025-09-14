@@ -1,4 +1,3 @@
-import 'package:closet_mate/config/theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_utils/get_utils.dart';
 

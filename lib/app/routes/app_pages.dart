@@ -21,6 +21,11 @@ import '../modules/settings/bindings/settings_binding.dart';
 import '../modules/settings/views/settings_view.dart';
 import '../modules/signup/bindings/signup_binding.dart';
 import '../modules/signup/views/signup_view.dart';
+import '../modules/user_measurements/bindings/user_measurements_binding.dart';
+import '../modules/user_measurements/views/user_measurements_view.dart';
+import '../modules/user_measurements/views/gender_selection_view.dart';
+import '../modules/user_measurements/views/basic_measurements_view.dart';
+import '../modules/user_measurements/views/detailed_measurements_view.dart';
 import '../modules/splash/bindings/splash_binding.dart';
 import '../modules/splash/views/splash_view.dart';
 import '../modules/swipe_shopping/bindings/swipe_shopping_binding.dart';
@@ -88,6 +93,26 @@ class AppPages {
       name: _Paths.SIGNUP,
       page: () => SignupView(),
       binding: SignupBinding(),
+    ),
+    GetPage(
+      name: _Paths.USER_MEASUREMENTS,
+      page: () => UserMeasurementsView(),
+      binding: UserMeasurementsBinding(),
+    ),
+    GetPage(
+      name: _Paths.GENDER_SELECTION,
+      page: () => GenderSelectionView(),
+      binding: UserMeasurementsBinding(),
+    ),
+    GetPage(
+      name: _Paths.BASIC_MEASUREMENTS,
+      page: () => BasicMeasurementsView(),
+      binding: UserMeasurementsBinding(),
+    ),
+    GetPage(
+      name: _Paths.DETAILED_MEASUREMENTS,
+      page: () => DetailedMeasurementsView(),
+      binding: UserMeasurementsBinding(),
     ),
     GetPage(
       name: _Paths.COLOR_THEME_CONTROLLER,

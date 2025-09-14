@@ -7,6 +7,7 @@ class SwipeShoppingBinding extends Bindings {
   void dependencies() {
     Get.lazyPut<SwipeShoppingController>(
       () => SwipeShoppingController(),
+      fenix: true,
     );
   }
 }

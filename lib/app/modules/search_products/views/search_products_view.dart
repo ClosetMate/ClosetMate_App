@@ -2,7 +2,6 @@ import 'package:closet_mate/config/theme/theme_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:closet_mate/app/components/product_item.dart';
-import 'package:closet_mate/config/theme/colors.dart';
 import '../controllers/search_products_controller.dart';
 
 class SearchProductsView extends GetView<SearchProductsController> {
