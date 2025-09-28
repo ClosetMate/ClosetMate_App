@@ -1,13 +1,17 @@
 import 'package:closet_mate/app/components/product_detail_card.dart';
-import 'package:closet_mate/models/product_model.dart';
+import 'package:closet_mate/models/cm_product_model.dart';
+import 'package:closet_mate/app/services/products_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:closet_mate/app/data/products_data.dart';
 import 'package:closet_mate/config/theme/theme_colors.dart';
 
 class SwipeShoppingController extends GetxController {
+  final ProductsService _productsService = ProductsService();
+  
   List<ProductDetailCard> productCards = [];
-  List<ProductModel> products = [];
+  final RxList<CmProductModel> products = <CmProductModel>[].obs;
+  final RxBool isLoading = false.obs;
+  final RxString errorMessage = ''.obs;
   Map<String, dynamic> swipeAction = {'opacity': 0.0};
   AxisDirection direction = AxisDirection.down;
   
@@ -21,18 +25,29 @@ class SwipeShoppingController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    _getProducts();
+    loadProducts();
   }
 
-  void _getProducts() {
-    for (Map<String, dynamic> productMap in productsData) {
-      products.add(ProductModel.fromMap(productMap));
+  Future<void> loadProducts() async {
+    try {
+      isLoading.value = true;
+      errorMessage.value = '';
+      
+      final fetchedProducts = await _productsService.getProducts(skip: 0, limit: 20);
+      products.assignAll(fetchedProducts);
+      _loadCards();
+      
+    } catch (e) {
+      errorMessage.value = e.toString();
+      print('Error loading products: $e');
+    } finally {
+      isLoading.value = false;
     }
-    _loadCards();
   }
 
   void _loadCards() {
-    for (ProductModel product in products) {
+    productCards.clear();
+    for (CmProductModel product in products) {
       productCards.add(ProductDetailCard(product: product));
     }
   }

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'app_colors.dart';
-import 'theme_colors.dart';
 
 /// Interactive Color and Theme Controller Screen
 /// Allows experimenting with different color patterns for the app

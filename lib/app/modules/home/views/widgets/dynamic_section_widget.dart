@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:closet_mate/models/dynamic_section.dart';
-import 'package:closet_mate/models/product_model.dart';
+import 'package:closet_mate/models/cm_product_model.dart';
 import 'package:closet_mate/app/modules/home/views/widgets/brands_section.dart';
 import 'package:closet_mate/app/modules/home/views/widgets/products_section.dart';
 import 'package:closet_mate/app/modules/home/views/widgets/trending_deals_carousel.dart';
@@ -8,7 +8,7 @@ import 'package:closet_mate/app/modules/home/views/widgets/promotional_banner.da
 
 class DynamicSectionWidget extends StatelessWidget {
   final DynamicSection section;
-  final List<ProductModel>? products;
+  final List<CmProductModel>? products;
   final List<BrandItem>? brands;
   final Map<String, dynamic>? promotionalData;
 

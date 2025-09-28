@@ -15,33 +15,33 @@ class UserMeasurementsController extends GetxController {
   // Track current step in the flow
   var currentStep = 0.obs;
   
-  // Basic measurements
-  final heightController = TextEditingController();
-  final weightController = TextEditingController();
+  // Basic measurements - using RxDouble for sliders
+  var height = 170.0.obs; // Range: 120-220
+  var weight = 70.0.obs; // Range: 30-150
   
   // Male measurements
-  final chestController = TextEditingController();
-  final waistController = TextEditingController();
-  final hipsController = TextEditingController();
-  final inseamController = TextEditingController();
-  final neckController = TextEditingController();
-  final shouldersController = TextEditingController();
-  final bicepsController = TextEditingController();
-  final wristController = TextEditingController();
+  var chest = 90.0.obs; // Range: 60-150
+  var waist = 80.0.obs; // Range: 50-150
+  var hips = 95.0.obs; // Range: 70-150
+  var inseam = 80.0.obs; // Range: 50-120
+  var neck = 40.0.obs; // Range: 30-60
+  var shoulders = 45.0.obs; // Range: 30-70
+  var biceps = 35.0.obs; // Range: 20-60
+  var wrist = 18.0.obs; // Range: 12-30
   
   // Female measurements
-  final bustController = TextEditingController();
-  final underBustController = TextEditingController();
-  final naturalWaistController = TextEditingController();
-  final lowWaistController = TextEditingController();
-  final hipCircumferenceController = TextEditingController();
-  final thighController = TextEditingController();
-  final kneeController = TextEditingController();
-  final calfController = TextEditingController();
-  final ankleController = TextEditingController();
-  final armLengthController = TextEditingController();
-  final shoulderToWaistController = TextEditingController();
-  final waistToHipController = TextEditingController();
+  var bust = 85.0.obs; // Range: 60-150
+  var underBust = 75.0.obs; // Range: 50-140
+  var naturalWaist = 70.0.obs; // Range: 50-150
+  var lowWaist = 75.0.obs; // Range: 50-150
+  var hipCircumference = 95.0.obs; // Range: 70-150
+  var thigh = 55.0.obs; // Range: 30-80
+  var knee = 35.0.obs; // Range: 20-60
+  var calf = 35.0.obs; // Range: 20-60
+  var ankle = 22.0.obs; // Range: 15-35
+  var armLength = 60.0.obs; // Range: 40-80
+  var shoulderToWaist = 40.0.obs; // Range: 20-60
+  var waistToHip = 20.0.obs; // Range: 10-40
 
 
 
@@ -110,32 +110,32 @@ class UserMeasurementsController extends GetxController {
     if (saved == null) return;
 
     selectedGender.value = saved.gender;
-    heightController.text = saved.height?.toString() ?? '';
-    weightController.text = saved.weight?.toString() ?? '';
+    height.value = (saved.height ?? 170.0).clamp(120.0, 220.0);
+    weight.value = (saved.weight ?? 70.0).clamp(30.0, 150.0);
 
-    // Male
-    chestController.text = saved.chest?.toString() ?? '';
-    waistController.text = saved.waist?.toString() ?? '';
-    hipsController.text = saved.hips?.toString() ?? '';
-    inseamController.text = saved.inseam?.toString() ?? '';
-    neckController.text = saved.neck?.toString() ?? '';
-    shouldersController.text = saved.shoulders?.toString() ?? '';
-    bicepsController.text = saved.biceps?.toString() ?? '';
-    wristController.text = saved.wrist?.toString() ?? '';
+    // Male measurements with proper clamping
+    chest.value = (saved.chest ?? 90.0).clamp(60.0, 150.0);
+    waist.value = (saved.waist ?? 80.0).clamp(50.0, 150.0);
+    hips.value = (saved.hips ?? 95.0).clamp(70.0, 150.0);
+    inseam.value = (saved.inseam ?? 80.0).clamp(50.0, 120.0);
+    neck.value = (saved.neck ?? 40.0).clamp(30.0, 60.0);
+    shoulders.value = (saved.shoulders ?? 45.0).clamp(30.0, 70.0);
+    biceps.value = (saved.biceps ?? 35.0).clamp(20.0, 60.0);
+    wrist.value = (saved.wrist ?? 18.0).clamp(12.0, 30.0);
 
-    // Female
-    bustController.text = saved.bust?.toString() ?? '';
-    underBustController.text = saved.underBust?.toString() ?? '';
-    naturalWaistController.text = saved.naturalWaist?.toString() ?? '';
-    lowWaistController.text = saved.lowWaist?.toString() ?? '';
-    hipCircumferenceController.text = saved.hipCircumference?.toString() ?? '';
-    thighController.text = saved.thigh?.toString() ?? '';
-    kneeController.text = saved.knee?.toString() ?? '';
-    calfController.text = saved.calf?.toString() ?? '';
-    ankleController.text = saved.ankle?.toString() ?? '';
-    armLengthController.text = saved.armLength?.toString() ?? '';
-    shoulderToWaistController.text = saved.shoulderToWaist?.toString() ?? '';
-    waistToHipController.text = saved.waistToHip?.toString() ?? '';
+    // Female measurements with proper clamping
+    bust.value = (saved.bust ?? 85.0).clamp(60.0, 150.0);
+    underBust.value = (saved.underBust ?? 75.0).clamp(50.0, 140.0);
+    naturalWaist.value = (saved.naturalWaist ?? 70.0).clamp(50.0, 150.0);
+    lowWaist.value = (saved.lowWaist ?? 75.0).clamp(50.0, 150.0);
+    hipCircumference.value = (saved.hipCircumference ?? 95.0).clamp(70.0, 150.0);
+    thigh.value = (saved.thigh ?? 55.0).clamp(30.0, 80.0);
+    knee.value = (saved.knee ?? 35.0).clamp(20.0, 60.0);
+    calf.value = (saved.calf ?? 35.0).clamp(20.0, 60.0);
+    ankle.value = (saved.ankle ?? 22.0).clamp(15.0, 35.0);
+    armLength.value = (saved.armLength ?? 60.0).clamp(40.0, 80.0);
+    shoulderToWaist.value = (saved.shoulderToWaist ?? 40.0).clamp(20.0, 60.0);
+    waistToHip.value = (saved.waistToHip ?? 20.0).clamp(10.0, 40.0);
   }
 
   bool get isMale => selectedGender.value == 'Male';
@@ -146,30 +146,30 @@ class UserMeasurementsController extends GetxController {
     try {
       final measurements = UserMeasurements(
         gender: selectedGender.value,
-        height: double.tryParse(heightController.text),
-        weight: double.tryParse(weightController.text),
+        height: height.value,
+        weight: weight.value,
         // Male measurements
-        chest: isMale ? double.tryParse(chestController.text) : null,
-        waist: isMale ? double.tryParse(waistController.text) : null,
-        hips: isMale ? double.tryParse(hipsController.text) : null,
-        inseam: isMale ? double.tryParse(inseamController.text) : null,
-        neck: isMale ? double.tryParse(neckController.text) : null,
-        shoulders: isMale ? double.tryParse(shouldersController.text) : null,
-        biceps: isMale ? double.tryParse(bicepsController.text) : null,
-        wrist: isMale ? double.tryParse(wristController.text) : null,
+        chest: isMale ? chest.value : null,
+        waist: isMale ? waist.value : null,
+        hips: isMale ? hips.value : null,
+        inseam: isMale ? inseam.value : null,
+        neck: isMale ? neck.value : null,
+        shoulders: isMale ? shoulders.value : null,
+        biceps: isMale ? biceps.value : null,
+        wrist: isMale ? wrist.value : null,
         // Female measurements
-        bust: isFemale ? double.tryParse(bustController.text) : null,
-        underBust: isFemale ? double.tryParse(underBustController.text) : null,
-        naturalWaist: isFemale ? double.tryParse(naturalWaistController.text) : null,
-        lowWaist: isFemale ? double.tryParse(lowWaistController.text) : null,
-        hipCircumference: isFemale ? double.tryParse(hipCircumferenceController.text) : null,
-        thigh: isFemale ? double.tryParse(thighController.text) : null,
-        knee: isFemale ? double.tryParse(kneeController.text) : null,
-        calf: isFemale ? double.tryParse(calfController.text) : null,
-        ankle: isFemale ? double.tryParse(ankleController.text) : null,
-        armLength: isFemale ? double.tryParse(armLengthController.text) : null,
-        shoulderToWaist: isFemale ? double.tryParse(shoulderToWaistController.text) : null,
-        waistToHip: isFemale ? double.tryParse(waistToHipController.text) : null,
+        bust: isFemale ? bust.value : null,
+        underBust: isFemale ? underBust.value : null,
+        naturalWaist: isFemale ? naturalWaist.value : null,
+        lowWaist: isFemale ? lowWaist.value : null,
+        hipCircumference: isFemale ? hipCircumference.value : null,
+        thigh: isFemale ? thigh.value : null,
+        knee: isFemale ? knee.value : null,
+        calf: isFemale ? calf.value : null,
+        ankle: isFemale ? ankle.value : null,
+        armLength: isFemale ? armLength.value : null,
+        shoulderToWaist: isFemale ? shoulderToWaist.value : null,
+        waistToHip: isFemale ? waistToHip.value : null,
       );
 
       await MySharedPref.setUserMeasurements(measurements);
@@ -196,30 +196,30 @@ class UserMeasurementsController extends GetxController {
       // Create measurements object (currently unused but ready for backend integration)
       final measurements = UserMeasurements(
         gender: selectedGender.value,
-        height: double.tryParse(heightController.text),
-        weight: double.tryParse(weightController.text),
+        height: height.value,
+        weight: weight.value,
         // Male measurements
-        chest: isMale ? double.tryParse(chestController.text) : null,
-        waist: isMale ? double.tryParse(waistController.text) : null,
-        hips: isMale ? double.tryParse(hipsController.text) : null,
-        inseam: isMale ? double.tryParse(inseamController.text) : null,
-        neck: isMale ? double.tryParse(neckController.text) : null,
-        shoulders: isMale ? double.tryParse(shouldersController.text) : null,
-        biceps: isMale ? double.tryParse(bicepsController.text) : null,
-        wrist: isMale ? double.tryParse(wristController.text) : null,
+        chest: isMale ? chest.value : null,
+        waist: isMale ? waist.value : null,
+        hips: isMale ? hips.value : null,
+        inseam: isMale ? inseam.value : null,
+        neck: isMale ? neck.value : null,
+        shoulders: isMale ? shoulders.value : null,
+        biceps: isMale ? biceps.value : null,
+        wrist: isMale ? wrist.value : null,
         // Female measurements
-        bust: isFemale ? double.tryParse(bustController.text) : null,
-        underBust: isFemale ? double.tryParse(underBustController.text) : null,
-        naturalWaist: isFemale ? double.tryParse(naturalWaistController.text) : null,
-        lowWaist: isFemale ? double.tryParse(lowWaistController.text) : null,
-        hipCircumference: isFemale ? double.tryParse(hipCircumferenceController.text) : null,
-        thigh: isFemale ? double.tryParse(thighController.text) : null,
-        knee: isFemale ? double.tryParse(kneeController.text) : null,
-        calf: isFemale ? double.tryParse(calfController.text) : null,
-        ankle: isFemale ? double.tryParse(ankleController.text) : null,
-        armLength: isFemale ? double.tryParse(armLengthController.text) : null,
-        shoulderToWaist: isFemale ? double.tryParse(shoulderToWaistController.text) : null,
-        waistToHip: isFemale ? double.tryParse(waistToHipController.text) : null,
+        bust: isFemale ? bust.value : null,
+        underBust: isFemale ? underBust.value : null,
+        naturalWaist: isFemale ? naturalWaist.value : null,
+        lowWaist: isFemale ? lowWaist.value : null,
+        hipCircumference: isFemale ? hipCircumference.value : null,
+        thigh: isFemale ? thigh.value : null,
+        knee: isFemale ? knee.value : null,
+        calf: isFemale ? calf.value : null,
+        ankle: isFemale ? ankle.value : null,
+        armLength: isFemale ? armLength.value : null,
+        shoulderToWaist: isFemale ? shoulderToWaist.value : null,
+        waistToHip: isFemale ? waistToHip.value : null,
       );
 
       // Save locally
@@ -274,30 +274,4 @@ class UserMeasurementsController extends GetxController {
     }
   }
 
-  @override
-  void onClose() {
-    heightController.dispose();
-    weightController.dispose();
-    chestController.dispose();
-    waistController.dispose();
-    hipsController.dispose();
-    inseamController.dispose();
-    neckController.dispose();
-    shouldersController.dispose();
-    bicepsController.dispose();
-    wristController.dispose();
-    bustController.dispose();
-    underBustController.dispose();
-    naturalWaistController.dispose();
-    lowWaistController.dispose();
-    hipCircumferenceController.dispose();
-    thighController.dispose();
-    kneeController.dispose();
-    calfController.dispose();
-    ankleController.dispose();
-    armLengthController.dispose();
-    shoulderToWaistController.dispose();
-    waistToHipController.dispose();
-    super.onClose();
-  }
 }

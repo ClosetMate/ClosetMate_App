@@ -2,7 +2,7 @@ import 'package:appinio_swiper/appinio_swiper.dart';
 import 'package:closet_mate/config/theme/colors.dart';
 import 'package:closet_mate/config/theme/theme_colors.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import '../controllers/swipe_shopping_controller.dart';
@@ -14,25 +14,101 @@ class SwipeShoppingView extends GetView<SwipeShoppingController> {
   Widget build(BuildContext context) {
     bool isLightTheme = Theme.of(context).brightness == Brightness.light;
     
-    return GetBuilder<SwipeShoppingController>(
-      builder: (_) => Scaffold(
-        backgroundColor: ThemeColors.getScaffoldBackground(isLightTheme),
-        body: Stack(
-          children: [
-            AppinioSwiper(
-              backgroundCardOffset: Offset(0, 50),
-              backgroundCardCount: 1,
-              controller: AppinioSwiperController(),
-                  cardBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.only(
-                        bottom: 50,
-                        top: 0,
-                      ), // Padding around each card
-                      child: controller.productCards[index],
-                    );
-                  },
-                  cardCount: controller.productCards.length,
+    return Scaffold(
+      backgroundColor: ThemeColors.getScaffoldBackground(isLightTheme),
+      body: Obx(() {
+        if (controller.isLoading.value) {
+          return const Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CircularProgressIndicator(),
+                SizedBox(height: 16),
+                Text('Loading products...'),
+              ],
+            ),
+          );
+        }
+
+        if (controller.errorMessage.value.isNotEmpty) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.error_outline,
+                  size: 64.sp,
+                  color: Colors.red,
+                ),
+                SizedBox(height: 16.h),
+                Text(
+                  'Error: ${controller.errorMessage.value}',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 16.sp),
+                ),
+                SizedBox(height: 16.h),
+                ElevatedButton(
+                  onPressed: controller.loadProducts,
+                  child: const Text('Retry'),
+                ),
+              ],
+            ),
+          );
+        }
+
+        if (controller.productCards.isEmpty) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.shopping_bag_outlined,
+                  size: 64.sp,
+                  color: Colors.grey,
+                ),
+                SizedBox(height: 16.h),
+                Text(
+                  'No products available',
+                  style: TextStyle(
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 8.h),
+                Text(
+                  'Try refreshing or check your connection',
+                  style: TextStyle(
+                    fontSize: 14.sp,
+                    color: Colors.grey[600],
+                  ),
+                ),
+                SizedBox(height: 16.h),
+                ElevatedButton(
+                  onPressed: controller.loadProducts,
+                  child: const Text('Refresh'),
+                ),
+              ],
+            ),
+          );
+        }
+
+        return GetBuilder<SwipeShoppingController>(
+          builder: (_) => Stack(
+            children: [
+              AppinioSwiper(
+                backgroundCardOffset: Offset(0, 50.h),
+                backgroundCardCount: 1,
+                controller: AppinioSwiperController(),
+                cardBuilder: (context, index) {
+                  return Padding(
+                    padding: EdgeInsets.only(
+                      bottom: 50.h,
+                      top: 0,
+                    ), // Padding around each card
+                    child: controller.productCards[index],
+                  );
+                },
+                cardCount: controller.productCards.length,
                   onSwipeEnd: (previousIndex, targetIndex, activity) {
                     controller.swipeAction = {'opacity': 0.0};
                     controller.update();
@@ -81,71 +157,72 @@ class SwipeShoppingView extends GetView<SwipeShoppingController> {
                   },
                 ),
 
-                // **Filter Button**
-                Positioned(
-                  top: MediaQuery.of(context).padding.top + 20,
-                  right: 20,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: ThemeColors.getCardBackground(isLightTheme),
-                      shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
-                          blurRadius: 8,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
-                    ),
-                    child: IconButton(
-                      icon: Icon(
-                        Icons.filter_list_rounded,
-                        color: ThemeColors.getSecondary(isLightTheme),
-                        size: 24,
+              // **Filter Button**
+              Positioned(
+                top: MediaQuery.of(context).padding.top + 20.h,
+                right: 20.w,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: ThemeColors.getCardBackground(isLightTheme),
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
                       ),
-                      onPressed: () => controller.showFilterDialog(context),
-                      tooltip: "Filter",
+                    ],
+                  ),
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.filter_list_rounded,
+                      color: ThemeColors.getSecondary(isLightTheme),
+                      size: 24.sp,
+                    ),
+                    onPressed: () => controller.showFilterDialog(context),
+                    tooltip: "Filter",
+                  ),
+                ),
+              ),
+
+              // **Swipe Action Overlay**
+              if (controller.swipeAction['opacity'] != 0.0)
+                Positioned(
+                  top: controller.swipeAction['top'],
+                  left: controller.swipeAction['left'],
+                  right: controller.swipeAction['right'],
+                  child: AnimatedOpacity(
+                    duration: const Duration(milliseconds: 300),
+                    opacity: controller.swipeAction['opacity'],
+                    child: Transform.scale(
+                      scale: 0.2 + (controller.swipeAction['opacity'] * 1.2),
+                      child: Container(
+                        width: 64.w,
+                        height: 64.h,
+                        decoration: BoxDecoration(
+                          color: const Color.fromARGB(196, 255, 255, 255),
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.1),
+                              blurRadius: 8,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: Icon(
+                          controller.swipeAction['icon'],
+                          size: 40.sp,
+                          color: controller.swipeAction['color'],
+                        ),
+                      ),
                     ),
                   ),
                 ),
-
-                // **Swipe Action Overlay**
-                if (controller.swipeAction['opacity'] != 0.0)
-                  Positioned(
-                    top: controller.swipeAction['top'],
-                    left: controller.swipeAction['left'],
-                    right: controller.swipeAction['right'],
-                    child: AnimatedOpacity(
-                      duration: const Duration(milliseconds: 300),
-                      opacity: controller.swipeAction['opacity'],
-                      child: Transform.scale(
-                        scale: 0.2 + (controller.swipeAction['opacity'] * 1.2),
-                        child: Container(
-                          width: 64,
-                          height: 64,
-                          decoration: BoxDecoration(
-                            color: const Color.fromARGB(196, 255, 255, 255),
-                            shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.1),
-                                blurRadius: 8,
-                                offset: const Offset(0, 4),
-                              ),
-                            ],
-                          ),
-                          child: Icon(
-                            controller.swipeAction['icon'],
-                            size: 40,
-                            color: controller.swipeAction['color'],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-              ],
-            ),
+            ],
           ),
+        );
+      }),
     );
   }
 }

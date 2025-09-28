@@ -10,8 +10,9 @@ abstract class Routes {
   static const FAVORITES = _Paths.FAVORITES;
   static const CART = _Paths.CART;
   static const PROFILE = _Paths.PROFILE;
-  static const SEARCH_PRODUCTS = _Paths.SEARCH_PRODUCTS;
   static const PRODUCT_DETAILS = _Paths.PRODUCT_DETAILS;
+  static const CM_PRODUCT_DETAILS = _Paths.CM_PRODUCT_DETAILS;
+  static const PRODUCTS_LISTING = _Paths.PRODUCTS_LISTING;
   static const LOGIN = _Paths.LOGIN;
   static const SIGNUP = _Paths.SIGNUP;
   static const USER_MEASUREMENTS = _Paths.USER_MEASUREMENTS;
@@ -31,8 +32,9 @@ abstract class _Paths {
   static const FAVORITES = '/favorites';
   static const CART = '/cart';
   static const PROFILE = '/profile';
-  static const SEARCH_PRODUCTS = '/search-products';
   static const PRODUCT_DETAILS = '/product-details';
+  static const CM_PRODUCT_DETAILS = '/cm-product-details';
+  static const PRODUCTS_LISTING = '/products-listing';
   static const LOGIN = '/login';
   static const SIGNUP = '/signup';
   static const USER_MEASUREMENTS = '/user-measurements';

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:closet_mate/models/product_model.dart';
+import 'package:closet_mate/models/cm_product_model.dart';
+import 'package:closet_mate/app/routes/app_pages.dart';
+import 'package:closet_mate/config/theme/colors.dart';
+import 'package:get/get.dart';
 
 class TrendingDealsCarousel extends StatelessWidget {
-  final List<ProductModel> deals;
+  final List<CmProductModel> deals;
   final String? title;
   final Map<String, dynamic>? config;
 
@@ -22,12 +25,43 @@ class TrendingDealsCarousel extends StatelessWidget {
         if (title != null)
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-            child: Text(
-              title!,
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  title!,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    // Navigate to products listing page with trending deals filter
+                    Get.toNamed(
+                      Routes.PRODUCTS_LISTING,
+                      arguments: {
+                        'filter': title ?? 'Trending Deals',
+                        'category': 'trending_deals',
+                      },
+                    );
+                  },
+                  child: Row(
+                    children: [
+                      Text(
+                        "View All",
+                        style: TextStyle(fontSize: 14, color: ColorConstants.appSpecificDark),
+                      ),
+                      const SizedBox(width: 4),
+                      Icon(
+                        Icons.arrow_forward_ios,
+                        size: 14,
+                        color: ColorConstants.appSpecificDark,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
         CarouselSlider(
@@ -48,9 +82,28 @@ class TrendingDealsCarousel extends StatelessWidget {
                     child: Stack(
                       fit: StackFit.expand,
                       children: [
-                        Image.asset(
-                          product.imageUrl,
+                        Image.network(
+                          product.mainImage,
                           fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) {
+                            return Container(
+                              color: Colors.grey[300],
+                              child: const Icon(
+                                Icons.image_not_supported,
+                                color: Colors.grey,
+                                size: 50,
+                              ),
+                            );
+                          },
+                          loadingBuilder: (context, child, loadingProgress) {
+                            if (loadingProgress == null) return child;
+                            return Container(
+                              color: Colors.grey[200],
+                              child: const Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                            );
+                          },
                         ),
                         Positioned(
                           bottom: 12,

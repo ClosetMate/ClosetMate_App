@@ -1,6 +1,8 @@
 import 'package:closet_mate/config/theme/theme_colors.dart';
 import 'package:closet_mate/utils/constants.dart';
+import 'package:closet_mate/app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   final int previousIndex;
@@ -61,7 +63,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
       actions: [
         IconButton(
           icon: Icon(Icons.search, color: ThemeColors.getSecondary(isLightTheme)),
-          onPressed: () => onTabChange(5),
+          onPressed: () => Get.toNamed(Routes.PRODUCTS_LISTING, arguments: {'isSearch': true}),
           tooltip: "Search",
         ),
         SizedBox(width: 10),

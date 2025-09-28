@@ -1,12 +1,13 @@
-import 'package:closet_mate/app/components/product_item.dart';
+import 'package:closet_mate/app/components/cm_product_item.dart';
 import 'package:closet_mate/config/theme/colors.dart';
 import 'package:closet_mate/config/theme/theme_colors.dart';
-import 'package:closet_mate/models/product_model.dart';
+import 'package:closet_mate/models/cm_product_model.dart';
+import 'package:closet_mate/app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ProductsSection extends StatelessWidget {
-  final List<ProductModel> products;
+  final List<CmProductModel> products;
   final String sectionTitle;
   final bool showViewAll;
   final String category;
@@ -40,8 +41,14 @@ class ProductsSection extends StatelessWidget {
                   if (showViewAll)
                     GestureDetector(
                       onTap: () {
-                        // Navigate to all products page with category filter
-                        print('Navigate to category: $category');
+                        // Navigate to products listing page with category filter
+                        Get.toNamed(
+                          Routes.PRODUCTS_LISTING,
+                          arguments: {
+                            'filter': sectionTitle,
+                            'category': category,
+                          },
+                        );
                       },
                       child: Row(
                         children: [
@@ -79,7 +86,7 @@ class ProductsSection extends StatelessWidget {
     );
   }
 
-  Widget _buildProductCard(ProductModel item) {
+  Widget _buildProductCard(CmProductModel item) {
     bool isLightTheme = Get.isDarkMode == false;
     return Container(
       width: 180,
@@ -88,7 +95,7 @@ class ProductsSection extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         color: ThemeColors.getScaffoldBackground(isLightTheme),
       ),
-      child: ProductItem(product: item),
+      child: CmProductItem(product: item),
     );
   }
 }

@@ -1,12 +1,12 @@
 import 'package:closet_mate/app/routes/app_pages.dart';
-import 'package:closet_mate/models/product_model.dart';
+import 'package:closet_mate/models/cm_product_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 
 class ProductDetailCard extends StatelessWidget {
   const ProductDetailCard({super.key, required this.product});
-  final ProductModel product;
+  final CmProductModel product;
 
   @override
   Widget build(BuildContext context) {
@@ -18,22 +18,46 @@ class ProductDetailCard extends StatelessWidget {
       child: Stack(
         children: [
           InkWell(
-            onTap: () => Get.toNamed(Routes.PRODUCT_DETAILS, arguments: product),
+            onTap: () => Get.toNamed(Routes.CM_PRODUCT_DETAILS, arguments: product.id),
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16),
-                image: DecorationImage(
-                  image: AssetImage(product.imageUrl),
-                  fit: BoxFit.cover,
-                ),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withOpacity(0.2),
                     spreadRadius: 2,
                     blurRadius: 6,
-                    offset: Offset(0, 3), // changes position of shadow
+                    offset: const Offset(0, 3), // changes position of shadow
                   ),
                 ],
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(16),
+                child: Image.network(
+                  product.mainImage,
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                  height: double.infinity,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      color: Colors.grey[300],
+                      child: const Icon(
+                        Icons.image_not_supported,
+                        color: Colors.grey,
+                        size: 50,
+                      ),
+                    );
+                  },
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return Container(
+                      color: Colors.grey[200],
+                      child: const Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    );
+                  },
+                ),
               ),
             ),
           ),
@@ -68,32 +92,24 @@ class ProductDetailCard extends StatelessWidget {
                       ),
                       const SizedBox(height: 4), // Small spacing
 
-                      // Prices (Side by Side)
-                      Row(
-                        children: [
-                          // Old Price with Strikethrough
-                          Text(
-                            product.currency + product.price.toString(),
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 12,
-                              decoration: TextDecoration.lineThrough,
-                              decorationColor: Colors.red,
-                              decorationThickness: 2.0,
-                            ),
-                          ),
-                          const SizedBox(width: 10), // Space between prices
-
-                          // Current Price
-                          Text(
-                            product.currency + product.currentPrice.toString(),
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w900,
-                            ),
-                          ),
-                        ],
+                      // Price
+                      Text(
+                        '${product.currency} ${product.price.toStringAsFixed(2)}',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      // Brand
+                      Text(
+                        product.brand,
+                        style: const TextStyle(
+                          color: Colors.white70,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ],
                   ),

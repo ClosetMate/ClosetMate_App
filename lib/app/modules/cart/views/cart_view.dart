@@ -1,7 +1,6 @@
 import 'package:closet_mate/config/theme/theme_colors.dart';
-import 'package:closet_mate/models/product_model.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import '../controllers/cart_controller.dart';
@@ -13,46 +12,144 @@ class CartView extends GetView<CartController> {
     bool isLightTheme = Theme.of(context).brightness == Brightness.light;
     return Scaffold(
       backgroundColor: ThemeColors.getScaffoldBackground(isLightTheme),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              itemCount: controller.products.length, // Replace with your cart items length
-              padding: const EdgeInsets.all(16),
-              itemBuilder: (context, index) {
-                return _buildCartItem(controller.products[index]);
-              },
+      // appBar: AppBar(
+      //   title: const Text('Shopping Cart'),
+      //   backgroundColor: ThemeColors.getScaffoldBackground(isLightTheme),
+      //   actions: [
+      //     Obx(() => Text(
+      //       '${controller.totalItems} items',
+      //       style: TextStyle(fontSize: 16.sp),
+      //     )),
+      //     SizedBox(width: 16.w),
+      //   ],
+      // ),
+      body: Obx(() {
+        if (controller.isLoading.value) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        if (controller.errorMessage.value.isNotEmpty) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.error_outline,
+                  size: 64.sp,
+                  color: Colors.red,
+                ),
+                SizedBox(height: 16.h),
+                Text(
+                  'Error: ${controller.errorMessage.value}',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 16.sp),
+                ),
+                SizedBox(height: 16.h),
+                ElevatedButton(
+                  onPressed: controller.loadCartItems,
+                  child: const Text('Retry'),
+                ),
+              ],
             ),
-          ),
-          _buildCartSummary(),
-        ],
-      ),
+          );
+        }
+
+        if (controller.cartItems.isEmpty) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.shopping_cart_outlined,
+                  size: 64.sp,
+                  color: Colors.grey,
+                ),
+                SizedBox(height: 16.h),
+                Text(
+                  'Your cart is empty',
+                  style: TextStyle(
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 8.h),
+                Text(
+                  'Add some products to get started',
+                  style: TextStyle(
+                    fontSize: 14.sp,
+                    color: Colors.grey[600],
+                  ),
+                ),
+              ],
+            ),
+          );
+        }
+
+        return Column(
+          children: [
+            Expanded(
+              child: ListView.builder(
+                itemCount: controller.cartItems.length,
+                padding: EdgeInsets.all(16.w),
+                itemBuilder: (context, index) {
+                  return _buildCartItem(controller.cartItems[index]);
+                },
+              ),
+            ),
+            _buildCartSummary(),
+          ],
+        );
+      }),
     );
   }
 
-  Widget _buildCartItem(ProductModel product) {
+  Widget _buildCartItem(CartItem cartItem) {
     bool isLightTheme = Get.isDarkMode == false;
+    final product = cartItem.product;
+    
     return Card(
       color: ThemeColors.getCardBackground(isLightTheme),
-      margin: const EdgeInsets.only(bottom: 12),
+      margin: EdgeInsets.only(bottom: 12.h),
       child: Padding(
-        padding: const EdgeInsets.all(12.0),
+        padding: EdgeInsets.all(12.w),
         child: Row(
           children: [
             // Product Image
             Container(
-              height: 80,
-              width: 80,
+              height: 80.h,
+              width: 80.w,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(8.r),
                 color: Colors.grey[200],
-                image: DecorationImage(
-                  image: AssetImage(product.imageUrl), // Replace with your image
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8.r),
+                child: Image.network(
+                  product.mainImage,
                   fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      color: Colors.grey[300],
+                      child: const Icon(
+                        Icons.image_not_supported,
+                        color: Colors.grey,
+                        size: 30,
+                      ),
+                    );
+                  },
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return Container(
+                      color: Colors.grey[200],
+                      child: const Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    );
+                  },
                 ),
               ),
             ),
-            const SizedBox(width: 12),
+            SizedBox(width: 12.w),
             // Product Info
             Expanded(
               child: Column(
@@ -60,34 +157,111 @@ class CartView extends GetView<CartController> {
                 children: [
                   Text(
                     product.name,
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                    style: TextStyle(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  SizedBox(height: 4),
+                  SizedBox(height: 4.h),
                   Text(
-                    '${product.currency} ${product.currentPrice.toStringAsFixed(2)}',
-                    style: TextStyle(color: ThemeColors.getCurrency(isLightTheme), fontWeight: FontWeight.bold),
+                    product.brand,
+                    style: TextStyle(
+                      fontSize: 12.sp,
+                      color: Colors.grey[600],
+                    ),
+                  ),
+                  SizedBox(height: 4.h),
+                  Text(
+                    '${product.currency} ${product.price.toStringAsFixed(2)}',
+                    style: TextStyle(
+                      color: ThemeColors.getCurrency(isLightTheme),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14.sp,
+                    ),
+                  ),
+                  SizedBox(height: 4.h),
+                  Row(
+                    children: [
+                      Text(
+                        'Color: ${cartItem.selectedColor}',
+                        style: TextStyle(
+                          fontSize: 10.sp,
+                          color: Colors.grey[600],
+                        ),
+                      ),
+                      SizedBox(width: 8.w),
+                      Text(
+                        'Size: ${cartItem.selectedSize}',
+                        style: TextStyle(
+                          fontSize: 10.sp,
+                          color: Colors.grey[600],
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
             ),
-            // Quantity Control
-            Column(
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.add_circle_outline),
-                  onPressed: () {},
-                ),
-                const Text('1'),
-                IconButton(
-                  icon: const Icon(Icons.remove_circle_outline),
-                  onPressed: () {},
-                ),
-              ],
-            ),
+            // Quantity Control - Wrapped in Obx for reactivity
+            Obx(() {
+              // Find the current cart item to get updated quantity
+              CartItem? currentItem;
+              try {
+                currentItem = controller.cartItems.firstWhere((item) => 
+                  item.product.id == product.id && 
+                  item.selectedColor == cartItem.selectedColor &&
+                  item.selectedSize == cartItem.selectedSize
+                );
+              } catch (e) {
+                currentItem = null;
+              }
+              final currentQuantity = currentItem?.quantity ?? cartItem.quantity;
+              
+              return Column(
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.add_circle_outline, size: 20.sp),
+                    onPressed: () {
+                      controller.updateQuantity(
+                        product.id,
+                        cartItem.selectedColor,
+                        cartItem.selectedSize,
+                        currentQuantity + 1,
+                      );
+                    },
+                  ),
+                  Text(
+                    '$currentQuantity',
+                    style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold),
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.remove_circle_outline, size: 20.sp),
+                    onPressed: () {
+                      if (currentQuantity > 1) {
+                        controller.updateQuantity(
+                          product.id,
+                          cartItem.selectedColor,
+                          cartItem.selectedSize,
+                          currentQuantity - 1,
+                        );
+                      }
+                    },
+                  ),
+                ],
+              );
+            }),
             // Remove Button
             IconButton(
-              icon: const Icon(Icons.delete_outline),
-              onPressed: () {},
+              icon: Icon(Icons.delete_outline, size: 20.sp),
+              onPressed: () {
+                controller.removeFromCart(
+                  product.id,
+                  cartItem.selectedColor,
+                  cartItem.selectedSize,
+                );
+              },
             ),
           ],
         ),
@@ -97,44 +271,55 @@ class CartView extends GetView<CartController> {
 
   Widget _buildCartSummary() {
     bool isLightTheme = Get.isDarkMode == false;
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: ThemeColors.getScaffoldBackground(isLightTheme),
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 10,
-            offset: Offset(0, -4),
-          ),
-        ],
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _buildSummaryRow('Subtotal', '\$ 24.00'),
-          const SizedBox(height: 8),
-          _buildSummaryRow('Shipping', '\$ 2.00'),
-          const Divider(height: 24, thickness: 1),
-          _buildSummaryRow('Total', '\$ 26.00', isTotal: true),
-          const SizedBox(height: 16),
-          ElevatedButton(
-            onPressed: () {
-              // TODO: Handle checkout
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: ThemeColors.getSecondary(isLightTheme),
-              minimumSize: const Size.fromHeight(50),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
+    return Obx(() {
+      final subtotal = controller.totalPrice;
+      final shipping = subtotal > 0 ? 2.0 : 0.0;
+      final total = subtotal + shipping;
+      final currency = controller.currency;
+      
+      return Container(
+        padding: EdgeInsets.all(16.w),
+        decoration: BoxDecoration(
+          color: ThemeColors.getScaffoldBackground(isLightTheme),
+          borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black12,
+              blurRadius: 10,
+              offset: const Offset(0, -4),
+            ),
+          ],
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _buildSummaryRow('Subtotal', '$currency ${subtotal.toStringAsFixed(2)}'),
+            SizedBox(height: 8.h),
+            _buildSummaryRow('Shipping', '$currency ${shipping.toStringAsFixed(2)}'),
+            Divider(height: 24.h, thickness: 1),
+            _buildSummaryRow('Total', '$currency ${total.toStringAsFixed(2)}', isTotal: true),
+            SizedBox(height: 16.h),
+            ElevatedButton(
+              onPressed: subtotal > 0 ? controller.checkout : null,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: ThemeColors.getSecondary(isLightTheme),
+                minimumSize: Size.fromHeight(50.h),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.r),
+                ),
+              ),
+              child: Text(
+                'Checkout',
+                style: TextStyle(
+                  fontSize: 18.sp,
+                  color: ThemeColors.getButtonText(isLightTheme),
+                ),
               ),
             ),
-            child: Text('Checkout', style: TextStyle(fontSize: 18, color: ThemeColors.getButtonText(isLightTheme))),
-          ),
-        ],
-      ),
-    );
+          ],
+        ),
+      );
+    });
   }
 
   Widget _buildSummaryRow(String title, String amount, {bool isTotal = false}) {
@@ -144,14 +329,14 @@ class CartView extends GetView<CartController> {
         Text(
           title,
           style: TextStyle(
-            fontSize: isTotal ? 18 : 16,
+            fontSize: isTotal ? 18.sp : 16.sp,
             fontWeight: isTotal ? FontWeight.bold : FontWeight.normal,
           ),
         ),
         Text(
           amount,
           style: TextStyle(
-            fontSize: isTotal ? 18 : 16,
+            fontSize: isTotal ? 18.sp : 16.sp,
             fontWeight: isTotal ? FontWeight.bold : FontWeight.normal,
           ),
         ),

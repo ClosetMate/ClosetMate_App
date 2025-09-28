@@ -13,10 +13,12 @@ import '../modules/login/bindings/login_binding.dart';
 import '../modules/login/views/login_view.dart';
 import '../modules/product_details/bindings/product_details_binding.dart';
 import '../modules/product_details/views/product_details_view.dart';
+import '../modules/product_details/controllers/cm_product_details_controller.dart';
+import '../modules/product_details/views/cm_product_details_view.dart';
+import '../modules/products_listing/bindings/products_listing_binding.dart';
+import '../modules/products_listing/views/products_listing_view.dart';
 import '../modules/profile/bindings/profile_binding.dart';
 import '../modules/profile/views/profile_view.dart';
-import '../modules/search_products/bindings/search_products_binding.dart';
-import '../modules/search_products/views/search_products_view.dart';
 import '../modules/settings/bindings/settings_binding.dart';
 import '../modules/settings/views/settings_view.dart';
 import '../modules/signup/bindings/signup_binding.dart';
@@ -75,14 +77,19 @@ class AppPages {
       binding: ProfileBinding(),
     ),
     GetPage(
-      name: _Paths.SEARCH_PRODUCTS,
-      page: () => const SearchProductsView(),
-      binding: SearchProductsBinding(),
-    ),
-    GetPage(
       name: _Paths.PRODUCT_DETAILS,
       page: () => const ProductDetailsView(),
       binding: ProductDetailsBinding(),
+    ),
+    GetPage(
+      name: _Paths.CM_PRODUCT_DETAILS,
+      page: () => const CmProductDetailsView(),
+      binding: BindingsBuilder(() => Get.lazyPut<CmProductDetailsController>(() => CmProductDetailsController())),
+    ),
+    GetPage(
+      name: _Paths.PRODUCTS_LISTING,
+      page: () => const ProductsListingView(),
+      binding: ProductsListingBinding(),
     ),
     GetPage(
       name: _Paths.LOGIN,
