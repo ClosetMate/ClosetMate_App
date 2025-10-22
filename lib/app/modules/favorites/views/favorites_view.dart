@@ -1,5 +1,6 @@
 import 'package:closet_mate/app/components/cm_product_item.dart';
 import 'package:closet_mate/config/theme/theme_colors.dart';
+import 'package:closet_mate/config/theme/my_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -45,11 +46,11 @@ class FavoritesView extends GetView<FavoritesController> {
                 dividerColor: Colors.transparent,
                 labelColor: isLightTheme ? Colors.black87 : Colors.white,
                 unselectedLabelColor: isLightTheme ? Colors.grey[600] : Colors.grey[400],
-                labelStyle: TextStyle(
+                labelStyle: MyFonts.getAppFontType.copyWith(
                   fontSize: 16.sp,
                   fontWeight: FontWeight.w600,
                 ),
-                unselectedLabelStyle: TextStyle(
+                unselectedLabelStyle: MyFonts.getAppFontType.copyWith(
                   fontSize: 16.sp,
                   fontWeight: FontWeight.w500,
                 ),
@@ -117,7 +118,7 @@ class FavoritesView extends GetView<FavoritesController> {
                 Text(
                   'Error: ${controller.errorMessage.value}',
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 16.sp),
+                  style: MyFonts.getAppFontType.copyWith(fontSize: 16.sp),
                 ),
                 SizedBox(height: 16.h),
                 ElevatedButton(
@@ -144,7 +145,7 @@ class FavoritesView extends GetView<FavoritesController> {
                   tabType == 'favorites' 
                     ? 'No favorites yet' 
                     : 'Your closet is empty',
-                  style: TextStyle(
+                  style: MyFonts.getAppFontType.copyWith(
                     fontSize: 18.sp,
                     fontWeight: FontWeight.w500,
                     color: Colors.grey[600],
@@ -156,7 +157,7 @@ class FavoritesView extends GetView<FavoritesController> {
                     ? 'Start adding products to your favorites'
                     : 'Add products to build your wardrobe',
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: MyFonts.getAppFontType.copyWith(
                     fontSize: 14.sp,
                     color: Colors.grey[500],
                   ),

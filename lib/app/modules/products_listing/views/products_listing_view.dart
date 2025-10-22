@@ -14,159 +14,132 @@ class ProductsListingView extends GetView<ProductsListingController> {
   Widget build(BuildContext context) {
     bool isLightTheme = Theme.of(context).brightness == Brightness.light;
     
-    return Scaffold(
-      backgroundColor: ThemeColors.getBackground(isLightTheme),
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: ThemeColors.getBackground(isLightTheme),
-        systemOverlayStyle: SystemUiOverlayStyle(
-          statusBarColor: Colors.transparent,
-          statusBarIconBrightness: isLightTheme ? Brightness.dark : Brightness.light,
+    return GestureDetector(
+      onTap: () {
+        // Close search mode when tapping outside
+        if (controller.isSearchMode.value) {
+          controller.exitSearchMode();
+        }
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(1),
+              blurRadius: 0,
+              offset: const Offset(0, 1),
+            ),
+          ],
         ),
+        child: Scaffold(
+        backgroundColor: ThemeColors.getBackground(isLightTheme),
+        appBar: AppBar(
+          elevation: 5,
+          // titleTextStyle: TextStyle(color: ThemeColors.getTextPrimary(isLightTheme)),
+          shadowColor: Colors.black.withOpacity(0.8),
+          backgroundColor: ThemeColors.getScaffoldBackground(isLightTheme),
+          toolbarHeight: 50.h,
+          systemOverlayStyle: SystemUiOverlayStyle(
+            statusBarColor: Colors.transparent,
+            statusBarIconBrightness: isLightTheme ? Brightness.dark : Brightness.light,
+          ),
+          surfaceTintColor: Colors.transparent,
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios, color: ThemeColors.getSecondary(isLightTheme)),
           onPressed: () => Get.back(),
         ),
-        title: Container(
-          width: double.infinity,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.1),
-                blurRadius: 8,
-                offset: const Offset(0, 2),
-              ),
-            ],
-          ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-              child: Focus(
-                onFocusChange: (hasFocus) {
-                  if (!hasFocus) {
-                    FocusScope.of(context).unfocus();
-                  }
-                },
-                child: TextField(
-                  controller: controller.searchController,
-                  autofocus: controller.isSearchMode.value,
-                  decoration: InputDecoration(
-                    hintText: 'Search',
-                    hintStyle: TextStyle(
-                      color: isLightTheme 
-                          ? Colors.grey[600]
-                          : Colors.white.withOpacity(0.6),
-                      fontSize: 16,
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide.none,
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide.none,
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide(
-                        color: isLightTheme 
-                            ? Colors.grey[400]!
-                            : Colors.white.withOpacity(0.2),
-                        width: 1.5,
+        title: Obx(() {
+          if (controller.isSearchMode.value) {
+            return Center(
+              child: Container(
+                width: MediaQuery.of(context).size.width * 0.75,
+                height: 40.h,
+                decoration: BoxDecoration(
+                  color: Colors.transparent,
+                  borderRadius: BorderRadius.circular(24),
+                  border: Border.all(
+                    color: isLightTheme ? Colors.grey[300]! : Colors.white.withOpacity(0.3),
+                    width: 1,
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: TextField(
+                        controller: controller.searchController,
+                        autofocus: true,
+                        decoration: InputDecoration(
+                          hintText: 'Search',
+                          border: InputBorder.none,
+                          hintStyle: TextStyle(
+                            color: isLightTheme ? Colors.grey[600] : Colors.white70,
+                          ),
+                          isDense: true,
+                        ),
+                        style: TextStyle(
+                          color: isLightTheme ? Colors.black87 : Colors.white,
+                          fontSize: 16,
+                        ),
+                        onChanged: (value) => controller.onSearchChanged(value),
                       ),
                     ),
-                    contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-                    filled: true,
-                    fillColor: isLightTheme 
-                        ? Colors.black.withOpacity(0.1)
-                        : Colors.white.withOpacity(0.1),
-                    prefixIcon: Icon(
-                      Icons.search,
-                      color: isLightTheme 
-                          ? Colors.grey[700]
-                          : Colors.white.withOpacity(0.7),
-                      size: 22,
+                    IconButton(
+                      icon: Icon(
+                        Icons.delete_outline,
+                        color: isLightTheme ? Colors.grey[600] : Colors.white70,
+                        size: 18,
+                      ),
+                      onPressed: controller.clearSearch,
+                      splashRadius: 18,
                     ),
-                    suffixIcon: Obx(() {
-                      if (controller.searchText.value.isNotEmpty) {
-                        return IconButton(
-                          icon: Icon(
-                            Icons.close, 
-                            color: isLightTheme 
-                                ? Colors.grey[700]
-                                : Colors.white.withOpacity(0.7), 
-                            size: 20
-                          ),
-                          onPressed: controller.clearSearch,
-                          padding: EdgeInsets.zero,
-                          constraints: BoxConstraints(),
-                        );
-                      }
-                      return const SizedBox.shrink();
-                    }),
-                  ),
-                  style: TextStyle(
-                    color: isLightTheme ? Colors.black87 : Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w400,
-                  ),
-                  onChanged: (value) => controller.onSearchChanged(value),
+                  ],
                 ),
               ),
-            ),
-          ),
-        ),
+            );
+          }
+          return Obx(() => Text(controller.displayTitle.value));
+        }),
         actions: [
-          IconButton(
-            icon: Icon(Icons.filter_list, color: ThemeColors.getSecondary(isLightTheme)),
-            onPressed: () => _showFilterBottomSheet(context, isLightTheme),
-          ),
+          Obx(() => IconButton(
+            icon: Icon(
+              controller.isSearchMode.value ? Icons.close : Icons.search,
+              color: ThemeColors.getSecondary(isLightTheme),
+            ),
+            onPressed: () {
+              if (controller.isSearchMode.value) {
+                controller.exitSearchMode();
+              } else {
+                controller.enterSearchMode();
+              }
+            },
+          )),
+          Obx(() {
+            final hasFilters = controller.selectedCategory.value.isNotEmpty ||
+                controller.selectedPriceRange.value.isNotEmpty ||
+                controller.selectedSortBy.value.isNotEmpty;
+            
+            return IconButton(
+              icon: Icon(
+                Icons.filter_list,
+                color: hasFilters 
+                    ? ThemeColors.getSecondary(isLightTheme)
+                    : ThemeColors.getSecondary(isLightTheme).withOpacity(0.6),
+              ),
+              onPressed: () {
+                // Exit search mode if active when filter is clicked
+                if (controller.isSearchMode.value) {
+                  controller.exitSearchMode();
+                }
+                _showFilterBottomSheet(context, isLightTheme);
+              },
+            );
+          }),
           const SizedBox(width: 8),
         ],
       ),
       body: Column(
         children: [
-          // Filter Chips
-          Obx(() {
-            // Check if there are any filters to show
-            final hasFilters = controller.selectedCategory.value.isNotEmpty ||
-                controller.selectedPriceRange.value.isNotEmpty ||
-                controller.selectedSortBy.value.isNotEmpty;
-            
-            if (!hasFilters) {
-              return const SizedBox.shrink(); // Hide if no filters
-            }
-            
-            return SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-              child: Row(
-                children: [
-                  if (controller.selectedCategory.value.isNotEmpty)
-                    _buildFilterChip(
-                      label: controller.selectedCategory.value,
-                      onDeleted: () => controller.setCategory(null),
-                      isLightTheme: isLightTheme
-                    ),
-                  if (controller.selectedPriceRange.value.isNotEmpty)
-                    _buildFilterChip(
-                      label: controller.selectedPriceRange.value,
-                      onDeleted: () => controller.setPriceRange(null),
-                      isLightTheme: isLightTheme
-                    ),
-                  if (controller.selectedSortBy.value.isNotEmpty)
-                    _buildFilterChip(
-                      label: controller.selectedSortBy.value,
-                      onDeleted: () => controller.setSortBy(null),
-                      isLightTheme: isLightTheme
-                    ),
-                ],
-              ),
-            );
-          }),
-
           // Products Grid
           Expanded(
             child: Obx(() {
@@ -251,7 +224,7 @@ class ProductsListingView extends GetView<ProductsListingController> {
                     return false;
                   },
                   child: GridView.builder(
-                    // padding: EdgeInsets.all(0.w),
+                    padding: EdgeInsets.all(5.w),
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                       childAspectRatio: 0.75,
@@ -280,24 +253,11 @@ class ProductsListingView extends GetView<ProductsListingController> {
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildFilterChip({
-    required String label,
-    required VoidCallback onDeleted,
-    isLightTheme
-  }) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 8.0),
-      child: Chip(
-        label: Text(label, style: TextStyle(color: ThemeColors.getTextPrimary(isLightTheme))),
-        deleteIcon: const Icon(Icons.close, size: 18),
-        onDeleted: onDeleted,
-        backgroundColor: ThemeColors.getCardBackground(isLightTheme),
+      ),
       ),
     );
   }
+
 
   void _showFilterBottomSheet(BuildContext context, bool isLightTheme) {
     showModalBottomSheet(
@@ -373,21 +333,6 @@ class ProductsListingView extends GetView<ProductsListingController> {
                 child: Obx(() => Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Category Filter
-                    _buildFilterSection(
-                      title: 'Category',
-                      icon: Icons.category_outlined,
-                      isLightTheme: isLightTheme,
-                      children: ['All', 'Chart Toppers', 'Trending Deals', 'New Arrivals', 'Top Selling', 'Recommended', 'Shirts', 'Pants', 'Dresses', 'Shoes', 'Accessories']
-                          .map((category) => _buildModernChip(
-                                label: category,
-                                isSelected: controller.selectedCategory.value == category,
-                                onTap: () => controller.setCategory(category),
-                                isLightTheme: isLightTheme,
-                              ))
-                          .toList(),
-                    ),
-                    SizedBox(height: 24.h),
 
                     // Price Range Filter
                     _buildFilterSection(
@@ -575,4 +520,5 @@ class ProductsListingView extends GetView<ProductsListingController> {
       ),
     );
   }
+
 }

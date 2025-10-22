@@ -22,6 +22,7 @@ class ProductsSection extends StatelessWidget {
 
     @override
     Widget build(BuildContext context) {
+    bool isLightTheme = Get.isDarkMode == false;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 12.0),
       child: Column(
@@ -54,13 +55,13 @@ class ProductsSection extends StatelessWidget {
                         children: [
                           Text(
                             "View All",
-                            style: TextStyle(fontSize: 14, color: ColorConstants.appSpecificDark),
+                            style: TextStyle(fontSize: 14, color: ThemeColors.getTextPrimary(isLightTheme)),
                           ),
                           const SizedBox(width: 4),
                           Icon(
                             Icons.arrow_forward_ios,
                             size: 14,
-                            color: ColorConstants.appSpecificDark,
+                            color: ThemeColors.getTextPrimary(isLightTheme),
                           ),
                         ],
                       ),

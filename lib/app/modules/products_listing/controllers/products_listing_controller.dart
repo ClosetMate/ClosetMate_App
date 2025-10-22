@@ -23,6 +23,9 @@ class ProductsListingController extends GetxController {
   final TextEditingController searchController = TextEditingController();
   final RxString searchText = ''.obs;
   final RxBool isSearchMode = false.obs;
+  
+  // Display title
+  final RxString displayTitle = 'Products'.obs;
 
   // Pagination
   final RxInt currentPage = 0.obs;
@@ -51,10 +54,16 @@ class ProductsListingController extends GetxController {
       
       if (isSearch) {
         isSearchMode.value = true;
+        displayTitle.value = 'Search';
         // Don't clear filters in search mode - keep them as they are
       } else if (initialFilter != null && initialFilter.isNotEmpty) {
-        selectedCategory.value = initialFilter;
+        displayTitle.value = initialFilter;
+        // Don't set selectedCategory for display-only filters
+      } else {
+        displayTitle.value = 'Products';
       }
+    } else {
+      displayTitle.value = 'Products';
     }
   }
 
@@ -202,5 +211,14 @@ class ProductsListingController extends GetxController {
     if (isSearchMode.value) {
       // This will be handled in the view
     }
+  }
+
+  void enterSearchMode() {
+    isSearchMode.value = true;
+  }
+
+  void exitSearchMode() {
+    isSearchMode.value = false;
+    clearSearch();
   }
 }
