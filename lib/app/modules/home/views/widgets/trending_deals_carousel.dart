@@ -31,9 +31,10 @@ class TrendingDealsCarousel extends StatelessWidget {
               children: [
                 Text(
                   title!,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
+                    color: ThemeColors.getTextPrimary(isLightTheme),
                   ),
                 ),
                 GestureDetector(
@@ -51,13 +52,13 @@ class TrendingDealsCarousel extends StatelessWidget {
                     children: [
                       Text(
                         "View All",
-                        style: TextStyle(fontSize: 14, color: ThemeColors.getTextPrimary(isLightTheme)),
+                        style: TextStyle(fontSize: 14, color: ThemeColors.getTextSecondary(isLightTheme)),
                       ),
                       const SizedBox(width: 4),
                       Icon(
                         Icons.arrow_forward_ios,
                         size: 14,
-                        color: ThemeColors.getTextPrimary(isLightTheme),
+                        color: ThemeColors.getTextSecondary(isLightTheme),
                       ),
                     ],
                   ),
@@ -109,6 +110,7 @@ class TrendingDealsCarousel extends StatelessWidget {
                         Positioned(
                           bottom: 12,
                           left: 12,
+                          right: 12,
                           child: Container(
                             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                             decoration: BoxDecoration(
@@ -117,6 +119,8 @@ class TrendingDealsCarousel extends StatelessWidget {
                             ),
                             child: Text(
                               product.name,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                               style: const TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,

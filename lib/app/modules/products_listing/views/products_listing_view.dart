@@ -379,8 +379,8 @@ class ProductsListingView extends GetView<ProductsListingController> {
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
-                      ThemeColors.getSecondary(isLightTheme),
-                      ThemeColors.getSecondary(isLightTheme).withOpacity(0.8),
+                      ThemeColors.getButtonBackground(isLightTheme),
+                      ThemeColors.getButtonBackground(isLightTheme).withOpacity(0.8),
                     ],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
@@ -388,7 +388,7 @@ class ProductsListingView extends GetView<ProductsListingController> {
                   borderRadius: BorderRadius.circular(16.r),
                   boxShadow: [
                     BoxShadow(
-                      color: ThemeColors.getSecondary(isLightTheme).withOpacity(0.3),
+                      color: ThemeColors.getBackground(!isLightTheme).withOpacity(0.3),
                       blurRadius: 12,
                       offset: const Offset(0, 4),
                     ),
@@ -408,14 +408,14 @@ class ProductsListingView extends GetView<ProductsListingController> {
                         children: [
                           Icon(
                             Icons.check_circle_outline,
-                            color: ThemeColors.getPrimary(isLightTheme),
+                            color: ThemeColors.getButtonText(isLightTheme),
                             size: 20.sp,
                           ),
                           SizedBox(width: 8.w),
                           Text(
                             'Apply Filters',
                             style: TextStyle(
-                              color: ThemeColors.getPrimary(isLightTheme),
+                              color: ThemeColors.getButtonText(isLightTheme),
                               fontSize: 16.sp,
                               fontWeight: FontWeight.w600,
                             ),
@@ -453,7 +453,7 @@ class ProductsListingView extends GetView<ProductsListingController> {
               child: Icon(
                 icon,
                 size: 18.sp,
-                color: ThemeColors.getSecondary(isLightTheme),
+                color: ThemeColors.getTextPrimary(isLightTheme),
               ),
             ),
             SizedBox(width: 12.w),
@@ -490,28 +490,28 @@ class ProductsListingView extends GetView<ProductsListingController> {
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
         decoration: BoxDecoration(
           color: isSelected 
-              ? ThemeColors.getSecondary(isLightTheme)
-              : ThemeColors.getCardBackground(isLightTheme),
+              ? ThemeColors.getButtonBackground(isLightTheme)
+              : ThemeColors.getButtonBackground(!isLightTheme),
           borderRadius: BorderRadius.circular(20.r),
-          border: Border.all(
-            color: isSelected 
-                ? ThemeColors.getSecondary(isLightTheme)
-                : ThemeColors.getTextHint(isLightTheme).withOpacity(0.3),
-            width: 1.5,
-          ),
-          boxShadow: isSelected ? [
-            BoxShadow(
-              color: ThemeColors.getSecondary(isLightTheme).withOpacity(0.3),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
-            ),
-          ] : null,
+          // border: Border.all(
+          //   color: isSelected 
+          //       ? ThemeColors.getSecondary(isLightTheme)
+          //       : ThemeColors.getTextHint(isLightTheme).withOpacity(0.3),
+          //   width: 1.5,
+          // ),
+          // boxShadow: isSelected ? [
+          //   BoxShadow(
+          //     color: ThemeColors.getSecondary(isLightTheme).withOpacity(0.3),
+          //     blurRadius: 8,
+          //     offset: const Offset(0, 2),
+          //   ),
+          // ] : null,
         ),
         child: Text(
           label,
           style: TextStyle(
             color: isSelected 
-                ? ThemeColors.getPrimary(isLightTheme)
+                ? ThemeColors.getTextPrimary(!isLightTheme)
                 : ThemeColors.getTextPrimary(isLightTheme),
             fontSize: 13.sp,
             fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,

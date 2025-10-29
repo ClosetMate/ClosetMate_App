@@ -20,7 +20,7 @@ class InitialAvatar extends StatelessWidget {
   Widget build(BuildContext context) {
     String initial = name.isNotEmpty ? name[0].toUpperCase() : '?';
     bool isLightTheme = Get.isDarkMode == false;
-    Color bg = backgroundColor ?? ThemeColors.getSecondary(isLightTheme);
+    Color bg = backgroundColor ?? ThemeColors.getBackground(!isLightTheme);
 
     return CircleAvatar(
       radius: radius,
@@ -29,7 +29,7 @@ class InitialAvatar extends StatelessWidget {
         initial,
         style: textStyle ??
             TextStyle(
-              color: ThemeColors.getPrimary(isLightTheme),
+              color: ThemeColors.getTextPrimary(!isLightTheme),
               fontSize: radius * 0.8,
               fontWeight: FontWeight.bold,
             ),

@@ -27,13 +27,13 @@ class FavoritesView extends GetView<FavoritesController> {
             child: Container(
               margin: EdgeInsets.symmetric(horizontal: 20.w),
               decoration: BoxDecoration(
-                color: isLightTheme ? Colors.grey[200] : Colors.grey[800],
+                color: ThemeColors.getCardBackground(isLightTheme),
                 borderRadius: BorderRadius.circular(25.r),
               ),
               child: TabBar(
                 indicator: BoxDecoration(
                   borderRadius: BorderRadius.circular(25.r),
-                  color: isLightTheme ? Colors.white : Colors.grey[700],
+                  color: ThemeColors.getButtonBackground(!isLightTheme),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withOpacity(0.1),
@@ -44,7 +44,7 @@ class FavoritesView extends GetView<FavoritesController> {
                 ),
                 indicatorSize: TabBarIndicatorSize.tab,
                 dividerColor: Colors.transparent,
-                labelColor: isLightTheme ? Colors.black87 : Colors.white,
+                labelColor: ThemeColors.getTextPrimary(isLightTheme),
                 unselectedLabelColor: isLightTheme ? Colors.grey[600] : Colors.grey[400],
                 labelStyle: MyFonts.getAppFontType.copyWith(
                   fontSize: 16.sp,

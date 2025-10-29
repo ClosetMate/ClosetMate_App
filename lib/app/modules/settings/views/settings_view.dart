@@ -24,63 +24,80 @@ class SettingsView extends GetView<SettingsController> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'Theme Mode',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: ThemeColors.getTextPrimary(isLightTheme),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () => controller.onThemeChange(true),
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-                              decoration: BoxDecoration(
-                                color: isLightTheme ? ThemeColors.getTextPrimary(isLightTheme) : Colors.transparent,
-                                border: Border.all(color: ThemeColors.getTextPrimary(isLightTheme)),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Text(
-                                'Light',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: isLightTheme ? Colors.white : ThemeColors.getTextPrimary(isLightTheme),
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ),
+                        Text(
+                          'Theme Mode',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: ThemeColors.getTextPrimary(isLightTheme),
                           ),
                         ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () => controller.onThemeChange(false),
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-                              decoration: BoxDecoration(
-                                color: !isLightTheme ? ThemeColors.getTextPrimary(isLightTheme) : Colors.transparent,
-                                border: Border.all(color: ThemeColors.getTextPrimary(isLightTheme)),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Text(
-                                'Dark',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: !isLightTheme ? Colors.white : ThemeColors.getTextPrimary(isLightTheme),
-                                  fontWeight: FontWeight.w500,
+                        Container(
+                          padding: const EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                            color: ThemeColors.getCardBackground(isLightTheme),
+                            borderRadius: BorderRadius.circular(25),
+                            border: Border.all(
+                              color: Colors.grey.shade300,
+                              width: 1,
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              GestureDetector(
+                                onTap: () => controller.onThemeChange(true),
+                                child: Container(
+                                  padding: const EdgeInsets.all(12),
+                                  decoration: BoxDecoration(
+                                    color: isLightTheme 
+                                      ? ThemeColors.getButtonBackground(isLightTheme)
+                                      : Colors.transparent,
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: Icon(
+                                    Icons.light_mode,
+                                    color: isLightTheme 
+                                      ? Colors.white
+                                      : ThemeColors.getButtonBackground(isLightTheme),
+                                    size: 24,
+                                  ),
                                 ),
                               ),
-                            ),
+                              const SizedBox(width: 4),
+                              GestureDetector(
+                                onTap: () => controller.onThemeChange(false),
+                                child: Container(
+                                  padding: const EdgeInsets.all(12),
+                                  decoration: BoxDecoration(
+                                    color: !isLightTheme 
+                                      ? ThemeColors.getPrimary(isLightTheme)
+                                      : Colors.transparent,
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: Icon(
+                                    Icons.dark_mode,
+                                    color: !isLightTheme 
+                                      ? Colors.white
+                                      : ThemeColors.getTextSecondary(isLightTheme),
+                                    size: 24,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 40),
+                    const SizedBox(height: 24),
+                    Divider(
+                      color: Colors.grey.shade300,
+                      thickness: 1,
+                    ),
+                    const SizedBox(height: 24),
                     Text(
                       'Account Settings',
                       style: TextStyle(
@@ -132,12 +149,12 @@ class SettingsView extends GetView<SettingsController> {
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: ThemeColors.getPrimary(isLightTheme).withOpacity(0.1),
+                color: ThemeColors.getTextPrimary(isLightTheme).withOpacity(0.1),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Icon(
                 icon,
-                color: ThemeColors.getSecondary(isLightTheme),
+                color: ThemeColors.getTextPrimary(isLightTheme),
                 size: 24,
               ),
             ),

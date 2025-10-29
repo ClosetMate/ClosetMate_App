@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:closet_mate/config/theme/theme_colors.dart';
 
 class SizeItem extends StatelessWidget {
   final void Function()? onPressed;
@@ -16,13 +17,14 @@ class SizeItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = context.theme;
+    bool isLightTheme = Get.isDarkMode == false;
     return GestureDetector(
       onTap: onPressed,
       child: Container(
         width: 30.w,
         height: 30.h,
         decoration: BoxDecoration(
-          color: selected ? theme.primaryColor : theme.colorScheme.surface,
+          color: selected ? ThemeColors.getButtonBackground(isLightTheme) : theme.colorScheme.surface,
           borderRadius: BorderRadius.circular(12.r),
         ),
         child: Center(
@@ -31,7 +33,7 @@ class SizeItem extends StatelessWidget {
             style: theme.textTheme.displaySmall?.copyWith(
               fontSize: 12.sp,
               fontWeight: FontWeight.bold,
-              color: selected ? Colors.white : null
+              color: selected ? ThemeColors.getButtonText(isLightTheme) : null
             ),
           ),
         ),

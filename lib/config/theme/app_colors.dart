@@ -4,19 +4,19 @@ import 'package:flutter/material.dart';
 /// This serves as the single source of truth for all colors
 class AppColors {
   // Primary Brand Colors
-  static const Color primary = Color.fromARGB(255, 0, 0, 0);
-  static const Color primaryLight = Color.fromARGB(255, 0, 0, 0);
-  static const Color primaryDark = Color.fromARGB(255, 0, 0, 0);
+  static const Color primary = Colors.black;
+  static const Color primaryLight = Colors.white;
+  static const Color primaryDark = Colors.black;
   
   // Secondary Colors
-  static const Color secondary = Colors.blue;
-  static const Color secondaryLight = Colors.blue;
-  static const Color secondaryDark = Colors.blue;
+  static const Color secondary = Colors.black;
+  static const Color secondaryLight = Colors.black;
+  static const Color secondaryDark = Colors.white;
   
   // Accent Colors
-  static const Color accent = Color(0xFF40DF9F);
-  static const Color accentLight = Color(0xFF6BE8B8);
-  static const Color accentDark = Color(0xFF2BC87A);
+  static const Color accent = Colors.deepPurple;
+  static const Color accentLight = Colors.deepPurple;
+  static const Color accentDark = Colors.deepPurple;
 
     // Accent Colors
   static const Color currency = Color(0xFF00cc00);
@@ -40,19 +40,21 @@ class AppColors {
   static const Color backgroundLight = Color(0xFFEDF1FA);
   static const Color backgroundDark = Color(0xFF1F2E35);
   static const Color cardLight = Color(0xFFfafafa);
-  static const Color cardDark = Color.fromARGB(255, 0, 0, 0);
+  static const Color cardDark = Color.fromARGB(0, 255, 255, 255);
   
   // Text Colors
-  static const Color textPrimaryLight = Color(0xFF30444E);
-  static const Color textPrimaryDark = Color(0xFF96A7AF);
-  static const Color textSecondaryLight = Color(0xFF686868);
-  static const Color textSecondaryDark = Color(0xFF96A7AF);
+  static const Color textPrimaryLight = Colors.black;
+  static const Color textPrimaryDark = Colors.white;
+  static const Color textSecondaryLight = Color.fromARGB(143, 0, 0, 0);
+  static const Color textSecondaryDark = Color.fromARGB(143, 255, 255, 255);
   
   // Interactive Colors
   static const Color buttonTextLight = Colors.white;
   static const Color buttonTextDark = Colors.black;
+  static const Color buttonBackgroundLight = Colors.black;
+  static const Color buttonBackgroundDark = Colors.white;
   static const Color chipTextLight = Colors.white;
-  static const Color chipTextDark = Color(0xff000000dd);
+  static const Color chipTextDark = Color.fromARGB(0, 255, 255, 255);
   
   // Utility function to convert hex to color
   static Color hexToColor(String hex) {

@@ -20,14 +20,14 @@ class BasicMeasurementsView extends StatelessWidget {
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back,
-            color: ThemeColors.getPrimary(isLightTheme),
+            color: ThemeColors.getTextPrimary(isLightTheme),
           ),
           onPressed: () => Get.back(),
         ),
         title: Text(
           "Basic Measurements",
           style: TextStyle(
-            color: ThemeColors.getPrimary(isLightTheme),
+            color: ThemeColors.getTextPrimary(isLightTheme),
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -44,7 +44,7 @@ class BasicMeasurementsView extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: ThemeColors.getPrimary(isLightTheme),
+                    color: ThemeColors.getTextPrimary(isLightTheme),
                   ),
                 ),
               ),
@@ -54,7 +54,7 @@ class BasicMeasurementsView extends StatelessWidget {
                   "These help us recommend the right size for you",
                   style: TextStyle(
                     fontSize: 14,
-                    color: ThemeColors.getPrimary(isLightTheme).withOpacity(0.7),
+                    color: ThemeColors.getTextSecondary(isLightTheme).withOpacity(0.7),
                   ),
                 ),
               ),
@@ -163,13 +163,13 @@ class BasicMeasurementsView extends StatelessWidget {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    backgroundColor: ThemeColors.getPrimary(isLightTheme),
+                    backgroundColor: ThemeColors.getButtonBackground(isLightTheme),
                   ),
                   child: Text(
                     "Next",
                     style: TextStyle(
                       fontSize: 18,
-                      color: ThemeColors.getSecondary(isLightTheme),
+                      color: ThemeColors.getButtonText(isLightTheme),
                     ),
                   ),
                 ),
@@ -188,7 +188,7 @@ class BasicMeasurementsView extends StatelessWidget {
                       "Skip for now",
                       style: TextStyle(
                         fontSize: 16,
-                        color: ThemeColors.getPrimary(isLightTheme),
+                        color: ThemeColors.getTextPrimary(isLightTheme),
                       ),
                     ),
                   ),
@@ -214,7 +214,7 @@ class BasicMeasurementsView extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
-        color: isLightTheme ? Colors.grey.shade50 : Colors.grey.shade800,
+        color: ThemeColors.getCardBackground(isLightTheme),
         borderRadius: BorderRadius.circular(8),
         border: Border.all(
           color: isLightTheme ? Colors.grey.shade300 : Colors.grey.shade600,
@@ -230,7 +230,7 @@ class BasicMeasurementsView extends StatelessWidget {
                 children: [
                   Icon(
                     icon,
-                    color: ThemeColors.getPrimary(isLightTheme),
+                    color: ThemeColors.getTextPrimary(isLightTheme),
                     size: 18,
                   ),
                   const SizedBox(width: 6),
@@ -239,7 +239,7 @@ class BasicMeasurementsView extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
-                      color: ThemeColors.getPrimary(isLightTheme),
+                      color: ThemeColors.getTextPrimary(isLightTheme),
                     ),
                   ),
                 ],
@@ -249,7 +249,7 @@ class BasicMeasurementsView extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: ThemeColors.getPrimary(isLightTheme),
+                  color: ThemeColors.getTextPrimary(isLightTheme),
                 ),
               )),
             ],
@@ -260,8 +260,8 @@ class BasicMeasurementsView extends StatelessWidget {
             min: min,
             max: max,
             divisions: divisions,
-            activeColor: ThemeColors.getPrimary(isLightTheme),
-            inactiveColor: ThemeColors.getPrimary(isLightTheme).withOpacity(0.3),
+            activeColor: ThemeColors.getButtonBackground(isLightTheme),
+            inactiveColor: ThemeColors.getButtonBackground(isLightTheme).withOpacity(0.3),
             onChanged: (newValue) {
               value.value = newValue;
             },

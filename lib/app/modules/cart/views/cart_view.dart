@@ -169,7 +169,7 @@ class CartView extends GetView<CartController> {
                     product.brand,
                     style: TextStyle(
                       fontSize: 12.sp,
-                      color: Colors.grey[600],
+                      color: ThemeColors.getTextSecondary(isLightTheme),
                     ),
                   ),
                   SizedBox(height: 4.h),
@@ -188,7 +188,7 @@ class CartView extends GetView<CartController> {
                         'Color: ${cartItem.selectedColor}',
                         style: TextStyle(
                           fontSize: 10.sp,
-                          color: Colors.grey[600],
+                          color: ThemeColors.getTextSecondary(isLightTheme),
                         ),
                       ),
                       SizedBox(width: 8.w),
@@ -196,7 +196,7 @@ class CartView extends GetView<CartController> {
                         'Size: ${cartItem.selectedSize}',
                         style: TextStyle(
                           fontSize: 10.sp,
-                          color: Colors.grey[600],
+                          color: ThemeColors.getTextSecondary(isLightTheme),
                         ),
                       ),
                     ],
@@ -302,7 +302,7 @@ class CartView extends GetView<CartController> {
             ElevatedButton(
               onPressed: subtotal > 0 ? controller.checkout : null,
               style: ElevatedButton.styleFrom(
-                backgroundColor: ThemeColors.getSecondary(isLightTheme),
+                backgroundColor: ThemeColors.getButtonBackground(isLightTheme),
                 minimumSize: Size.fromHeight(50.h),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8.r),
@@ -323,6 +323,7 @@ class CartView extends GetView<CartController> {
   }
 
   Widget _buildSummaryRow(String title, String amount, {bool isTotal = false}) {
+    bool isLightTheme = Get.isDarkMode == false;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -331,6 +332,7 @@ class CartView extends GetView<CartController> {
           style: TextStyle(
             fontSize: isTotal ? 18.sp : 16.sp,
             fontWeight: isTotal ? FontWeight.bold : FontWeight.normal,
+            color: ThemeColors.getTextPrimary(isLightTheme),
           ),
         ),
         Text(
@@ -338,6 +340,7 @@ class CartView extends GetView<CartController> {
           style: TextStyle(
             fontSize: isTotal ? 18.sp : 16.sp,
             fontWeight: isTotal ? FontWeight.bold : FontWeight.normal,
+            color: ThemeColors.getCurrency(isLightTheme),
           ),
         ),
       ],

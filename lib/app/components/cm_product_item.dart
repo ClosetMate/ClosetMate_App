@@ -61,9 +61,10 @@ class CmProductItem extends StatelessWidget {
                     children: [
                       Text(
                         product.name,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 15,
+                          color: ThemeColors.getTextPrimary(isLightTheme),
                         ),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
@@ -72,7 +73,7 @@ class CmProductItem extends StatelessWidget {
                       Text(
                         product.brand,
                         style: TextStyle(
-                          color: Colors.grey[600],
+                          color: ThemeColors.getTextSecondary(isLightTheme),
                           fontSize: 12,
                         ),
                         maxLines: 1,
@@ -93,13 +94,13 @@ class CmProductItem extends StatelessWidget {
                           Icon(
                             Icons.straighten,
                             size: 12,
-                            color: Colors.grey[600],
+                            color: ThemeColors.getTextSecondary(isLightTheme),
                           ),
                           const SizedBox(width: 4),
                           Text(
                             '${product.availableSizes.length} sizes',
                             style: TextStyle(
-                              color: Colors.grey[600],
+                              color: ThemeColors.getTextSecondary(isLightTheme),
                               fontSize: 10,
                             ),
                           ),
@@ -107,13 +108,13 @@ class CmProductItem extends StatelessWidget {
                           Icon(
                             Icons.palette,
                             size: 12,
-                            color: Colors.grey[600],
+                            color: ThemeColors.getTextSecondary(isLightTheme),
                           ),
                           const SizedBox(width: 4),
                           Text(
                             '${product.availableColors.length} colors',
                             style: TextStyle(
-                              color: Colors.grey[600],
+                              color: ThemeColors.getTextSecondary(isLightTheme),
                               fontSize: 10,
                             ),
                           ),

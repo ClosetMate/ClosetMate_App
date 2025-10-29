@@ -30,7 +30,7 @@ class SplashView extends GetView<SplashController> {
                   Constants.logoNoBg,
                   width: 200.w,
                   height: 100.h,
-                  color: isLightTheme ? null : ThemeColors.getSecondary(isLightTheme),
+                  // color: isLightTheme ? null : ThemeColors.getSecondary(isLightTheme),
                 ),
               ).animate().scale(
                 begin: const Offset(0.5, 0.5), // Start slightly smaller

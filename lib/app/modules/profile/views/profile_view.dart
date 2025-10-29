@@ -99,7 +99,7 @@ class ProfileView extends GetView<ProfileController> {
       margin: const EdgeInsets.only(bottom: 12),
       color: ThemeColors.getCardBackground(isLightTheme),
       child: ListTile(
-        leading: Icon(icon, color: ThemeColors.getSecondary(isLightTheme)),
+        leading: Icon(icon, color: ThemeColors.getTextPrimary(isLightTheme)),
         title: Text(title, style: TextStyle(fontSize: 18, color: ThemeColors.getTextPrimary(isLightTheme))),
         trailing: const Icon(Icons.arrow_forward_ios, size: 16),
         onTap: onTap,

@@ -87,10 +87,10 @@ class CmProductDetailsView extends GetView<CmProductDetailsController> {
                 
                 20.verticalSpace,
                 
-                // Tags Section
-                _buildTagsSection(product, isLightTheme),
+                // // Tags Section
+                // _buildTagsSection(product, isLightTheme),
                 
-                20.verticalSpace,
+                // 20.verticalSpace,
                 
                 // Add to Cart Button
                 _buildAddToCartButton(isLightTheme),
@@ -209,15 +209,15 @@ class CmProductDetailsView extends GetView<CmProductDetailsController> {
                 onPressed: () => Get.back(),
                 child: Icon(
                   Icons.arrow_back_ios_new_rounded,
-                  color: ThemeColors.getSecondary(isLightTheme),
+                  color: ThemeColors.getButtonText(isLightTheme),
                   size: 20.sp,
                 ),
               ),
               RoundedButton(
                 onPressed: controller.toggleFavorite,
-                child: const Icon(
+                child: Icon(
                   Icons.favorite_border,
-                  color: Colors.white,
+                  color: ThemeColors.getButtonText(isLightTheme),
                   size: 22,
                 ).animate().scale(duration: 200.ms),
               ),
@@ -250,7 +250,7 @@ class CmProductDetailsView extends GetView<CmProductDetailsController> {
           Text(
             product.brand,
             style: TextStyle(
-              color: Colors.grey[600],
+              color: ThemeColors.getTextSecondary(isLightTheme),
               fontSize: 16.sp,
             ),
           ).animate().fade().slideX(duration: 300.ms, begin: -1),
@@ -273,7 +273,7 @@ class CmProductDetailsView extends GetView<CmProductDetailsController> {
           Text(
             product.description,
             style: TextStyle(
-              color: ThemeColors.getTextPrimary(isLightTheme),
+              color: ThemeColors.getTextSecondary(isLightTheme),
               fontSize: 14.sp,
               height: 1.5,
             ),
@@ -309,23 +309,23 @@ class CmProductDetailsView extends GetView<CmProductDetailsController> {
                   padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
                   decoration: BoxDecoration(
                     color: controller.selectedColor.value == color
-                        ? ThemeColors.getPrimary(isLightTheme)
+                        ? ThemeColors.getButtonBackground(isLightTheme)
                         : Colors.grey[200],
                     borderRadius: BorderRadius.circular(20.r),
-                    border: Border.all(
-                      color: controller.selectedColor.value == color
-                          ? ThemeColors.getPrimary(isLightTheme)
-                          : Colors.grey[300]!,
-                      width: 2,
-                    ),
+                    // border: Border.all(
+                    //   color: controller.selectedColor.value == color
+                    //       ? ThemeColors.getAccent(isLightTheme)
+                    //       : Colors.grey[300]!,
+                    //   width: 2,
+                    // ),
                   ),
                   child: Text(
                     color,
                     style: TextStyle(
                       color: controller.selectedColor.value == color
-                          ? Colors.white
+                          ? ThemeColors.getButtonText(isLightTheme)
                           : Colors.black,
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
@@ -397,9 +397,9 @@ class CmProductDetailsView extends GetView<CmProductDetailsController> {
                 icon: const Icon(Icons.remove),
                 style: IconButton.styleFrom(
                   backgroundColor: controller.selectedQuantity.value > 1
-                      ? ThemeColors.getPrimary(isLightTheme)
+                      ? ThemeColors.getButtonBackground(isLightTheme)
                       : Colors.grey[300],
-                  foregroundColor: Colors.white,
+                  foregroundColor: ThemeColors.getButtonText(isLightTheme),
                 ),
               ),
               Container(
@@ -425,9 +425,9 @@ class CmProductDetailsView extends GetView<CmProductDetailsController> {
                 icon: const Icon(Icons.add),
                 style: IconButton.styleFrom(
                   backgroundColor: controller.selectedQuantity.value < controller.selectedVariantStock
-                      ? ThemeColors.getPrimary(isLightTheme)
+                      ? ThemeColors.getButtonBackground(isLightTheme)
                       : Colors.grey[300],
-                  foregroundColor: Colors.white,
+                  foregroundColor: ThemeColors.getButtonText(isLightTheme),
                 ),
               ),
               const Spacer(),
@@ -497,10 +497,10 @@ class CmProductDetailsView extends GetView<CmProductDetailsController> {
       padding: EdgeInsets.symmetric(horizontal: 30.w),
       child: Obx(() => CustomButton(
         text: controller.isVariantAvailable ? 'Add to Cart' : 'Out of Stock',
-        foregroundColor: ThemeColors.getSecondary(isLightTheme),
+        foregroundColor: ThemeColors.getButtonText(isLightTheme),
         onPressed: controller.isVariantAvailable ? controller.addToCart : null,
         backgroundColor: controller.isVariantAvailable 
-            ? ThemeColors.getPrimary(isLightTheme)
+            ? ThemeColors.getButtonBackground(isLightTheme)
             : Colors.grey[400]!,
         disabled: !controller.isVariantAvailable,
         fontSize: 16.sp,

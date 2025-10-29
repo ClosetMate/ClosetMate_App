@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'config/theme/my_theme.dart';
+import 'config/theme/dynamic_color_controller.dart';
 import 'app/data/local/my_shared_pref.dart';
 import 'app/routes/app_pages.dart';
 
@@ -9,6 +10,10 @@ import 'app/routes/app_pages.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await MySharedPref.init();
+  
+  // Initialize the dynamic color controller
+  Get.put(DynamicColorController());
+  
   runApp(
     ScreenUtilInit(
       designSize: const Size(375, 812),

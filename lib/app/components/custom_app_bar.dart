@@ -52,7 +52,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
         Constants.logoNoBg,
         height: 35,
         fit: BoxFit.contain,
-        color: isLightTheme ? null : ThemeColors.getSecondary(isLightTheme),
+        color: isLightTheme ? null : null,
       ),
       centerTitle: true,
       leading: IconButton(

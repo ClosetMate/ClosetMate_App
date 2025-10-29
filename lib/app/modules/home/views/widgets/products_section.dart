@@ -37,7 +37,11 @@ class ProductsSection extends StatelessWidget {
                 children: [
                   Text(
                     sectionTitle,
-                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: ThemeColors.getTextPrimary(isLightTheme)
+                    ),
                   ),
                   if (showViewAll)
                     GestureDetector(
@@ -55,13 +59,13 @@ class ProductsSection extends StatelessWidget {
                         children: [
                           Text(
                             "View All",
-                            style: TextStyle(fontSize: 14, color: ThemeColors.getTextPrimary(isLightTheme)),
+                            style: TextStyle(fontSize: 14, color: ThemeColors.getTextSecondary(isLightTheme)),
                           ),
                           const SizedBox(width: 4),
                           Icon(
                             Icons.arrow_forward_ios,
                             size: 14,
-                            color: ThemeColors.getTextPrimary(isLightTheme),
+                            color: ThemeColors.getTextSecondary(isLightTheme),
                           ),
                         ],
                       ),

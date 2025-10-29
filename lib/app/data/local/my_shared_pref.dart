@@ -71,4 +71,18 @@ class MySharedPref {
     // Note: We preserve _lightThemeKey as it's an app preference, not user data
   }
 
+  /// Set integer value
+  static Future<void> setInt(String key, int value) =>
+      _sharedPreferences.setInt(key, value);
+
+  /// Get integer value
+  static int? getInt(String key) => _sharedPreferences.getInt(key);
+
+  /// Set boolean value
+  static Future<void> setBool(String key, bool value) =>
+      _sharedPreferences.setBool(key, value);
+
+  /// Get boolean value
+  static bool? getBool(String key) => _sharedPreferences.getBool(key);
+
 }

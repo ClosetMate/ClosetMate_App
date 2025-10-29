@@ -22,14 +22,14 @@ class GenderSelectionView extends StatelessWidget {
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back,
-            color: ThemeColors.getPrimary(isLightTheme),
+            color: ThemeColors.getTextPrimary(isLightTheme),
           ),
           onPressed: () => Get.back(),
         ),
         title: Text(
           "Gender Selection",
           style: TextStyle(
-            color: ThemeColors.getPrimary(isLightTheme),
+            color: ThemeColors.getTextPrimary(isLightTheme),
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -60,7 +60,7 @@ class GenderSelectionView extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
-                    color: ThemeColors.getPrimary(isLightTheme),
+                    color: ThemeColors.getTextPrimary(isLightTheme),
                   ),
                 ),
               ),
@@ -70,7 +70,7 @@ class GenderSelectionView extends StatelessWidget {
                   "Select your gender to personalize your experience",
                   style: TextStyle(
                     fontSize: 14,
-                    color: ThemeColors.getPrimary(isLightTheme).withOpacity(0.7),
+                    color: ThemeColors.getTextSecondary(isLightTheme).withOpacity(0.7),
                   ),
                 ),
               ),
@@ -82,7 +82,7 @@ class GenderSelectionView extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
-                  color: ThemeColors.getPrimary(isLightTheme),
+                  color: ThemeColors.getTextPrimary(isLightTheme),
                 ),
               ),
               const SizedBox(height: 20),
@@ -125,7 +125,7 @@ class GenderSelectionView extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8),
                     ),
                     backgroundColor: controller.selectedGender.value.isNotEmpty 
-                        ? ThemeColors.getPrimary(isLightTheme)
+                        ? ThemeColors.getButtonBackground(isLightTheme)
                         : Colors.grey,
                   ),
                   child: Text(
@@ -133,7 +133,7 @@ class GenderSelectionView extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 18,
                       color: controller.selectedGender.value.isNotEmpty 
-                          ? ThemeColors.getSecondary(isLightTheme)
+                          ? ThemeColors.getButtonText(isLightTheme)
                           : Colors.white,
                     ),
                   ),
@@ -153,7 +153,7 @@ class GenderSelectionView extends StatelessWidget {
                       "Skip for now",
                       style: TextStyle(
                         fontSize: 16,
-                        color: ThemeColors.getPrimary(isLightTheme),
+                        color: ThemeColors.getTextPrimary(isLightTheme),
                       ),
                     ),
                   ),
@@ -167,12 +167,13 @@ class GenderSelectionView extends StatelessWidget {
   }
 
   Widget _buildGenderCard(String gender, IconData icon, Color color, bool isSelected, VoidCallback onTap) {
+    bool isLightTheme = Get.isDarkMode == false;
     return GestureDetector(
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(
-          color: isSelected ? color.withOpacity(0.1) : Colors.white,
+          color: isSelected ? color.withOpacity(0.1) : ThemeColors.getCardBackground(isLightTheme),
           border: Border.all(
             color: isSelected ? color : Colors.grey.shade300,
             width: isSelected ? 2 : 1,
