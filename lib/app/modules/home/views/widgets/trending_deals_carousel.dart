@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:closet_mate/models/cm_product_model.dart';
 import 'package:closet_mate/app/routes/app_pages.dart';
+import 'package:closet_mate/app/components/smart_image.dart';
 import 'package:get/get.dart';
 
 class TrendingDealsCarousel extends StatelessWidget {
@@ -84,28 +85,10 @@ class TrendingDealsCarousel extends StatelessWidget {
                     child: Stack(
                       fit: StackFit.expand,
                       children: [
-                        Image.network(
-                          product.mainImage,
+                        SmartImage(
+                          imageUrl: product.mainImage,
                           fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) {
-                            return Container(
-                              color: Colors.grey[300],
-                              child: const Icon(
-                                Icons.image_not_supported,
-                                color: Colors.grey,
-                                size: 50,
-                              ),
-                            );
-                          },
-                          loadingBuilder: (context, child, loadingProgress) {
-                            if (loadingProgress == null) return child;
-                            return Container(
-                              color: Colors.grey[200],
-                              child: const Center(
-                                child: CircularProgressIndicator(),
-                              ),
-                            );
-                          },
+                          borderRadius: BorderRadius.circular(16),
                         ),
                         Positioned(
                           bottom: 12,

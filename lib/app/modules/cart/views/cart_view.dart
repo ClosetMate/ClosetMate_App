@@ -1,4 +1,5 @@
 import 'package:closet_mate/config/theme/theme_colors.dart';
+import 'package:closet_mate/app/components/smart_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -122,31 +123,12 @@ class CartView extends GetView<CartController> {
                 borderRadius: BorderRadius.circular(8.r),
                 color: Colors.grey[200],
               ),
-              child: ClipRRect(
+              child: SmartImage(
+                imageUrl: product.mainImage,
+                fit: BoxFit.cover,
                 borderRadius: BorderRadius.circular(8.r),
-                child: Image.network(
-                  product.mainImage,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) {
-                    return Container(
-                      color: Colors.grey[300],
-                      child: const Icon(
-                        Icons.image_not_supported,
-                        color: Colors.grey,
-                        size: 30,
-                      ),
-                    );
-                  },
-                  loadingBuilder: (context, child, loadingProgress) {
-                    if (loadingProgress == null) return child;
-                    return Container(
-                      color: Colors.grey[200],
-                      child: const Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                    );
-                  },
-                ),
+                width: 80.w,
+                height: 80.w,
               ),
             ),
             SizedBox(width: 12.w),

@@ -80,11 +80,11 @@ class HomeView extends GetView<HomeController> {
                           section: section,
                           products: products,
                         );
-                      case 'promotional_banner':
-                        return DynamicSectionWidget(
-                          section: section,
-                          promotionalData: controller.promotionalBanner.value,
-                        );
+                      // case 'promotional_banner':
+                      //   return DynamicSectionWidget(
+                      //     section: section,
+                      //     promotionalData: controller.promotionalBanner.value,
+                      //   );
                       default:
                         return const SizedBox.shrink();
                     }

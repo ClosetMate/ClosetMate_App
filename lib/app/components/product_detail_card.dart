@@ -1,5 +1,6 @@
 import 'package:closet_mate/app/routes/app_pages.dart';
 import 'package:closet_mate/models/cm_product_model.dart';
+import 'package:closet_mate/app/components/smart_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -31,33 +32,12 @@ class ProductDetailCard extends StatelessWidget {
                   ),
                 ],
               ),
-              child: ClipRRect(
+              child: SmartImage(
+                imageUrl: product.mainImage,
+                fit: BoxFit.cover,
+                width: double.infinity,
+                height: double.infinity,
                 borderRadius: BorderRadius.circular(16),
-                child: Image.network(
-                  product.mainImage,
-                  fit: BoxFit.cover,
-                  width: double.infinity,
-                  height: double.infinity,
-                  errorBuilder: (context, error, stackTrace) {
-                    return Container(
-                      color: Colors.grey[300],
-                      child: const Icon(
-                        Icons.image_not_supported,
-                        color: Colors.grey,
-                        size: 50,
-                      ),
-                    );
-                  },
-                  loadingBuilder: (context, child, loadingProgress) {
-                    if (loadingProgress == null) return child;
-                    return Container(
-                      color: Colors.grey[200],
-                      child: const Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                    );
-                  },
-                ),
               ),
             ),
           ),
