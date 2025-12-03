@@ -7,7 +7,9 @@ import 'package:get/get.dart';
 import '../controllers/favorites_controller.dart';
 
 class FavoritesView extends GetView<FavoritesController> {
-  const FavoritesView({super.key});
+  FavoritesView({super.key});
+  
+  final GlobalKey _shareButtonKey = GlobalKey();
   
   @override
   Widget build(BuildContext context) {
@@ -15,7 +17,10 @@ class FavoritesView extends GetView<FavoritesController> {
     
     return DefaultTabController(
       length: 2,
-      child: Scaffold(
+      child: Builder(
+        builder: (context) {
+          final TabController tabController = DefaultTabController.of(context);
+          return Scaffold(
         backgroundColor: ThemeColors.getScaffoldBackground(isLightTheme),
         appBar: AppBar(
           backgroundColor: ThemeColors.getScaffoldBackground(isLightTheme),
@@ -92,6 +97,35 @@ class FavoritesView extends GetView<FavoritesController> {
             _buildTabContent(context, isLightTheme, 'closet'),
           ],
         ),
+        floatingActionButton: ListenableBuilder(
+          listenable: tabController,
+          builder: (context, child) {
+            // Show share button only when closet tab is active
+            if (tabController.index == 1) {
+              return FloatingActionButton.extended(
+                key: _shareButtonKey,
+                onPressed: () => controller.shareClosetLink(_shareButtonKey.currentContext),
+                backgroundColor: ThemeColors.getButtonBackground(!isLightTheme),
+                icon: Icon(
+                  Icons.share,
+                  color: ThemeColors.getTextPrimary(isLightTheme),
+                ),
+                label: Text(
+                  'Share Closet',
+                  style: MyFonts.getAppFontType.copyWith(
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w600,
+                    color: ThemeColors.getTextPrimary(isLightTheme),
+                  ),
+                ),
+              );
+            }
+            return const SizedBox.shrink();
+          },
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      );
+        },
       ),
     );
   }

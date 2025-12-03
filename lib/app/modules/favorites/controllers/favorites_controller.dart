@@ -1,6 +1,10 @@
 import 'package:closet_mate/models/cm_product_model.dart';
 import 'package:closet_mate/app/services/products_service.dart';
 import 'package:get/get.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'dart:typed_data';
 
 class FavoritesController extends GetxController {
   final ProductsService _productsService = ProductsService();
@@ -54,5 +58,69 @@ class FavoritesController extends GetxController {
   // Refresh products
   Future<void> refreshProducts() async {
     await _getProducts();
+  }
+
+  // Share closet link
+  Future<void> shareClosetLink(BuildContext? context) async {
+    try {
+      // TODO: Replace with actual user ID from authentication/backend
+      // For now using a placeholder - update this when user ID is available
+      const String userId = 'user123'; // This should come from your auth system
+      const String baseUrl = 'https://closetmate.app'; // Update with your actual domain
+      final String closetLink = '$baseUrl/closet/$userId';
+      
+      const String shareTitle = 'My Closet - Closet Mate';
+      final String shareText = '$shareTitle\n\nCheck out my closet on Closet Mate!\n$closetLink';
+      
+      // Load the splash image from assets
+      ByteData logoBytes;
+      try {
+        logoBytes = await rootBundle.load('assets/images/splash.png');
+      } catch (e) {
+        // Fallback to logo.png if splash.png doesn't exist
+        logoBytes = await rootBundle.load('assets/images/logo.png');
+      }
+      
+      final Uint8List logoUint8List = logoBytes.buffer.asUint8List();
+      final XFile logoFile = XFile.fromData(
+        logoUint8List,
+        name: 'My Closet - Closet Mate.png',
+        mimeType: 'image/png',
+      );
+      
+      if (context != null) {
+        final RenderBox? box = context.findRenderObject() as RenderBox?;
+        if (box != null) {
+          final Rect sharePositionOrigin = box.localToGlobal(Offset.zero) & box.size;
+          
+          await Share.shareXFiles(
+            [logoFile],
+            text: shareText,
+            subject: shareTitle,
+            sharePositionOrigin: sharePositionOrigin,
+          );
+        } else {
+          await Share.shareXFiles(
+            [logoFile],
+            text: shareText,
+            subject: shareTitle,
+          );
+        }
+      } else {
+        await Share.shareXFiles(
+          [logoFile],
+          text: shareText,
+          subject: shareTitle,
+        );
+      }
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        'Failed to share closet link: ${e.toString()}',
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Get.theme.colorScheme.error,
+        colorText: Get.theme.colorScheme.onError,
+      );
+    }
   }
 }

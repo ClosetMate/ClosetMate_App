@@ -5,11 +5,15 @@ import 'config/theme/my_theme.dart';
 import 'config/theme/dynamic_color_controller.dart';
 import 'app/data/local/my_shared_pref.dart';
 import 'app/routes/app_pages.dart';
+import 'app/services/google_cloud_initializer.dart';
 
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await MySharedPref.init();
+  
+  // Initialize Google Cloud services (for Virtual Try-On feature)
+  await GoogleCloudInitializer.initialize();
   
   // Initialize the dynamic color controller
   Get.put(DynamicColorController());

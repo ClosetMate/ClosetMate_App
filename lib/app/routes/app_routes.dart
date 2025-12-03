@@ -21,6 +21,8 @@ abstract class Routes {
   static const DETAILED_MEASUREMENTS = _Paths.DETAILED_MEASUREMENTS;
   static const COLOR_THEME_CONTROLLER = _Paths.COLOR_THEME_CONTROLLER;
   static const SETTINGS = _Paths.SETTINGS;
+  static const VIRTUAL_TRYON = _Paths.VIRTUAL_TRYON;
+  static const TRIED_ON = _Paths.TRIED_ON;
 }
 
 abstract class _Paths {
@@ -43,4 +45,6 @@ abstract class _Paths {
   static const DETAILED_MEASUREMENTS = '/detailed-measurements';
   static const COLOR_THEME_CONTROLLER = '/color-theme-controller';
   static const SETTINGS = '/settings';
+  static const VIRTUAL_TRYON = '/virtual-tryon';
+  static const TRIED_ON = '/tried-on';
 }

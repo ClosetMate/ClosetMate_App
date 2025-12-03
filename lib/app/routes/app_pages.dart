@@ -32,6 +32,10 @@ import '../modules/splash/bindings/splash_binding.dart';
 import '../modules/splash/views/splash_view.dart';
 import '../modules/swipe_shopping/bindings/swipe_shopping_binding.dart';
 import '../modules/swipe_shopping/views/swipe_shopping_view.dart';
+import '../modules/virtual_tryon/bindings/virtual_tryon_binding.dart';
+import '../modules/virtual_tryon/views/virtual_tryon_view.dart';
+import '../modules/tried_on/bindings/tried_on_binding.dart';
+import '../modules/tried_on/views/tried_on_view.dart';
 
 part 'app_routes.dart';
 
@@ -63,7 +67,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.FAVORITES,
-      page: () => const FavoritesView(),
+      page: () => FavoritesView(),
       binding: FavoritesBinding(),
     ),
     GetPage(
@@ -129,6 +133,16 @@ class AppPages {
       name: _Paths.SETTINGS,
       page: () => const SettingsView(),
       binding: SettingsBinding(),
+    ),
+    GetPage(
+      name: _Paths.VIRTUAL_TRYON,
+      page: () => const VirtualTryOnView(),
+      binding: VirtualTryOnBinding(),
+    ),
+    GetPage(
+      name: _Paths.TRIED_ON,
+      page: () => const TriedOnView(),
+      binding: TriedOnBinding(),
     ),
   ];
 }

@@ -56,9 +56,9 @@ class _CustomAppBarState extends State<CustomAppBar> {
       ),
       centerTitle: true,
       leading: IconButton(
-        icon: Icon(Icons.person, color: ThemeColors.getSecondary(isLightTheme)),
-        onPressed: () {},
-        tooltip: "Profile",
+        icon: Icon(Icons.bookmark, color: ThemeColors.getSecondary(isLightTheme)),
+        onPressed: () => Get.toNamed(Routes.TRIED_ON),
+        tooltip: "Saved Try-Ons",
       ),
       actions: [
         IconButton(

@@ -29,7 +29,7 @@ class BaseController extends GetxController {
     
     pages = [
       const HomeView(),
-      const FavoritesView(),
+      FavoritesView(),
       const SwipeShoppingView(),
       const CartView(),
       const ProfileView(),

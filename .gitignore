@@ -43,3 +43,10 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Google Cloud service account keys (NEVER commit these!)
+**/service-account-key.json
+**/service_account_key.json
+**/*service-account*.json
+assets/config/*.json
+!assets/config/config.example.json

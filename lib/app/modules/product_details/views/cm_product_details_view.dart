@@ -1,3 +1,4 @@
+import 'dart:typed_data';
 import 'package:closet_mate/config/theme/theme_colors.dart';
 import 'package:closet_mate/models/cm_product_model.dart';
 import 'package:closet_mate/app/components/smart_image.dart';
@@ -130,54 +131,193 @@ class CmProductDetailsView extends GetView<CmProductDetailsController> {
               bottomLeft: Radius.circular(30.r),
               bottomRight: Radius.circular(30.r),
             ),
-            child: PageView.builder(
-              controller: controller.pageController,
-              itemCount: product.images.length,
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (context, index) {
-                return SmartImage(
-                  imageUrl: product.images[index],
-                  fit: BoxFit.cover,
-                  width: double.infinity,
-                );
-              },
-            ),
+            child: Obx(() {
+              final totalImages = controller.totalDisplayImageCount;
+              final isLoading = controller.isTryOnLoading.value;
+              
+              return PageView.builder(
+                controller: controller.pageController,
+                itemCount: totalImages,
+                scrollDirection: Axis.horizontal,
+                onPageChanged: (index) {
+                  controller.currentPageIndex.value = index;
+                },
+                itemBuilder: (context, index) {
+                  final imageData = controller.getDisplayImage(index);
+                  final isTryOnResult = controller.isTryOnResult(index);
+                  
+                  Widget imageWidget;
+                  
+                  if (imageData == null) {
+                    imageWidget = Container(
+                      color: Colors.grey[300],
+                      child: Center(
+                        child: Icon(Icons.image, size: 64.sp, color: Colors.grey),
+                      ),
+                    );
+                  } else if (isTryOnResult && imageData is Uint8List) {
+                    // Show try-on result image
+                    imageWidget = Image.memory(
+                      imageData,
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                    );
+                  } else if (imageData is String) {
+                    // Show original product image
+                    imageWidget = SmartImage(
+                      imageUrl: imageData,
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                    );
+                  } else {
+                    imageWidget = Container(
+                      color: Colors.grey[300],
+                      child: Center(
+                        child: Icon(Icons.image, size: 64.sp, color: Colors.grey),
+                      ),
+                    );
+                  }
+                  
+                  // Show loading overlay if generating try-on on the current image
+                  if (isLoading && index == controller.currentPageIndex.value) {
+                    imageWidget = Stack(
+                      children: [
+                        imageWidget,
+                        Container(
+                          color: Colors.black.withOpacity(0.7),
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                CircularProgressIndicator(
+                                  color: Colors.white,
+                                ),
+                                SizedBox(height: 16.h),
+                                Text(
+                                  'Generating try-on...',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16.sp,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  }
+                  
+                  // Add save button for try-on result images
+                  if (isTryOnResult && !isLoading) {
+                    imageWidget = Stack(
+                      children: [
+                        imageWidget,
+                        Positioned(
+                          bottom: 20.h,
+                          right: 20.w,
+                          child: Obx(() {
+                            final isSaved = controller.isTryOnSaved(index);
+                            return GestureDetector(
+                              onTap: () => controller.saveTryOnImage(index),
+                              child: Container(
+                                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+                                decoration: BoxDecoration(
+                                  color: isSaved 
+                                      ? Colors.green
+                                      : ThemeColors.getButtonBackground(isLightTheme),
+                                  borderRadius: BorderRadius.circular(25.r),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.2),
+                                      blurRadius: 8,
+                                      offset: const Offset(0, 4),
+                                    ),
+                                  ],
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(
+                                      isSaved ? Icons.bookmark : Icons.bookmark_border,
+                                      color: ThemeColors.getButtonText(isLightTheme),
+                                      size: 20.sp,
+                                    ),
+                                    SizedBox(width: 8.w),
+                                    Text(
+                                      isSaved ? 'Saved' : 'Save',
+                                      style: TextStyle(
+                                        color: ThemeColors.getButtonText(isLightTheme),
+                                        fontSize: 14.sp,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          }),
+                        ),
+                      ],
+                    );
+                  }
+                  
+                  // Wrap in GestureDetector for tap to open full screen
+                  return GestureDetector(
+                    onTap: () => _openFullScreenGallery(context, index, product, isLightTheme),
+                    behavior: HitTestBehavior.opaque,
+                    child: imageWidget,
+                  );
+                },
+              );
+            }),
           ),
         ),
         
         // Navigation arrows
-        if (product.images.length > 1) ...[
-          Positioned(
-            left: 10,
-            top: 225.h,
-            child: IconButton(
-              icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
-              onPressed: () {
-                if (controller.pageController.hasClients) {
-                  controller.pageController.previousPage(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeInOut,
-                  );
-                }
-              },
-            ),
-          ),
-          Positioned(
-            right: 10,
-            top: 225.h,
-            child: IconButton(
-              icon: const Icon(Icons.arrow_forward_ios, color: Colors.white),
-              onPressed: () {
-                if (controller.pageController.hasClients) {
-                  controller.pageController.nextPage(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeInOut,
-                  );
-                }
-              },
-            ),
-          ),
-        ],
+        Obx(() {
+          final totalImages = controller.totalDisplayImageCount;
+          if (totalImages > 1) {
+            return Positioned(
+              left: 10,
+              top: 225.h,
+              child: IconButton(
+                icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+                onPressed: () {
+                  if (controller.pageController.hasClients) {
+                    controller.pageController.previousPage(
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeInOut,
+                    );
+                  }
+                },
+              ),
+            );
+          }
+          return const SizedBox.shrink();
+        }),
+        Obx(() {
+          final totalImages = controller.totalDisplayImageCount;
+          if (totalImages > 1) {
+            return Positioned(
+              right: 10,
+              top: 225.h,
+              child: IconButton(
+                icon: const Icon(Icons.arrow_forward_ios, color: Colors.white),
+                onPressed: () {
+                  if (controller.pageController.hasClients) {
+                    controller.pageController.nextPage(
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeInOut,
+                    );
+                  }
+                },
+              ),
+            );
+          }
+          return const SizedBox.shrink();
+        }),
         
         // Header buttons
         Positioned(
@@ -206,6 +346,67 @@ class CmProductDetailsView extends GetView<CmProductDetailsController> {
             ],
           ),
         ),
+        
+        // Floating Try On Button
+        Obx(() {
+          final isLoading = controller.isTryOnLoading.value;
+          final hasTryOnResults = controller.hasTryOnResults;
+          
+          return Positioned(
+            bottom: 20.h,
+            left: 20.w,
+            child: GestureDetector(
+              onTap: isLoading ? null : () => controller.generateTryOn(),
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+                decoration: BoxDecoration(
+                  color: isLoading 
+                      ? Colors.grey[400]
+                      : ThemeColors.getButtonBackground(isLightTheme),
+                  borderRadius: BorderRadius.circular(25.r),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      blurRadius: 8,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (isLoading)
+                      SizedBox(
+                        width: 16.sp,
+                        height: 16.sp,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Colors.white,
+                        ),
+                      )
+                    else
+                      Icon(
+                        hasTryOnResults ? Icons.refresh : Icons.camera_alt,
+                        color: ThemeColors.getButtonText(isLightTheme),
+                        size: 20.sp,
+                      ),
+                    SizedBox(width: 8.w),
+                    Text(
+                      isLoading 
+                          ? 'Loading...'
+                          : (hasTryOnResults ? 'Try Again' : 'Try On'),
+                      style: TextStyle(
+                        color: ThemeColors.getButtonText(isLightTheme),
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        }),
       ],
     );
   }
@@ -428,52 +629,6 @@ class CmProductDetailsView extends GetView<CmProductDetailsController> {
     );
   }
 
-  Widget _buildTagsSection(CmProductModel product, bool isLightTheme) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20.w),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Tags:',
-            style: TextStyle(
-              color: ThemeColors.getTextPrimary(isLightTheme),
-              fontSize: 16.sp,
-              fontWeight: FontWeight.bold,
-            ),
-          ).animate().fade().slideX(duration: 300.ms, begin: -1),
-          
-          10.verticalSpace,
-          
-          Wrap(
-            spacing: 8.w,
-            runSpacing: 8.h,
-            children: product.tags.map((tag) {
-              return Container(
-                padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-                decoration: BoxDecoration(
-                  color: ThemeColors.getPrimary(isLightTheme).withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(16.r),
-                  border: Border.all(
-                    color: ThemeColors.getPrimary(isLightTheme).withOpacity(0.3),
-                  ),
-                ),
-                child: Text(
-                  tag,
-                  style: TextStyle(
-                    color: ThemeColors.getPrimary(isLightTheme),
-                    fontSize: 12.sp,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              );
-            }).toList(),
-          ).animate().fade().slideX(duration: 300.ms, begin: -1),
-        ],
-      ),
-    );
-  }
-
   Widget _buildAddToCartButton(bool isLightTheme) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 30.w),
@@ -494,6 +649,285 @@ class CmProductDetailsView extends GetView<CmProductDetailsController> {
         shadowBlurRadius: 6,
         shadowSpreadRadius: 2,
       )).animate().fade().slideY(duration: 300.ms, begin: 1),
+    );
+  }
+  
+  /// Open full-screen image gallery
+  void _openFullScreenGallery(
+    BuildContext context,
+    int initialIndex,
+    CmProductModel product,
+    bool isLightTheme,
+  ) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => _FullScreenImageGallery(
+          product: product,
+          initialIndex: initialIndex,
+          controller: controller,
+          isLightTheme: isLightTheme,
+        ),
+      ),
+    );
+  }
+}
+
+/// Full-screen image gallery viewer
+class _FullScreenImageGallery extends StatefulWidget {
+  final CmProductModel product;
+  final int initialIndex;
+  final CmProductDetailsController controller;
+  final bool isLightTheme;
+
+  const _FullScreenImageGallery({
+    required this.product,
+    required this.initialIndex,
+    required this.controller,
+    required this.isLightTheme,
+  });
+
+  @override
+  State<_FullScreenImageGallery> createState() => _FullScreenImageGalleryState();
+}
+
+class _FullScreenImageGalleryState extends State<_FullScreenImageGallery> {
+  late PageController _pageController;
+  final Map<int, TransformationController> _transformationControllers = {};
+  final Map<int, bool> _isZoomed = {};
+  int _currentPageIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentPageIndex = widget.initialIndex;
+    _pageController = PageController(initialPage: widget.initialIndex);
+    _initializeControllers();
+  }
+  
+  void _initializeControllers() {
+    final totalImages = widget.controller.totalDisplayImageCount;
+    for (int i = 0; i < totalImages; i++) {
+      if (!_transformationControllers.containsKey(i)) {
+        _transformationControllers[i] = TransformationController();
+        _isZoomed[i] = false;
+        _transformationControllers[i]!.addListener(() {
+          final scale = _transformationControllers[i]!.value.getMaxScaleOnAxis();
+          final wasZoomed = _isZoomed[i] ?? false;
+          final isNowZoomed = scale > 1.0;
+          if (wasZoomed != isNowZoomed) {
+            setState(() {
+              _isZoomed[i] = isNowZoomed;
+            });
+          }
+        });
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    for (var controller in _transformationControllers.values) {
+      controller.dispose();
+    }
+    super.dispose();
+  }
+
+  void _resetZoom(int index) {
+    _transformationControllers[index]?.value = Matrix4.identity();
+    setState(() {
+      _isZoomed[index] = false;
+    });
+  }
+
+  bool _isCurrentPageZoomed() {
+    return _isZoomed[_currentPageIndex] ?? false;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: ThemeColors.getScaffoldBackground(widget.isLightTheme),
+      body: Stack(
+        children: [
+          Obx(() {
+            _initializeControllers(); // Re-initialize if images changed
+            final totalImages = widget.controller.totalDisplayImageCount;
+            final isLoading = widget.controller.isTryOnLoading.value;
+            
+            return PageView.builder(
+              controller: _pageController,
+              physics: _isCurrentPageZoomed() 
+                  ? const NeverScrollableScrollPhysics() 
+                  : const PageScrollPhysics(),
+              itemCount: totalImages,
+              onPageChanged: (index) {
+                // Reset zoom of previous page when changing pages
+                if (_currentPageIndex != index) {
+                  _resetZoom(_currentPageIndex);
+                }
+                setState(() {
+                  _currentPageIndex = index;
+                });
+              },
+              itemBuilder: (context, index) {
+                final imageData = widget.controller.getDisplayImage(index);
+                final isTryOnResult = widget.controller.isTryOnResult(index);
+                
+                Widget imageWidget;
+                
+                if (imageData == null) {
+                  imageWidget = Container(
+                    color: Colors.grey[300],
+                    child: Center(
+                      child: Icon(Icons.image, size: 64.sp, color: Colors.grey),
+                    ),
+                  );
+                } else if (isTryOnResult && imageData is Uint8List) {
+                  // Show try-on result image
+                  imageWidget = Image.memory(
+                    imageData,
+                    fit: BoxFit.contain,
+                  );
+                } else if (imageData is String) {
+                  // Show original product image
+                  imageWidget = SmartImage(
+                    imageUrl: imageData,
+                    fit: BoxFit.contain,
+                  );
+                } else {
+                  imageWidget = Container(
+                    color: Colors.grey[300],
+                    child: Center(
+                      child: Icon(Icons.image, size: 64.sp, color: Colors.grey),
+                    ),
+                  );
+                }
+                
+                // Show loading overlay if generating try-on and this is the first image
+                if (isLoading && index == 0) {
+                  imageWidget = Stack(
+                    children: [
+                      imageWidget,
+                      Container(
+                        color: Colors.black.withOpacity(0.5),
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              CircularProgressIndicator(
+                                color: Colors.white,
+                              ),
+                              SizedBox(height: 16.h),
+                              Text(
+                                'Generating try-on...',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16.sp,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                }
+                
+                // Wrap in GestureDetector for double tap
+                return GestureDetector(
+                  onDoubleTap: () {
+                    _resetZoom(index);
+                  },
+                  child: InteractiveViewer(
+                    transformationController: _transformationControllers[index],
+                    minScale: 1.0,
+                    maxScale: 5.0,
+                    panEnabled: true,
+                    scaleEnabled: true,
+                    child: Center(
+                      child: imageWidget,
+                    ),
+                  ),
+                );
+              },
+            );
+          }),
+          // Header back button
+          Positioned(
+            top: MediaQuery.of(context).padding.top + 20.h,
+            left: 20.w,
+            child: RoundedButton(
+              onPressed: () => Get.back(),
+              child: Icon(
+                Icons.arrow_back_ios_new_rounded,
+                color: ThemeColors.getButtonText(widget.isLightTheme),
+                size: 20.sp,
+              ),
+            ),
+          ),
+          // Floating Try On Button
+          Obx(() {
+            final isLoading = widget.controller.isTryOnLoading.value;
+            final hasTryOnResults = widget.controller.hasTryOnResults;
+            
+            return Positioned(
+              bottom: 20.h,
+              left: 20.w,
+              child: GestureDetector(
+                onTap: isLoading ? null : () => widget.controller.generateTryOn(),
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+                  decoration: BoxDecoration(
+                    color: isLoading 
+                        ? Colors.grey[400]
+                        : ThemeColors.getButtonBackground(widget.isLightTheme),
+                    borderRadius: BorderRadius.circular(25.r),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        blurRadius: 8,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (isLoading)
+                        SizedBox(
+                          width: 16.sp,
+                          height: 16.sp,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: Colors.white,
+                          ),
+                        )
+                      else
+                        Icon(
+                          hasTryOnResults ? Icons.refresh : Icons.camera_alt,
+                          color: ThemeColors.getButtonText(widget.isLightTheme),
+                          size: 20.sp,
+                        ),
+                      SizedBox(width: 8.w),
+                      Text(
+                        isLoading 
+                            ? 'Loading...'
+                            : (hasTryOnResults ? 'Try Again' : 'Try On'),
+                        style: TextStyle(
+                          color: ThemeColors.getButtonText(widget.isLightTheme),
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          }),
+        ],
+      ),
     );
   }
 }

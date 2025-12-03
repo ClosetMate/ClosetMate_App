@@ -45,6 +45,11 @@ dependencies:
   flutter_svg: 
   font_awesome_flutter: ^10.7.0
   http: ^1.1.0
+  share_plus: ^10.1.2
+  image_picker: ^1.0.7
+  googleapis_auth: ^1.4.1
+  path_provider: ^2.1.1
+  image_gallery_saver: ^2.0.3
 
 dev_dependencies:
   flutter_test:
@@ -73,6 +78,7 @@ flutter:
     - assets/images/logo.png
     - assets/images/swipe_icon.png
     - assets/images/logo_no_background.png
+    - assets/config/service-account-key.json
     - assets/images/products/p1_0.png
     - assets/images/products/p1_1.png
     - assets/images/products/p1_2.png
