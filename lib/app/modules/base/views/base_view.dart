@@ -59,7 +59,7 @@ class BaseView extends GetView<BaseController> {
 
   bool _shouldHideAppBar(int currentIndex) {
     // Add indices where you want to hide the app bar
-    return currentIndex == 2 || // Swipe Shopping
+    return currentIndex == 3 || // Swipe Shopping
            currentIndex == 5;   // Search
   }
 }

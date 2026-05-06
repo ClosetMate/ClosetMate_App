@@ -31,8 +31,13 @@ class CmProductDetailsController extends GetxController {
   
   // Try-on results storage - list of try-on result images (prepended to original images)
   final RxList<Uint8List> tryOnResultImages = <Uint8List>[].obs;
+  // Track unique IDs for each try-on result (index-based mapping)
+  final RxMap<int, String> tryOnResultIds = <int, String>{}.obs;
   final RxBool isTryOnLoading = false.obs;
-  final RxMap<String, bool> savedTryOns = <String, bool>{}.obs;
+  // Track saved status per try-on result index
+  final RxMap<int, bool> savedTryOnStatus = <int, bool>{}.obs;
+  // Flag to track if try-on generation should be cancelled
+  bool _isTryOnCancelled = false;
   
   // Reactive trigger to notify GetX when try-on results change
   final RxInt _tryOnUpdateTrigger = 0.obs;
@@ -43,31 +48,36 @@ class CmProductDetailsController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    _loadProductDetails();
     _initializeTryOnService();
-    _loadSavedStatus();
+    _loadProductDetails().then((_) {
+      // Load saved status after product is loaded
+      _loadSavedStatus();
+    });
   }
   
   Future<void> _loadSavedStatus() async {
-    if (product.value != null) {
-      final isSaved = await _tryOnStorage.hasSavedTryOn(product.value!.id);
-      savedTryOns[product.value!.id] = isSaved;
-    }
-  }
-  
-  Future<void> _loadSavedTryOnImage() async {
     if (product.value == null) return;
     
     try {
-      final savedImage = await _tryOnStorage.getTryOnImage(product.value!.id);
-      if (savedImage != null) {
-        // Add saved try-on image to the first position
-        tryOnResultImages.insert(0, savedImage);
+      // Load all saved try-on IDs for this product
+      final savedTryOnIds = await _tryOnStorage.getSavedTryOnIdsForProduct(product.value!.id);
+      
+      // Load each saved try-on image
+      for (final tryOnId in savedTryOnIds) {
+        final savedImage = await _tryOnStorage.getTryOnImageById(tryOnId);
+        if (savedImage != null) {
+          final index = tryOnResultImages.length;
+          tryOnResultImages.add(savedImage);
+          tryOnResultIds[index] = tryOnId;
+          savedTryOnStatus[index] = true;
+        }
+      }
+      
+      if (savedTryOnIds.isNotEmpty) {
         _tryOnUpdateTrigger.value++;
-        savedTryOns[product.value!.id] = true;
       }
     } catch (e) {
-      print('Error loading saved try-on image: $e');
+      print('Error loading saved try-on images: $e');
     }
   }
   
@@ -96,8 +106,7 @@ class CmProductDetailsController extends GetxController {
           selectedColor.value = productData.variants.first.color;
           selectedSize.value = productData.variants.first.size;
         }
-        // Load saved try-on if exists
-        await _loadSavedTryOnImage();
+        // Saved try-ons are loaded in _loadSavedStatus() after product is set
       } else {
         errorMessage.value = 'Product not found';
       }
@@ -308,6 +317,9 @@ class CmProductDetailsController extends GetxController {
         }
       }
 
+      // Reset cancellation flag
+      _isTryOnCancelled = false;
+      
       // Set loading state
       isTryOnLoading.value = true;
 
@@ -318,9 +330,19 @@ class CmProductDetailsController extends GetxController {
         sampleCount: 1,
       );
 
+      // Check if process was cancelled
+      if (_isTryOnCancelled) {
+        return;
+      }
+
       // Add result to first position
       if (result.hasImages && result.images.isNotEmpty) {
         await addTryOnResult(result.images.first);
+        
+        // Check again if cancelled after adding result
+        if (_isTryOnCancelled) {
+          return;
+        }
         
         Get.snackbar(
           'Success',
@@ -331,6 +353,11 @@ class CmProductDetailsController extends GetxController {
           duration: const Duration(seconds: 2),
         );
       } else {
+        // Check if cancelled before showing error
+        if (_isTryOnCancelled) {
+          return;
+        }
+        
         Get.snackbar(
           'Error',
           'No images were generated. Please try again.',
@@ -338,6 +365,11 @@ class CmProductDetailsController extends GetxController {
         );
       }
     } catch (e) {
+      // Check if cancelled before showing error
+      if (_isTryOnCancelled) {
+        return;
+      }
+      
       String errorMsg = 'Failed to generate try-on';
       if (e.toString().contains('camera') || e.toString().contains('permission')) {
         errorMsg = 'Camera access denied. Please allow camera permission and try again.';
@@ -355,14 +387,45 @@ class CmProductDetailsController extends GetxController {
         duration: const Duration(seconds: 5),
       );
     } finally {
-      isTryOnLoading.value = false;
+      if (!_isTryOnCancelled) {
+        isTryOnLoading.value = false;
+      }
+      _isTryOnCancelled = false;
     }
+  }
+
+  /// Generate unique ID for a try-on result
+  String _generateTryOnId() {
+    final timestamp = DateTime.now().millisecondsSinceEpoch;
+    final random = (timestamp % 10000).toString().padLeft(4, '0');
+    return '${product.value?.id ?? "product"}_${timestamp}_$random';
   }
 
   /// Add try-on result to the first position
   /// This should be called when returning from the try-on page with results
   Future<void> addTryOnResult(Uint8List result) async {
+    // Shift existing IDs
+    final shiftedIds = <int, String>{};
+    final shiftedStatus = <int, bool>{};
+    
+    for (var entry in tryOnResultIds.entries) {
+      shiftedIds[entry.key + 1] = entry.value;
+    }
+    for (var entry in savedTryOnStatus.entries) {
+      shiftedStatus[entry.key + 1] = entry.value;
+    }
+    
+    tryOnResultIds.clear();
+    tryOnResultIds.addAll(shiftedIds);
+    savedTryOnStatus.clear();
+    savedTryOnStatus.addAll(shiftedStatus);
+    
+    // Generate unique ID for new try-on result
+    final tryOnId = _generateTryOnId();
     tryOnResultImages.insert(0, result);
+    tryOnResultIds[0] = tryOnId;
+    savedTryOnStatus[0] = false; // New try-on is not saved by default
+    
     _tryOnUpdateTrigger.value++;
     
     // Move slider to position 0 (the new try-on result)
@@ -430,13 +493,16 @@ class CmProductDetailsController extends GetxController {
     if (imageData == null || imageData is! Uint8List) return false;
     
     try {
-      final success = await _tryOnStorage.saveTryOn(
-        product.value!.id,
-        imageData,
-      );
+      // Get or generate try-on ID
+      String tryOnId = tryOnResultIds[imageIndex] ?? _generateTryOnId();
+      if (!tryOnResultIds.containsKey(imageIndex)) {
+        tryOnResultIds[imageIndex] = tryOnId;
+      }
+      
+      final success = await _tryOnStorage.saveTryOnWithId(tryOnId, imageData);
       
       if (success) {
-        savedTryOns[product.value!.id] = true;
+        savedTryOnStatus[imageIndex] = true;
         Get.snackbar(
           'Success',
           'Try-on image saved',
@@ -464,10 +530,104 @@ class CmProductDetailsController extends GetxController {
     }
   }
 
+  /// Unsave (remove) try-on result image
+  Future<bool> unsaveTryOnImage(int imageIndex) async {
+    if (product.value == null) return false;
+    
+    // Check if this is a try-on result
+    if (!isTryOnResult(imageIndex)) return false;
+    
+    try {
+      final tryOnId = tryOnResultIds[imageIndex];
+      if (tryOnId == null) {
+        Get.snackbar(
+          'Error',
+          'Try-on ID not found',
+          snackPosition: SnackPosition.BOTTOM,
+        );
+        return false;
+      }
+      
+      final success = await _tryOnStorage.removeTryOnById(tryOnId);
+      
+      if (success) {
+        savedTryOnStatus[imageIndex] = false;
+        Get.snackbar(
+          'Success',
+          'Try-on image removed',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.orange,
+          colorText: Colors.white,
+          duration: const Duration(seconds: 2),
+        );
+      } else {
+        Get.snackbar(
+          'Error',
+          'Failed to remove try-on image',
+          snackPosition: SnackPosition.BOTTOM,
+        );
+      }
+      
+      return success;
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        'Failed to remove: $e',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+      return false;
+    }
+  }
+
   /// Check if current image is a saved try-on
   bool isTryOnSaved(int imageIndex) {
     if (product.value == null || !isTryOnResult(imageIndex)) return false;
-    return savedTryOns[product.value!.id] ?? false;
+    return savedTryOnStatus[imageIndex] ?? false;
+  }
+
+  /// Handle back navigation with confirmation if try-on is in progress
+  /// Returns true if navigation should proceed, false otherwise
+  Future<bool> handleBackNavigation() async {
+    if (isTryOnLoading.value) {
+      // Show confirmation dialog
+      final shouldCancel = await Get.dialog<bool>(
+        AlertDialog(
+          title: const Text('Cancel Try-On Generation?'),
+          content: const Text(
+            'Try-on generation is in progress. If you go back now, this process will be cancelled.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Get.back(result: false),
+              child: const Text('Continue'),
+            ),
+            TextButton(
+              onPressed: () => Get.back(result: true),
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.red,
+              ),
+              child: const Text('Cancel & Go Back'),
+            ),
+          ],
+        ),
+      );
+
+      if (shouldCancel == true) {
+        // Cancel the try-on process
+        cancelTryOnGeneration();
+        return true; // Allow navigation to proceed
+      }
+      return false; // Don't navigate, stay on page
+    } else {
+      // No try-on in progress, allow navigation
+      return true;
+    }
+  }
+
+  /// Cancel the try-on generation process
+  void cancelTryOnGeneration() {
+    _isTryOnCancelled = true;
+    isTryOnLoading.value = false;
   }
 
   @override

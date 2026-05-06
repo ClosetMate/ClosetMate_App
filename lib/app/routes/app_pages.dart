@@ -19,6 +19,8 @@ import '../modules/products_listing/bindings/products_listing_binding.dart';
 import '../modules/products_listing/views/products_listing_view.dart';
 import '../modules/profile/bindings/profile_binding.dart';
 import '../modules/profile/views/profile_view.dart';
+import '../modules/profile/bindings/edit_profile_binding.dart';
+import '../modules/profile/views/edit_profile_view.dart';
 import '../modules/settings/bindings/settings_binding.dart';
 import '../modules/settings/views/settings_view.dart';
 import '../modules/signup/bindings/signup_binding.dart';
@@ -36,6 +38,11 @@ import '../modules/virtual_tryon/bindings/virtual_tryon_binding.dart';
 import '../modules/virtual_tryon/views/virtual_tryon_view.dart';
 import '../modules/tried_on/bindings/tried_on_binding.dart';
 import '../modules/tried_on/views/tried_on_view.dart';
+import '../modules/orders/bindings/orders_binding.dart';
+import '../modules/orders/views/orders_view.dart';
+import '../modules/shipping_addresses/bindings/shipping_addresses_binding.dart';
+import '../modules/shipping_addresses/views/shipping_addresses_view.dart';
+import '../modules/shipping_addresses/views/add_edit_address_view.dart';
 
 part 'app_routes.dart';
 
@@ -143,6 +150,26 @@ class AppPages {
       name: _Paths.TRIED_ON,
       page: () => const TriedOnView(),
       binding: TriedOnBinding(),
+    ),
+    GetPage(
+      name: _Paths.ORDERS,
+      page: () => const OrdersView(),
+      binding: OrdersBinding(),
+    ),
+    GetPage(
+      name: _Paths.SHIPPING_ADDRESSES,
+      page: () => const ShippingAddressesView(),
+      binding: ShippingAddressesBinding(),
+    ),
+    GetPage(
+      name: _Paths.ADD_EDIT_ADDRESS,
+      page: () => const AddEditAddressView(),
+      binding: ShippingAddressesBinding(),
+    ),
+    GetPage(
+      name: _Paths.EDIT_PROFILE,
+      page: () => const EditProfileView(),
+      binding: EditProfileBinding(),
     ),
   ];
 }

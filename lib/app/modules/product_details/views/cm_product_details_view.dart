@@ -18,9 +18,17 @@ class CmProductDetailsView extends GetView<CmProductDetailsController> {
   Widget build(BuildContext context) {
     bool isLightTheme = Get.isDarkMode == false;
     
-    return Scaffold(
-      backgroundColor: ThemeColors.getScaffoldBackground(isLightTheme),
-      body: Obx(() {
+    return WillPopScope(
+      onWillPop: () async {
+        final shouldPop = await controller.handleBackNavigation();
+        if (shouldPop) {
+          Get.back();
+        }
+        return false; // We handle navigation ourselves
+      },
+      child: Scaffold(
+        backgroundColor: ThemeColors.getScaffoldBackground(isLightTheme),
+        body: Obx(() {
         if (controller.isLoading.value) {
           return const Center(child: CircularProgressIndicator());
         }
@@ -103,6 +111,7 @@ class CmProductDetailsView extends GetView<CmProductDetailsController> {
           ),
         );
       }),
+      ),
     );
   }
 
@@ -135,13 +144,16 @@ class CmProductDetailsView extends GetView<CmProductDetailsController> {
               final totalImages = controller.totalDisplayImageCount;
               final isLoading = controller.isTryOnLoading.value;
               
-              return PageView.builder(
-                controller: controller.pageController,
-                itemCount: totalImages,
-                scrollDirection: Axis.horizontal,
-                onPageChanged: (index) {
-                  controller.currentPageIndex.value = index;
-                },
+              return AbsorbPointer(
+                absorbing: isLoading,
+                child: PageView.builder(
+                  controller: controller.pageController,
+                  itemCount: totalImages,
+                  scrollDirection: Axis.horizontal,
+                  physics: isLoading ? const NeverScrollableScrollPhysics() : const PageScrollPhysics(),
+                  onPageChanged: (index) {
+                    controller.currentPageIndex.value = index;
+                  },
                 itemBuilder: (context, index) {
                   final imageData = controller.getDisplayImage(index);
                   final isTryOnResult = controller.isTryOnResult(index);
@@ -209,7 +221,7 @@ class CmProductDetailsView extends GetView<CmProductDetailsController> {
                     );
                   }
                   
-                  // Add save button for try-on result images
+                  // Add save/unsave button for try-on result images
                   if (isTryOnResult && !isLoading) {
                     imageWidget = Stack(
                       children: [
@@ -220,7 +232,13 @@ class CmProductDetailsView extends GetView<CmProductDetailsController> {
                           child: Obx(() {
                             final isSaved = controller.isTryOnSaved(index);
                             return GestureDetector(
-                              onTap: () => controller.saveTryOnImage(index),
+                              onTap: () {
+                                if (isSaved) {
+                                  controller.unsaveTryOnImage(index);
+                                } else {
+                                  controller.saveTryOnImage(index);
+                                }
+                              },
                               child: Container(
                                 padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
                                 decoration: BoxDecoration(
@@ -241,14 +259,18 @@ class CmProductDetailsView extends GetView<CmProductDetailsController> {
                                   children: [
                                     Icon(
                                       isSaved ? Icons.bookmark : Icons.bookmark_border,
-                                      color: ThemeColors.getButtonText(isLightTheme),
+                                      color: isSaved 
+                                          ? Colors.white
+                                          : ThemeColors.getButtonText(isLightTheme),
                                       size: 20.sp,
                                     ),
                                     SizedBox(width: 8.w),
                                     Text(
-                                      isSaved ? 'Saved' : 'Save',
+                                      isSaved ? 'Unsave' : 'Save',
                                       style: TextStyle(
-                                        color: ThemeColors.getButtonText(isLightTheme),
+                                        color: isSaved 
+                                            ? Colors.white
+                                            : ThemeColors.getButtonText(isLightTheme),
                                         fontSize: 14.sp,
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -265,20 +287,62 @@ class CmProductDetailsView extends GetView<CmProductDetailsController> {
                   
                   // Wrap in GestureDetector for tap to open full screen
                   return GestureDetector(
-                    onTap: () => _openFullScreenGallery(context, index, product, isLightTheme),
+                    onTap: isLoading ? null : () => _openFullScreenGallery(context, index, product, isLightTheme),
                     behavior: HitTestBehavior.opaque,
                     child: imageWidget,
                   );
                 },
+                ),
               );
             }),
           ),
         ),
         
+        // Blocking overlay when try-on is loading
+        Obx(() {
+          final isLoading = controller.isTryOnLoading.value;
+          if (isLoading) {
+            return Positioned.fill(
+              child: AbsorbPointer(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.black.withOpacity(0.7),
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(30.r),
+                      bottomRight: Radius.circular(30.r),
+                    ),
+                  ),
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CircularProgressIndicator(
+                          color: Colors.white,
+                        ),
+                        SizedBox(height: 16.h),
+                        Text(
+                          'Generating try-on...',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            );
+          }
+          return const SizedBox.shrink();
+        }),
+        
         // Navigation arrows
         Obx(() {
           final totalImages = controller.totalDisplayImageCount;
-          if (totalImages > 1) {
+          final isLoading = controller.isTryOnLoading.value;
+          if (totalImages > 1 && !isLoading) {
             return Positioned(
               left: 10,
               top: 225.h,
@@ -299,7 +363,8 @@ class CmProductDetailsView extends GetView<CmProductDetailsController> {
         }),
         Obx(() {
           final totalImages = controller.totalDisplayImageCount;
-          if (totalImages > 1) {
+          final isLoading = controller.isTryOnLoading.value;
+          if (totalImages > 1 && !isLoading) {
             return Positioned(
               right: 10,
               top: 225.h,
@@ -328,7 +393,12 @@ class CmProductDetailsView extends GetView<CmProductDetailsController> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               RoundedButton(
-                onPressed: () => Get.back(),
+                onPressed: () async {
+                  final shouldPop = await controller.handleBackNavigation();
+                  if (shouldPop) {
+                    Get.back();
+                  }
+                },
                 child: Icon(
                   Icons.arrow_back_ios_new_rounded,
                   color: ThemeColors.getButtonText(isLightTheme),
@@ -858,7 +928,12 @@ class _FullScreenImageGalleryState extends State<_FullScreenImageGallery> {
             top: MediaQuery.of(context).padding.top + 20.h,
             left: 20.w,
             child: RoundedButton(
-              onPressed: () => Get.back(),
+              onPressed: () async {
+                final shouldPop = await widget.controller.handleBackNavigation();
+                if (shouldPop) {
+                  Get.back();
+                }
+              },
               child: Icon(
                 Icons.arrow_back_ios_new_rounded,
                 color: ThemeColors.getButtonText(widget.isLightTheme),
@@ -916,6 +991,69 @@ class _FullScreenImageGalleryState extends State<_FullScreenImageGallery> {
                             : (hasTryOnResults ? 'Try Again' : 'Try On'),
                         style: TextStyle(
                           color: ThemeColors.getButtonText(widget.isLightTheme),
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          }),
+          // Save/Unsave button for try-on results in full-screen gallery
+          Obx(() {
+            final isLoading = widget.controller.isTryOnLoading.value;
+            final isTryOnResult = widget.controller.isTryOnResult(_currentPageIndex);
+            final isSaved = widget.controller.isTryOnSaved(_currentPageIndex);
+            
+            if (!isTryOnResult || isLoading) {
+              return const SizedBox.shrink();
+            }
+            
+            return Positioned(
+              bottom: 20.h,
+              right: 20.w,
+              child: GestureDetector(
+                onTap: () {
+                  if (isSaved) {
+                    widget.controller.unsaveTryOnImage(_currentPageIndex);
+                  } else {
+                    widget.controller.saveTryOnImage(_currentPageIndex);
+                  }
+                },
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+                  decoration: BoxDecoration(
+                    color: isSaved 
+                        ? Colors.green
+                        : ThemeColors.getButtonBackground(widget.isLightTheme),
+                    borderRadius: BorderRadius.circular(25.r),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        blurRadius: 8,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        isSaved ? Icons.bookmark : Icons.bookmark_border,
+                        color: isSaved 
+                            ? Colors.white
+                            : ThemeColors.getButtonText(widget.isLightTheme),
+                        size: 20.sp,
+                      ),
+                      SizedBox(width: 8.w),
+                      Text(
+                        isSaved ? 'Unsave' : 'Save',
+                        style: TextStyle(
+                          color: isSaved 
+                              ? Colors.white
+                              : ThemeColors.getButtonText(widget.isLightTheme),
                           fontSize: 14.sp,
                           fontWeight: FontWeight.bold,
                         ),

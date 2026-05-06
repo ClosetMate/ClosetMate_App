@@ -13,6 +13,10 @@ class MySharedPref {
   static const String _fcmTokenKey = 'fcm_token';
   static const String _lightThemeKey = 'is_theme_light';
   static const String _userMeasurementsKey = 'user_measurements';
+  static const String _userNameKey = 'user_name';
+  static const String _userEmailKey = 'user_email';
+  static const String _userAvatarPathKey = 'user_avatar_path';
+  static const String _userAvatarBytesKey = 'user_avatar_bytes';
 
   /// init get storage services
   static Future<void> init() async {
@@ -64,10 +68,11 @@ class MySharedPref {
   static Future<void> clearUserMeasurements() async =>
       _sharedPreferences.remove(_userMeasurementsKey);
 
-  /// Clear all user-specific data (measurements, tokens) but preserve app settings (theme)
+  /// Clear all user-specific data (measurements, tokens, profile) but preserve app settings (theme)
   static Future<void> clearUserData() async {
     await _sharedPreferences.remove(_fcmTokenKey);
     await _sharedPreferences.remove(_userMeasurementsKey);
+    await clearUserProfile();
     // Note: We preserve _lightThemeKey as it's an app preference, not user data
   }
 
@@ -84,5 +89,31 @@ class MySharedPref {
 
   /// Get boolean value
   static bool? getBool(String key) => _sharedPreferences.getBool(key);
+
+  /// Set string value
+  static Future<void> setString(String key, String value) =>
+      _sharedPreferences.setString(key, value);
+
+  /// Get string value
+  static String? getString(String key) => _sharedPreferences.getString(key);
+
+  /// Save user profile data
+  static Future<void> setUserName(String name) =>
+      _sharedPreferences.setString(_userNameKey, name);
+
+  static Future<void> setUserEmail(String email) =>
+      _sharedPreferences.setString(_userEmailKey, email);
+
+  /// Get user profile data
+  static String? getUserName() => _sharedPreferences.getString(_userNameKey);
+  static String? getUserEmail() => _sharedPreferences.getString(_userEmailKey);
+
+  /// Clear user profile data
+  static Future<void> clearUserProfile() async {
+    await _sharedPreferences.remove(_userNameKey);
+    await _sharedPreferences.remove(_userEmailKey);
+    await _sharedPreferences.remove(_userAvatarPathKey);
+    await _sharedPreferences.remove(_userAvatarBytesKey);
+  }
 
 }

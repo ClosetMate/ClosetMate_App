@@ -13,7 +13,7 @@ class SettingsView extends GetView<SettingsController> {
     return 
       GetBuilder<SettingsController>(
         builder:
-          (_) => Scaffold(
+          (controller) => Scaffold(
           appBar: AppBar(title: Text('Settings', style: TextStyle(color: ThemeColors.getTextPrimary(isLightTheme)),),
           backgroundColor: ThemeColors.getScaffoldBackground(isLightTheme), iconTheme: IconThemeData(color: ThemeColors.getTextPrimary(isLightTheme)),),
           body: Builder(
@@ -111,7 +111,7 @@ class SettingsView extends GetView<SettingsController> {
                       title: 'Update Measurements',
                       subtitle: 'Change your body measurements for better fit recommendations',
                       icon: Icons.accessibility,
-                      onTap: controller.navigateToMeasurements,
+                      onTap: () => controller.navigateToMeasurements(),
                       isLightTheme: isLightTheme,
                     ),
                   ],

@@ -28,11 +28,11 @@ class BaseController extends GetxController {
     ProfileBinding().dependencies();
     
     pages = [
-      const HomeView(),
-      FavoritesView(),
-      const SwipeShoppingView(),
-      const CartView(),
-      const ProfileView(),
+      const HomeView(),        // index 0
+      FavoritesView(),         // index 1
+      const CartView(),        // index 2
+      const SwipeShoppingView(), // index 3
+      const ProfileView(),     // index 4
     ];
   }
 

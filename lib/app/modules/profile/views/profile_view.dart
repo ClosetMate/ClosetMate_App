@@ -1,8 +1,12 @@
+import 'dart:io';
+import 'dart:typed_data';
 import 'package:closet_mate/app/modules/profile/views/widgets/initial_avatar.dart';
 import 'package:closet_mate/config/theme/theme_colors.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:closet_mate/app/routes/app_pages.dart';
 
 import '../controllers/profile_controller.dart';
 
@@ -25,7 +29,26 @@ class ProfileView extends GetView<ProfileController> {
             margin: const EdgeInsets.symmetric(horizontal: 16),
             child: Row(
               children: [
-                InitialAvatar(name: controller.userName, radius: 35),
+                Obx(() {
+                  if (controller.avatarImage.value != null) {
+                    return CircleAvatar(
+                      radius: 35,
+                      backgroundColor: ThemeColors.getCardBackground(isLightTheme),
+                      backgroundImage: kIsWeb
+                          ? (controller.avatarImage.value is Uint8List
+                              ? MemoryImage(controller.avatarImage.value as Uint8List)
+                              : null)
+                          : (controller.avatarImage.value is File
+                              ? FileImage(controller.avatarImage.value as File)
+                              : null),
+                      child: (kIsWeb && controller.avatarImage.value is! Uint8List) ||
+                              (!kIsWeb && controller.avatarImage.value is! File)
+                          ? InitialAvatar(name: controller.userName, radius: 35)
+                          : null,
+                    );
+                  }
+                  return InitialAvatar(name: controller.userName, radius: 35);
+                }),
                 const SizedBox(width: 16),
                 Expanded(
                   child: Column(
@@ -40,8 +63,10 @@ class ProfileView extends GetView<ProfileController> {
                             ),
                           ),
                           GestureDetector(
-                            onTap: () {
-                              // Navigate to edit profile page
+                            onTap: () async {
+                              await Get.toNamed(Routes.EDIT_PROFILE);
+                              // Reload profile data after returning from edit
+                              await controller.loadProfileData();
                             },
                             child: Row(
                               children: [
@@ -75,8 +100,12 @@ class ProfileView extends GetView<ProfileController> {
             child: ListView(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               children: [
-                _buildProfileOption(Icons.shopping_bag, "My Orders", () {}),
-                _buildProfileOption(Icons.location_on, "Shipping Address", () {}),
+                _buildProfileOption(Icons.shopping_bag, "My Orders", () {
+                  Get.toNamed(Routes.ORDERS);
+                }),
+                _buildProfileOption(Icons.location_on, "Shipping Address", () {
+                  Get.toNamed(Routes.SHIPPING_ADDRESSES);
+                }),
                 _buildProfileOption(Icons.settings, "Settings", () {
                   Get.toNamed('/settings');
                 }),

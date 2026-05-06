@@ -70,7 +70,7 @@ class _BottomNavState extends State<BottomNav> with SingleTickerProviderStateMix
                 _buildNavItem(Icons.home_outlined, 0, isLightTheme),
                 _buildNavItem(Icons.favorite, 1, isLightTheme),
                 const SizedBox(width: 60),
-                _buildNavItem(Icons.shopping_cart_rounded, 3, isLightTheme),
+                _buildNavItem(Icons.shopping_cart_rounded, 2, isLightTheme),
                 _buildNavItem(Icons.person_outlined, 4, isLightTheme),
               ],
             ),
@@ -110,7 +110,9 @@ class _BottomNavState extends State<BottomNav> with SingleTickerProviderStateMix
           children: [
             Icon(
               icon,
-              color: isSelected ? ThemeColors.getSecondary(isLightTheme) : ThemeColors.getSecondary(isLightTheme),
+              color: isSelected 
+                  ? ThemeColors.getPrimary(isLightTheme) 
+                  : ThemeColors.getSecondary(isLightTheme).withOpacity(0.6),
               size: 24,
             ),
           ],
@@ -120,13 +122,13 @@ class _BottomNavState extends State<BottomNav> with SingleTickerProviderStateMix
   }
 
   Widget _buildCenterButton(bool isLightTheme) {
-    final bool isSelected = currentTabIndex == 2;
+    final bool isSelected = currentTabIndex == 3;
     return GestureDetector(
       onTap: () {
         setState(() {
-          currentTabIndex = 2;
+          currentTabIndex = 3;
         });
-        onTabChange(2);
+        onTabChange(3);
         _animationController.forward().then((_) => _animationController.reverse());
       },
       child: AnimatedContainer(

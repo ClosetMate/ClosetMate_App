@@ -23,6 +23,10 @@ abstract class Routes {
   static const SETTINGS = _Paths.SETTINGS;
   static const VIRTUAL_TRYON = _Paths.VIRTUAL_TRYON;
   static const TRIED_ON = _Paths.TRIED_ON;
+  static const ORDERS = _Paths.ORDERS;
+  static const SHIPPING_ADDRESSES = _Paths.SHIPPING_ADDRESSES;
+  static const ADD_EDIT_ADDRESS = _Paths.ADD_EDIT_ADDRESS;
+  static const EDIT_PROFILE = _Paths.EDIT_PROFILE;
 }
 
 abstract class _Paths {
@@ -47,4 +51,8 @@ abstract class _Paths {
   static const SETTINGS = '/settings';
   static const VIRTUAL_TRYON = '/virtual-tryon';
   static const TRIED_ON = '/tried-on';
+  static const ORDERS = '/orders';
+  static const SHIPPING_ADDRESSES = '/shipping-addresses';
+  static const ADD_EDIT_ADDRESS = '/add-edit-address';
+  static const EDIT_PROFILE = '/edit-profile';
 }
