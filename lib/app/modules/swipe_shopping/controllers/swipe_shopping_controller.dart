@@ -1,20 +1,23 @@
-import 'package:closet_mate/app/components/product_detail_card.dart';
+import 'package:closet_mate/app/modules/swipe_shopping/views/swipe_product_card.dart';
 import 'package:closet_mate/models/cm_product_model.dart';
 import 'package:closet_mate/app/services/products_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:appinio_swiper/appinio_swiper.dart';
 import 'package:closet_mate/config/theme/theme_colors.dart';
 
 class SwipeShoppingController extends GetxController {
   final ProductsService _productsService = ProductsService();
   
-  List<ProductDetailCard> productCards = [];
+  List<Widget> productCards = [];
   final RxList<CmProductModel> products = <CmProductModel>[].obs;
   final RxBool isLoading = false.obs;
   final RxString errorMessage = ''.obs;
   Map<String, dynamic> swipeAction = {'opacity': 0.0};
   AxisDirection direction = AxisDirection.down;
   
+  final AppinioSwiperController swiperController = AppinioSwiperController();
+
   // Filter options
   String selectedCategory = 'All';
   String selectedSize = 'All';
@@ -27,6 +30,7 @@ class SwipeShoppingController extends GetxController {
     super.onInit();
     loadProducts();
   }
+
 
   Future<void> loadProducts() async {
     try {
@@ -48,7 +52,7 @@ class SwipeShoppingController extends GetxController {
   void _loadCards() {
     productCards.clear();
     for (CmProductModel product in products) {
-      productCards.add(ProductDetailCard(product: product));
+      productCards.add(SwipeProductCard(product: product));
     }
   }
 

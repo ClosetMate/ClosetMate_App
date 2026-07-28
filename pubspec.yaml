@@ -51,6 +51,7 @@ dependencies:
   googleapis_auth: ^1.4.1
   path_provider: ^2.1.1
   image_gallery_saver: ^2.0.3
+  google_fonts: ^8.1.0
 
 dev_dependencies:
   flutter_test:

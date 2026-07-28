@@ -151,7 +151,7 @@ class _CropImageViewState extends State<CropImageView> {
       if (widget.imageSource is File) {
         final file = widget.imageSource as File;
         return ExtendedImage.file(
-          file,
+          file as dynamic,
           fit: BoxFit.contain,
           mode: ExtendedImageMode.editor,
           extendedImageEditorKey: editorKey,

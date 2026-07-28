@@ -1,9 +1,7 @@
 import 'package:closet_mate/app/modules/base/controllers/base_controller.dart';
 import 'package:closet_mate/app/components/bottom_nav.dart';
-import 'package:closet_mate/app/components/custom_app_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_state_manager/src/simple/get_state.dart';
-import 'package:get/get_state_manager/src/simple/get_view.dart';
+import 'package:get/get.dart';
 
 class BaseView extends GetView<BaseController> {
   const BaseView({super.key});
@@ -13,35 +11,9 @@ class BaseView extends GetView<BaseController> {
     return GetBuilder<BaseController>(
       builder:
           (_) => Scaffold(
-            appBar: PreferredSize(
-              preferredSize: const Size.fromHeight(
-                50,
-              ), // Standard AppBar height
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 400),
-                height:
-                    _shouldHideAppBar(controller.currentTabIndex)
-                        ? 40
-                        : 120, // Animate height change
-                child: AnimatedOpacity(
-                  duration: const Duration(milliseconds: 400),
-                  opacity:
-                      _shouldHideAppBar(controller.currentTabIndex)
-                          ? 0.0
-                          : 1.0, // Animate opacity change
-                  child:
-                      _shouldHideAppBar(controller.currentTabIndex)
-                          ? SizedBox.shrink()
-                          : CustomAppBar(
-                            previousIndex: controller.currentTabIndex,
-                            onTabChange: controller.onTabChange,
-                          ),
-                ),
-              ),
-            ),
             body: SafeArea(
               bottom: false,
-              child: IndexedStack(
+              child: FadeIndexedStack(
                 index: controller.currentTabIndex,
                 children: controller.pages,
               ),
@@ -56,10 +28,56 @@ class BaseView extends GetView<BaseController> {
           ),
     );
   }
+}
 
-  bool _shouldHideAppBar(int currentIndex) {
-    // Add indices where you want to hide the app bar
-    return currentIndex == 3 || // Swipe Shopping
-           currentIndex == 5;   // Search
+class FadeIndexedStack extends StatefulWidget {
+  final int index;
+  final List<Widget> children;
+  final Duration duration;
+
+  const FadeIndexedStack({
+    super.key,
+    required this.index,
+    required this.children,
+    this.duration = const Duration(milliseconds: 300),
+  });
+
+  @override
+  State<FadeIndexedStack> createState() => _FadeIndexedStackState();
+}
+
+class _FadeIndexedStackState extends State<FadeIndexedStack> with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(vsync: this, duration: widget.duration);
+    _controller.forward();
+  }
+
+  @override
+  void didUpdateWidget(FadeIndexedStack oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.index != oldWidget.index) {
+      _controller.forward(from: 0.0);
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FadeTransition(
+      opacity: _controller,
+      child: IndexedStack(
+        index: widget.index,
+        children: widget.children,
+      ),
+    );
   }
 }

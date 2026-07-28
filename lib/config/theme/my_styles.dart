@@ -123,7 +123,7 @@ class MyStyles {
           backgroundColor: WidgetStateProperty.resolveWith<Color>(
             (Set<WidgetState> states) {
               if (states.contains(WidgetState.pressed)) {
-                return ThemeColors.getPrimary(isLightTheme).withOpacity(0.5);
+                return ThemeColors.getPrimary(isLightTheme).withValues(alpha: 0.5);
               } else if (states.contains(WidgetState.disabled)) {
                 return AppColors.grey;
               }

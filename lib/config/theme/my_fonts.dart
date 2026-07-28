@@ -1,37 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-// todo configure text family and size
-class MyFonts
-{
-  // return the right font depending on app language
-  static TextStyle get getAppFontType => const TextStyle(fontFamily: 'Eurostile');
+class MyFonts {
+  // Anton - Buttons
+  static TextStyle get buttonTextStyle => GoogleFonts.anton();
 
-  // headlines text font
-  static TextStyle get headlineTextStyle => getAppFontType;
+  // Inter SemiBold - Body Text
+  static TextStyle get bodyTextStyle => GoogleFonts.inter(fontWeight: FontWeight.w600);
+  
+  // Inter Regular - Fashion/Marketing Pages
+  static TextStyle get fashionTextStyle => GoogleFonts.inter(fontWeight: FontWeight.w400);
 
-  // body text font
-  static TextStyle get bodyTextStyle => getAppFontType;
+  // Satoshi - Numbers/Stats (using TextStyle fallback, assume font might be added to assets later, or fallback to Inter)
+  static TextStyle get numberTextStyle => const TextStyle(fontFamily: 'Satoshi').copyWith(fontFamilyFallback: ['Inter']);
 
-  // button text font
-  static TextStyle get buttonTextStyle => getAppFontType;
+  // Inter Medium - General usage
+  static TextStyle get mediumTextStyle => GoogleFonts.inter(fontWeight: FontWeight.w500);
 
-  // app bar text font
-  static TextStyle get appBarTextStyle  => getAppFontType;
+  // General mappings
+  static TextStyle get getAppFontType => GoogleFonts.inter();
 
-  // chips text font
-  static TextStyle get chipTextStyle  => getAppFontType;
+  static TextStyle get headlineTextStyle => GoogleFonts.inter(fontWeight: FontWeight.w700);
+  static TextStyle get appBarTextStyle  => GoogleFonts.inter(fontWeight: FontWeight.w600);
+  static TextStyle get chipTextStyle  => GoogleFonts.inter(fontWeight: FontWeight.w500);
+  static TextStyle get displayTextStyle => GoogleFonts.inter(fontWeight: FontWeight.w700);
 
   // appbar font size
   static double get appBarTittleSize => 18.sp;
-
-  // headlines text font
-  static TextStyle get displayTextStyle => getAppFontType;
 
   // body font size
   static double get bodySmallTextSize => 12.sp;
   static double get bodyMediumSize => 14.sp; // default font
   static double get bodyLargeSize => 20.sp;
+  
   // display font size
   static double get displayLargeSize => 24.sp;
   static double get displayMediumSize => 18.sp;

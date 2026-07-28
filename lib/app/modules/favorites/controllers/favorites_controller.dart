@@ -13,6 +13,22 @@ class FavoritesController extends GetxController {
   final RxString errorMessage = ''.obs;
   final Set<String> favoriteProductIds = {};
   
+  final RxString activeMainTab = 'closet'.obs;
+  final RxString activeCategory = 'All'.obs;
+
+  void setActiveTab(String tab) => activeMainTab.value = tab;
+  void setActiveCategory(String category) => activeCategory.value = category;
+
+  List<CmProductModel> get filteredWardrobe {
+    if (activeCategory.value == 'All') return products;
+    return products.where((p) => p.tags.isNotEmpty && p.tags.first == activeCategory.value).toList();
+  }
+
+  List<String> get categories {
+    final cats = products.expand((p) => p.tags).toSet().toList();
+    return ['All', ...cats];
+  }
+  
   @override
   void onInit() async {
     await _getProducts();

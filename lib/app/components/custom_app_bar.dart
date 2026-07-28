@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:closet_mate/config/theme/theme_colors.dart';
 import 'package:closet_mate/utils/constants.dart';
 import 'package:closet_mate/app/routes/app_pages.dart';
@@ -12,7 +13,7 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   _CustomAppBarState createState() => _CustomAppBarState();
 
   @override
-  Size get preferredSize => Size.fromHeight(50);
+  Size get preferredSize => const Size.fromHeight(56);
 }
 
 class _CustomAppBarState extends State<CustomAppBar> {
@@ -29,44 +30,41 @@ class _CustomAppBarState extends State<CustomAppBar> {
   @override
   Widget build(BuildContext context) {
     bool isLightTheme = Theme.of(context).brightness == Brightness.light;
+    Color bgColor = isLightTheme ? Colors.white : Colors.black;
+    Color textColor = isLightTheme ? const Color(0xFF1A1A1A) : Colors.white;
+
     return AppBar(
-      elevation: 10,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          bottom: Radius.circular(20),
+      elevation: 0,
+      backgroundColor: bgColor.withOpacity(0.9),
+      surfaceTintColor: Colors.transparent,
+      flexibleSpace: ClipRRect(
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+          child: Container(color: Colors.transparent),
         ),
       ),
-      flexibleSpace: Container(
-        decoration: BoxDecoration(
-          color: ThemeColors.getScaffoldBackground(isLightTheme),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.3),
-              blurRadius: 5,
-              offset: Offset(0, 3),
-            ),
-          ],
+      title: Text(
+        'CLOSETMATE',
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          color: textColor,
+          letterSpacing: 1.5,
+          fontSize: 20,
         ),
-      ),
-      title: Image.asset(
-        Constants.logoNoBg,
-        height: 35,
-        fit: BoxFit.contain,
-        color: isLightTheme ? null : null,
       ),
       centerTitle: true,
       leading: IconButton(
-        icon: Icon(Icons.bookmark, color: ThemeColors.getSecondary(isLightTheme)),
-        onPressed: () => Get.toNamed(Routes.TRIED_ON),
-        tooltip: "Saved Try-Ons",
+        icon: Icon(Icons.person_outline, color: textColor),
+        onPressed: () => onTabChange(4), // 4 is typically the Profile tab
+        tooltip: "Profile",
       ),
       actions: [
         IconButton(
-          icon: Icon(Icons.search, color: ThemeColors.getSecondary(isLightTheme)),
+          icon: Icon(Icons.search, color: textColor),
           onPressed: () => Get.toNamed(Routes.PRODUCTS_LISTING, arguments: {'isSearch': true}),
           tooltip: "Search",
         ),
-        SizedBox(width: 10),
+        const SizedBox(width: 8),
       ],
     );
   }

@@ -1,5 +1,4 @@
-import 'package:closet_mate/config/theme/colors.dart';
-import 'package:closet_mate/config/theme/theme_colors.dart';
+import 'dart:ui';
 import 'package:flutter/material.dart';
 
 class BottomNav extends StatefulWidget {
@@ -11,84 +10,63 @@ class BottomNav extends StatefulWidget {
   State<BottomNav> createState() => _BottomNavState();
 }
 
-class _BottomNavState extends State<BottomNav> with SingleTickerProviderStateMixin {
+class _BottomNavState extends State<BottomNav> {
   late int currentTabIndex;
   late Function(int) onTabChange;
-  late AnimationController _animationController;
-  late Animation<double> _scaleAnimation;
 
   @override
   void initState() {
     super.initState();
     currentTabIndex = widget.index;
     onTabChange = widget.onTabChange;
-    _animationController = AnimationController(
-      duration: const Duration(milliseconds: 200),
-      vsync: this,
-    );
-    _scaleAnimation = Tween<double>(begin: 1.0, end: 1.2).animate(
-      CurvedAnimation(
-        parent: _animationController,
-        curve: Curves.easeInOut,
-      ),
-    );
   }
 
   @override
-  void dispose() {
-    _animationController.dispose();
-    super.dispose();
+  void didUpdateWidget(BottomNav oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.index != oldWidget.index) {
+      currentTabIndex = widget.index;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     bool isLightTheme = Theme.of(context).brightness == Brightness.light;
-    return Container(
-      height: 70,
-      decoration: BoxDecoration(
-        color: ThemeColors.getScaffoldBackground(isLightTheme),
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.3),
-            blurRadius: 10,
-            offset: const Offset(0, -3),
-          ),
-        ],
-      ),
-      child: Stack(
-        clipBehavior: Clip.none,
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              color: ThemeColors.getScaffoldBackground(isLightTheme),
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                _buildNavItem(Icons.home_outlined, 0, isLightTheme),
-                _buildNavItem(Icons.favorite, 1, isLightTheme),
-                const SizedBox(width: 60),
-                _buildNavItem(Icons.shopping_cart_rounded, 2, isLightTheme),
-                _buildNavItem(Icons.person_outlined, 4, isLightTheme),
-              ],
+    Color bgColor = isLightTheme ? Colors.white.withOpacity(0.9) : Colors.black.withOpacity(0.9);
+    Color iconColor = isLightTheme ? const Color(0xFF1A1A1A) : Colors.white;
+    Color inactiveColor = isLightTheme ? const Color(0xFF9CA3AF) : Colors.white54;
+    Color borderColor = isLightTheme ? Colors.grey.shade100 : Colors.grey.shade900;
+
+    return ClipRRect(
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+        child: Container(
+          height: 80,
+          padding: const EdgeInsets.only(bottom: 16),
+          decoration: BoxDecoration(
+            color: bgColor,
+            border: Border(
+              top: BorderSide(
+                color: borderColor,
+                width: 1,
+              ),
             ),
           ),
-          Positioned(
-            left: 0,
-            right: 0,
-            top: -5,
-            child: Center(
-              child: _buildCenterButton(isLightTheme),
-            ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              _buildNavItem(Icons.home_outlined, 0, iconColor, inactiveColor),
+              _buildNavItem(Icons.grid_view_outlined, 1, iconColor, inactiveColor),
+              _buildNavItem(Icons.auto_awesome, 3, iconColor, inactiveColor),
+              _buildNavItem(Icons.person_outline, 4, iconColor, inactiveColor),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
 
-  Widget _buildNavItem(IconData icon, int index, bool isLightTheme) {
+  Widget _buildNavItem(IconData icon, int index, Color activeColor, Color inactiveColor) {
     final bool isSelected = currentTabIndex == index;
     return GestureDetector(
       onTap: () {
@@ -97,83 +75,36 @@ class _BottomNavState extends State<BottomNav> with SingleTickerProviderStateMix
         });
         onTabChange(index);
       },
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        margin: const EdgeInsets.only(top: 3),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-        decoration: BoxDecoration(
-          color: isSelected ? ThemeColors.getSecondary(isLightTheme).withOpacity(0.1) : Colors.transparent,
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
+      behavior: HitTestBehavior.opaque,
+      child: SizedBox(
+        width: 64,
+        height: double.infinity,
+        child: Stack(
+          alignment: Alignment.center,
           children: [
-            Icon(
-              icon,
-              color: isSelected 
-                  ? ThemeColors.getPrimary(isLightTheme) 
-                  : ThemeColors.getSecondary(isLightTheme).withOpacity(0.6),
-              size: 24,
+            AnimatedScale(
+              scale: isSelected ? 1.1 : 1.0,
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeOutBack,
+              child: Icon(
+                icon,
+                color: isSelected ? activeColor : inactiveColor,
+                size: 26,
+              ),
             ),
+            if (isSelected)
+              Positioned(
+                bottom: 4,
+                child: Container(
+                  width: 4,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: activeColor,
+                    shape: BoxShape.circle,
+                  ),
+                ),
+              ),
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildCenterButton(bool isLightTheme) {
-    final bool isSelected = currentTabIndex == 3;
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          currentTabIndex = 3;
-        });
-        onTabChange(3);
-        _animationController.forward().then((_) => _animationController.reverse());
-      },
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        height: 50,
-        width: 50,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: isSelected
-                ? [
-                    ThemeColors.getPrimary(isLightTheme),
-                    ThemeColors.getPrimary(isLightTheme).withOpacity(0.8),
-                  ]
-                : [
-                    ThemeColors.getSecondary(isLightTheme),
-                    ThemeColors.getSecondary(isLightTheme).withOpacity(0.9),
-                  ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          shape: BoxShape.circle,
-          boxShadow: [
-            BoxShadow(
-              color: (isSelected ? ColorConstants.primaryColor : ColorConstants.secondary).withOpacity(0.3),
-              blurRadius: 12,
-              spreadRadius: 2,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: ScaleTransition(
-          scale: _scaleAnimation,
-          child: Image.asset(
-            'assets/images/swipe_icon.png',
-            width: 28,
-            height: 28,
-            fit: BoxFit.contain,
-            errorBuilder: (context, error, stackTrace) {
-              return Icon(
-                Icons.swap_horiz,
-                color: isSelected ? ThemeColors.getSecondary(isLightTheme) : ThemeColors.getPrimary(isLightTheme),
-                size: 28,
-              );
-            },
-          ),
         ),
       ),
     );

@@ -483,44 +483,47 @@ class CmProductDetailsView extends GetView<CmProductDetailsController> {
 
   Widget _buildProductInfo(CmProductModel product, bool isLightTheme) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20.w),
+      padding: EdgeInsets.symmetric(horizontal: 24.w),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Brand
+          Text(
+            product.brand.toUpperCase(),
+            style: TextStyle(
+              color: ThemeColors.getTextSecondary(isLightTheme),
+              fontSize: 12.sp,
+              fontWeight: FontWeight.w600,
+              letterSpacing: 1.5,
+            ),
+          ).animate().fade().slideX(duration: 300.ms, begin: -1),
+          
+          8.verticalSpace,
+
           // Product name
           Text(
             product.name,
             style: TextStyle(
               color: ThemeColors.getTextPrimary(isLightTheme),
               fontSize: 20.sp,
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w500,
+              height: 1.2,
             ),
           ).animate().fade().slideX(duration: 300.ms, begin: -1),
           
-          10.verticalSpace,
-          
-          // Brand
-          Text(
-            product.brand,
-            style: TextStyle(
-              color: ThemeColors.getTextSecondary(isLightTheme),
-              fontSize: 16.sp,
-            ),
-          ).animate().fade().slideX(duration: 300.ms, begin: -1),
-          
-          10.verticalSpace,
+          12.verticalSpace,
           
           // Price
           Text(
             '${product.currency} ${product.price.toStringAsFixed(2)}',
             style: TextStyle(
-              color: ThemeColors.getCurrency(isLightTheme),
-              fontSize: 28.sp,
-              fontWeight: FontWeight.bold,
+              color: ThemeColors.getTextPrimary(isLightTheme),
+              fontSize: 22.sp,
+              fontWeight: FontWeight.w600,
             ),
           ).animate().fade().slideX(duration: 300.ms, begin: -1),
           
-          10.verticalSpace,
+          16.verticalSpace,
           
           // Description
           Text(
@@ -528,7 +531,7 @@ class CmProductDetailsView extends GetView<CmProductDetailsController> {
             style: TextStyle(
               color: ThemeColors.getTextSecondary(isLightTheme),
               fontSize: 14.sp,
-              height: 1.5,
+              height: 1.6,
             ),
           ).animate().fade().slideX(duration: 300.ms, begin: -1),
         ],
@@ -538,47 +541,50 @@ class CmProductDetailsView extends GetView<CmProductDetailsController> {
 
   Widget _buildColorSelection(bool isLightTheme) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20.w),
+      padding: EdgeInsets.symmetric(horizontal: 24.w),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Choose Color:',
+            'COLOR',
             style: TextStyle(
-              color: ThemeColors.getTextPrimary(isLightTheme),
-              fontSize: 16.sp,
-              fontWeight: FontWeight.bold,
+              color: ThemeColors.getTextSecondary(isLightTheme),
+              fontSize: 12.sp,
+              fontWeight: FontWeight.w600,
+              letterSpacing: 1.2,
             ),
           ).animate().fade().slideX(duration: 300.ms, begin: -1),
           
-          10.verticalSpace,
+          12.verticalSpace,
           
           Obx(() => Wrap(
-            spacing: 10.w,
+            spacing: 12.w,
             children: controller.availableColors.map((color) {
+              final isSelected = controller.selectedColor.value == color;
               return GestureDetector(
                 onTap: () => controller.changeSelectedColor(color),
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+                  padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
                   decoration: BoxDecoration(
-                    color: controller.selectedColor.value == color
+                    color: isSelected
                         ? ThemeColors.getButtonBackground(isLightTheme)
-                        : Colors.grey[200],
-                    borderRadius: BorderRadius.circular(20.r),
-                    // border: Border.all(
-                    //   color: controller.selectedColor.value == color
-                    //       ? ThemeColors.getAccent(isLightTheme)
-                    //       : Colors.grey[300]!,
-                    //   width: 2,
-                    // ),
+                        : (isLightTheme ? Colors.grey[100] : Colors.grey[800]),
+                    borderRadius: BorderRadius.circular(24.r),
+                    border: Border.all(
+                      color: isSelected 
+                          ? ThemeColors.getButtonBackground(isLightTheme) 
+                          : Colors.transparent,
+                      width: 1,
+                    ),
                   ),
                   child: Text(
                     color,
                     style: TextStyle(
-                      color: controller.selectedColor.value == color
+                      color: isSelected
                           ? ThemeColors.getButtonText(isLightTheme)
-                          : Colors.black,
-                      fontWeight: FontWeight.bold,
+                          : ThemeColors.getTextPrimary(isLightTheme),
+                      fontSize: 14.sp,
+                      fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
                     ),
                   ),
                 ),
@@ -592,29 +598,54 @@ class CmProductDetailsView extends GetView<CmProductDetailsController> {
 
   Widget _buildSizeSelection(bool isLightTheme) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20.w),
+      padding: EdgeInsets.symmetric(horizontal: 24.w),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Choose Size:',
+            'SIZE',
             style: TextStyle(
-              color: ThemeColors.getTextPrimary(isLightTheme),
-              fontSize: 16.sp,
-              fontWeight: FontWeight.bold,
+              color: ThemeColors.getTextSecondary(isLightTheme),
+              fontSize: 12.sp,
+              fontWeight: FontWeight.w600,
+              letterSpacing: 1.2,
             ),
           ).animate().fade().slideX(duration: 300.ms, begin: -1),
           
-          10.verticalSpace,
+          12.verticalSpace,
           
-          Obx(() => Row(
+          Obx(() => Wrap(
+            spacing: 12.w,
             children: controller.availableSizes.map((size) {
-              return Padding(
-                padding: EdgeInsets.only(right: 10.w),
-                child: SizeItem(
-                  onPressed: () => controller.changeSelectedSize(size),
-                  label: size,
-                  selected: controller.selectedSize.value == size,
+              final isSelected = controller.selectedSize.value == size;
+              return GestureDetector(
+                onTap: () => controller.changeSelectedSize(size),
+                child: Container(
+                  width: 44.w,
+                  height: 44.w,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: isSelected 
+                        ? ThemeColors.getButtonBackground(isLightTheme) 
+                        : (isLightTheme ? Colors.white : Colors.grey[900]),
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: isSelected
+                          ? ThemeColors.getButtonBackground(isLightTheme)
+                          : Colors.grey[300]!,
+                      width: 1,
+                    ),
+                  ),
+                  child: Text(
+                    size,
+                    style: TextStyle(
+                      color: isSelected
+                          ? ThemeColors.getButtonText(isLightTheme)
+                          : ThemeColors.getTextPrimary(isLightTheme),
+                      fontSize: 14.sp,
+                      fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                    ),
+                  ),
                 ),
               );
             }).toList(),
@@ -626,61 +657,62 @@ class CmProductDetailsView extends GetView<CmProductDetailsController> {
 
   Widget _buildQuantitySelection(bool isLightTheme) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20.w),
+      padding: EdgeInsets.symmetric(horizontal: 24.w),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Quantity:',
+            'QUANTITY',
             style: TextStyle(
-              color: ThemeColors.getTextPrimary(isLightTheme),
-              fontSize: 16.sp,
-              fontWeight: FontWeight.bold,
+              color: ThemeColors.getTextSecondary(isLightTheme),
+              fontSize: 12.sp,
+              fontWeight: FontWeight.w600,
+              letterSpacing: 1.2,
             ),
           ).animate().fade().slideX(duration: 300.ms, begin: -1),
           
-          10.verticalSpace,
+          12.verticalSpace,
           
           Obx(() => Row(
             children: [
-              IconButton(
-                onPressed: controller.selectedQuantity.value > 1
-                    ? () => controller.changeQuantity(controller.selectedQuantity.value - 1)
-                    : null,
-                icon: const Icon(Icons.remove),
-                style: IconButton.styleFrom(
-                  backgroundColor: controller.selectedQuantity.value > 1
-                      ? ThemeColors.getButtonBackground(isLightTheme)
-                      : Colors.grey[300],
-                  foregroundColor: ThemeColors.getButtonText(isLightTheme),
-                ),
-              ),
               Container(
-                width: 60.w,
-                padding: EdgeInsets.symmetric(vertical: 8.h),
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.grey[300]!),
-                  borderRadius: BorderRadius.circular(8.r),
+                  borderRadius: BorderRadius.circular(24.r),
                 ),
-                child: Text(
-                  controller.selectedQuantity.value.toString(),
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              IconButton(
-                onPressed: controller.selectedQuantity.value < controller.selectedVariantStock
-                    ? () => controller.changeQuantity(controller.selectedQuantity.value + 1)
-                    : null,
-                icon: const Icon(Icons.add),
-                style: IconButton.styleFrom(
-                  backgroundColor: controller.selectedQuantity.value < controller.selectedVariantStock
-                      ? ThemeColors.getButtonBackground(isLightTheme)
-                      : Colors.grey[300],
-                  foregroundColor: ThemeColors.getButtonText(isLightTheme),
+                child: Row(
+                  children: [
+                    IconButton(
+                      onPressed: controller.selectedQuantity.value > 1
+                          ? () => controller.changeQuantity(controller.selectedQuantity.value - 1)
+                          : null,
+                      icon: Icon(Icons.remove, size: 18.sp),
+                      color: ThemeColors.getTextPrimary(isLightTheme),
+                      padding: EdgeInsets.zero,
+                      constraints: BoxConstraints(minWidth: 40.w, minHeight: 40.h),
+                    ),
+                    SizedBox(
+                      width: 30.w,
+                      child: Text(
+                        controller.selectedQuantity.value.toString(),
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w500,
+                          color: ThemeColors.getTextPrimary(isLightTheme),
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: controller.selectedQuantity.value < controller.selectedVariantStock
+                          ? () => controller.changeQuantity(controller.selectedQuantity.value + 1)
+                          : null,
+                      icon: Icon(Icons.add, size: 18.sp),
+                      color: ThemeColors.getTextPrimary(isLightTheme),
+                      padding: EdgeInsets.zero,
+                      constraints: BoxConstraints(minWidth: 40.w, minHeight: 40.h),
+                    ),
+                  ],
                 ),
               ),
               const Spacer(),
@@ -688,7 +720,7 @@ class CmProductDetailsView extends GetView<CmProductDetailsController> {
                 'Stock: ${controller.selectedVariantStock}',
                 style: TextStyle(
                   color: controller.selectedVariantStock > 0 ? Colors.green : Colors.red,
-                  fontSize: 14.sp,
+                  fontSize: 12.sp,
                   fontWeight: FontWeight.w500,
                 ),
               ),
